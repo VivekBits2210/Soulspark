@@ -29,6 +29,60 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+MY_APPS = [
+    "ai_profiles.apps.AiProfilesConfig"
+]
+
+AUTH_APPS = [
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google"
+]
+
+SITE_ID = 1
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request'
+            ]
+        }
+    }
+]
+
+
+# Project ID: soulspark-380421
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email'
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online'
+        },
+        'APP': {
+            'client_id': '485503899387-03u1pvv94g1k01tf9rhv7nno51tbfmls.apps.googleusercontent.com',
+            'secret': 'GOCSPX-a030o6-IXhKjEqipDMyqBeidx8J',
+            'key': ''
+        }
+    }
+}
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -37,9 +91,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "ai_profiles.apps.AiProfilesConfig"
-]
-
+    "django.contrib.sites"] \
+                 + MY_APPS \
+                 + AUTH_APPS
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",

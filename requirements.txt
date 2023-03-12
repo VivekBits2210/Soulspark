@@ -1,0 +1,5 @@
+django
+pillow
+six
+psycopg2
+django-allauth

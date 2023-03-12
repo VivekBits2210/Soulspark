@@ -18,5 +18,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path('ai-profiles/', include('ai_profiles.urls')),
+    path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
 ]
