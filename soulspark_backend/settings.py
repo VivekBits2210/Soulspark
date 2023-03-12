@@ -25,8 +25,9 @@ SECRET_KEY = "django-insecure-7n287l5t%!5jo-m=7v*@798-o01!$+eu$(vhhisjm8z9vc=h*a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
+ACCOUNT_EMAIL_REQUIRED = True
 
 # Application definition
 MY_APPS = [
@@ -43,6 +44,10 @@ AUTH_APPS = [
 SITE_ID = 1
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
+
+LOGIN_URL = "/accounts/login"
+LOGIN_REDIRECT_URL = "/ai-profiles/generate-images"
+LOGOUT_REDIRECT_URL = "/ai-profiles"
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -68,22 +73,14 @@ SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
             'profile',
-            'email'
+            'email',
         ],
         'AUTH_PARAMS': {
-            'access_type': 'online'
+            'access_type': 'online',
         },
-        'APP': {
-            'client_id': '485503899387-03u1pvv94g1k01tf9rhv7nno51tbfmls.apps.googleusercontent.com',
-            'secret': 'GOCSPX-a030o6-IXhKjEqipDMyqBeidx8J',
-            'key': ''
-        }
+        'OAUTH_PKCE_ENABLED': True,
     }
 }
-
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -94,6 +91,7 @@ INSTALLED_APPS = [
     "django.contrib.sites"] \
                  + MY_APPS \
                  + AUTH_APPS
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
