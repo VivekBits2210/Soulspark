@@ -12,7 +12,8 @@ def fetch_profile(request):
 
     # If the 'bot_id' parameter is provided, filter by bot_id
     if bot_id:
-        query_set = BotProfile.objects.filter(bot_id=int(bot_id))
+        bot_id = int(bot_id)
+        query_set = BotProfile.objects.filter(bot_id=bot_id)
         if not query_set.exists():
             return JsonResponse({'error': f"No profile found for bot_id '{bot_id}'"})
         profile = query_set.first()

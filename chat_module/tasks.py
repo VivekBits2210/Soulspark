@@ -18,6 +18,8 @@ def get_response(channel_name, input_data):
         channel_name,
         {
             "type": "chat.message",
-            "text": {"msg": response, "source": "bot"},
+            "text": {"message": response,
+                     "username": None,
+                     },
         },
     )

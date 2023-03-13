@@ -23,11 +23,11 @@ def fetch_chat_history(request):
         chat_history_queryset = ChatHistory.objects.filter(user=user)
 
     if not chat_history_queryset.exists():
-        history = {}
+        history = []
         if bot_id:
             UserProfile.objects.create(user=user, bot=bot, history=history).save()
     elif lines == 0:
-        history = {}
+        history = []
     else:
         history = chat_history_queryset.first()[-lines:]
     return JsonResponse({'bot_id': bot_id, 'history': history})
