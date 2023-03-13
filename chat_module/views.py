@@ -1,4 +1,3 @@
-from django.shortcuts import render
 
 # Create your views here.
 import json
@@ -42,11 +41,10 @@ def fetch_user(request):
 @csrf_exempt
 @require_POST
 def post_message(request):
+    user = request.user
     data = json.loads(request.body.decode('utf-8'))
     message = data['message']
-
-    # Send the message to the chatbot consumer
     channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.send)('chatbot', {'type': 'chat.message', 'message': message})
+    async_to_sync(channel_layer.send)('chatbot', {'uid': user, 'bot_id': data['bot_id'], 'message': message})
 
     return JsonResponse({'status': 'ok'})
