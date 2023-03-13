@@ -11,16 +11,18 @@ import os
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
-# from decouple import config
+from chat_module import routing
 from django.core.asgi import get_asgi_application
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "soulspark_backend.settings")
 
-application = get_asgi_application()
+django_asgi_app = get_asgi_application()
 
 application = ProtocolTypeRouter(
     {
-        "http": application,
-        # We will add WebSocket protocol later. For now, it's just HTTP.
+        "http": django_asgi_app,
+        "websocket": AllowedHostsOriginValidator(
+            AuthMiddlewareStack(URLRouter(routing.websocket_urlpatterns))
+        ),
     }
 )

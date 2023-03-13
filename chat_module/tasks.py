@@ -5,7 +5,8 @@ from channels.layers import get_channel_layer
 channel_layer = get_channel_layer()
 
 
-@shared_task
+# TODO: Make this a shared task once celery is setup
+# @shared_task
 def get_response(channel_name, input_data):
     # TODO: Integrate with the Dialogue Engine
     canned_response = """

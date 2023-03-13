@@ -1,6 +1,11 @@
 from django.shortcuts import render
 
 # Create your views here.
+import json
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from .models import UserProfile
@@ -31,3 +36,17 @@ def fetch_user(request):
     }
 
     return JsonResponse(user_profile, safe=False)
+
+
+@login_required
+@csrf_exempt
+@require_POST
+def post_message(request):
+    data = json.loads(request.body.decode('utf-8'))
+    message = data['message']
+
+    # Send the message to the chatbot consumer
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.send)('chatbot', {'type': 'chat.message', 'message': message})
+
+    return JsonResponse({'status': 'ok'})
