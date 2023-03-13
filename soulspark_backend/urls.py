@@ -18,9 +18,7 @@ schema_view = get_schema_view(
     public=True,
 )
 urlpatterns = [
-    re_path(r'', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-
+    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('post-attribute', post_attribute.post_attribute, name='post-attribute'),
     path('fetch-user-info', fetch_user.fetch_user, name='fetch-user-info'),
     path('fill-db', fill_db.fill_db, name='fill-db'),

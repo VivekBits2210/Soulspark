@@ -25,3 +25,11 @@ class ChatHistory(models.Model):
     history = models.JSONField()
 
     REQUIRED_FIELDS = ['user', 'bot', 'history']
+
+
+class DeletedChatHistory(models.Model):
+    user = models.ForeignKey(app_settings.USER_MODEL, on_delete=models.CASCADE)
+    bot = models.ForeignKey(BotProfile, on_delete=models.CASCADE)
+    history = models.JSONField()
+
+    REQUIRED_FIELDS = ['user', 'bot', 'history']

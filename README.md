@@ -20,7 +20,7 @@ REST:  /fill-db
 ```
 
 Go to /admin and login with your super user credentials. Under "Social Application", you should now see "Google SSO"
-Under 'Bot Profiles', re-upload images for the tinder profiles.
+Under 'Bot Profiles', re-upload images for the tinder profiles using images from /static.
 
 ```
 REST: /accounts/login
