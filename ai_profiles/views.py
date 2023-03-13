@@ -59,6 +59,7 @@ def fetch_profile(request):
     return JsonResponse(profile_data)
 
 
+#TODO: This api should also change the bot mapping in the chat history table, a version of the api should require login
 @api_view(['POST'])
 def create_profile(request):
     serializer = BotProfileSerializer(data=request.data)

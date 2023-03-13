@@ -1,6 +1,7 @@
 from django.db import models
 
 # Create your models here.
+from ai_profiles.models import BotProfile
 from allauth import app_settings
 from django.db import models
 
@@ -16,3 +17,11 @@ class UserProfile(models.Model):
     is_staff = models.BooleanField(default=False)
 
     REQUIRED_FIELDS = ['username']
+
+
+class ChatHistory(models.Model):
+    user = models.ForeignKey(app_settings.USER_MODEL, on_delete=models.CASCADE)
+    bot = models.ForeignKey(BotProfile, on_delete=models.CASCADE)
+    history = models.JSONField()
+
+    REQUIRED_FIELDS = ['user', 'bot', 'history']

@@ -3,7 +3,8 @@ from django.db import models
 
 # Create your models here.
 class BotProfile(models.Model):
-    bot_id = models.CharField(max_length=200)
+    bot_id = models.CharField(max_length=200, primary_key=True)
+    name = models.CharField(max_length=50)
     gender = models.CharField(max_length=1)
     age = models.IntegerField()
     profession = models.TextField(null=True)
@@ -15,4 +16,4 @@ class BotProfile(models.Model):
         return self.bot_id
 
     def __str__(self):
-        return f"ID: {self.bot_id}, Gender: {self.gender}, Age: {self.age}, Hobbies: {self.hobbies}, Profession: {self.profession}, Favorites: {self.favorites}"
+        return f"ID: {self.bot_id}, Name: {self.name}, Gender: {self.gender}, Age: {self.age}, Hobbies: {self.hobbies}, Profession: {self.profession}, Favorites: {self.favorites}"
