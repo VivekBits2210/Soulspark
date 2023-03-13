@@ -11,7 +11,7 @@ from .serializers import BotProfileSerializer
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the AI profiles index.")
+    return HttpResponse("You are at the AI profiles index.")
 
 
 # TODO: Remove this login_required (only used for temporary testing of auth)

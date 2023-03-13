@@ -4,3 +4,7 @@ six
 psycopg2
 django-allauth
 djangorestframework
+daphne
+channels
+celery
+openai
