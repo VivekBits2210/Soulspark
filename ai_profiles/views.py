@@ -13,6 +13,8 @@ from .serializers import BotProfileSerializer
 def index(request):
     return HttpResponse("Hello, world. You're at the AI profiles index.")
 
+
+# TODO: Remove this login_required (only used for temporary testing of auth)
 @login_required
 def generate_profile(request):
     image = Image.new('RGB', (200, 200), (255, 0, 0))
@@ -52,7 +54,7 @@ def fetch_profile(request):
         'hobbies': profile.hobbies,
         'favorites': profile.favorites,
         'profile_image_url': profile.profile_image.url,
-        "profile_image":  encoded_image,
+        "profile_image": encoded_image,
     }
     return JsonResponse(profile_data)
 
