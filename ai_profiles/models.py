@@ -6,9 +6,10 @@ class BotProfile(models.Model):
     bot_id = models.CharField(max_length=200)
     gender = models.CharField(max_length=1)
     age = models.IntegerField()
-    profession = models.TextField
+    profession = models.TextField(null=True)
     hobbies = models.JSONField()
     favorites = models.JSONField()
+    profile_image = models.ImageField(upload_to='images/')
 
     def get_id(self):
         return self.bot_id
