@@ -41,12 +41,12 @@ AUTH_APPS = [
     "allauth.socialaccount.providers.google"
 ]
 
-SITE_ID = 1
+SITE_ID = 2
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 LOGIN_URL = "/accounts/login"
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/ "
 LOGOUT_REDIRECT_URL = "/"
 
 AUTHENTICATION_BACKENDS = [
@@ -87,8 +87,9 @@ INSTALLED_APPS = [
                      "django.contrib.contenttypes",
                      "django.contrib.sessions",
                      "django.contrib.messages",
-                     "django.contrib.staticfiles",
-                     "django.contrib.sites"] \
+                     "django.contrib.sites",
+                     "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
+                     "drf_yasg"] \
                  + MY_APPS \
                  + AUTH_APPS
 

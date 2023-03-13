@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('fetch-user-info', views.fetch_user, name='fetch-user-info'),
+    path('fetch-chat-history', views.fetch_chat_history, name='fetch-chat-history'),
+    path('post-message', views.post_message, name='post-message'),
 ]

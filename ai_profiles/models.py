@@ -1,12 +1,13 @@
 from django.db import models
 
 
-# Create your models here.
+# Create your models here.-
 class BotProfile(models.Model):
-    bot_id = models.CharField(max_length=200, primary_key=True)
+    bot_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     gender = models.CharField(max_length=1)
     age = models.IntegerField()
+    bio = models.CharField(max_length=300)
     profession = models.TextField(null=True)
     hobbies = models.JSONField()
     favorites = models.JSONField()

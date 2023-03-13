@@ -4,4 +4,4 @@ from .models import BotProfile
 class BotProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = BotProfile
-        fields = ['bot_id', 'gender', 'age', 'profession', 'hobbies', 'favorites', 'profile_image']
+        fields = ['name', 'gender', 'age', 'bio', 'profession', 'hobbies', 'favorites', 'profile_image']

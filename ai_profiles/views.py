@@ -3,19 +3,22 @@ from django.http import HttpResponse
 from PIL import Image
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+
+from chat_module.models import ChatHistory
 from .models import BotProfile
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import BotProfileSerializer
 
-
+@api_view(['GET'])
 def index(request):
     return HttpResponse("You are at the AI profiles index.")
 
-
+@api_view(['GET'])
 def fetch_profile(request):
-    bot_id = request.GET.get('bot_id')
+    bot_id = int(request.GET.get('bot_id'))
     image_only = request.GET.get('image_only')
 
     # If the 'bot_id' parameter is provided, filter by bot_id
@@ -50,15 +53,51 @@ def fetch_profile(request):
     return JsonResponse(profile_data)
 
 
-#TODO: This api should also change the bot mapping in the chat history table, a version of the api should require login
 @api_view(['POST'])
-def create_profile(request):
+def create_profile_admin(request):
     serializer = BotProfileSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# TODO: This api should also change the bot mapping in the chat history table
+@login_required()
+@api_view(['POST'])
+def create_profile(request):
+    bot_id = request.data.get('bot_id')
+    name = request.data.get('name')
+    gender = request.data.get('gender')
+    age = request.data.get('age')
+    profession = request.data.get('profession')
+    hobbies = request.data.get('hobbies')
+    favorites = request.data.get('favorites')
+    profile_image = request.data.get('profile_image')
+
+    original_bot = get_object_or_404(BotProfile, pk=bot_id)
+    bot = original_bot.copy()
+
+    if name:
+        bot.name = name
+    if gender:
+        bot.gender = gender
+    if age:
+        bot.age = age
+    if profession:
+        bot.profession = profession
+    if hobbies:
+        bot.hobbies = hobbies
+    if favorites:
+        bot.favorites = favorites
+    if profile_image:
+        bot.profile_image = profile_image
+
+    bot.save()
+    ChatHistory.objects.create(user=request.user, bot=bot, history={}).save()
+    return Response({"message": "BotProfile updated successfully!"})
+
 
 # Usage for above api
 # import requests
