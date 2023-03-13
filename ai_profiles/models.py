@@ -18,3 +18,4 @@ class BotProfile(models.Model):
 
     def __str__(self):
         return f"ID: {self.bot_id}, Name: {self.name}, Gender: {self.gender}, Age: {self.age}, Hobbies: {self.hobbies}, Profession: {self.profession}, Favorites: {self.favorites}"
+    
