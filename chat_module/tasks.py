@@ -1,5 +1,5 @@
 from asgiref.sync import async_to_sync
-from celery import shared_task
+from django.utils import timezone
 from channels.layers import get_channel_layer
 
 channel_layer = get_channel_layer()
@@ -14,12 +14,14 @@ def get_response(channel_name, input_data):
     """
 
     response = canned_response
+    timestamp = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
     async_to_sync(channel_layer.send)(
         channel_name,
         {
-            "type": "chat.message",
-            "text": {"message": response,
-                     "username": None,
-                     },
+            "type": "chat_message",
+            "text": response,
+            "username": None,
+            "bot_id": input_data["bot_id"],
+            "timestamp": timestamp
         },
     )

@@ -5,7 +5,7 @@ from channels.generic.websocket import WebsocketConsumer
 
 
 class ChatConsumer(WebsocketConsumer):
-    def receive(self, text_data):
+    def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         get_response.delay(self.channel_name, text_data_json)
 
@@ -13,19 +13,20 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name,
             {
                 "type": "chat_message",
-                "text": {"msg": text_data_json["text"], "source": "user"},
+                "text": text_data_json["text"],
+                "username": text_data_json["username"],
+                "bot_id": text_data_json["bot_id"],
+                "timestamp": text_data_json["timestamp"]
             },
         )
 
-        # We will later replace this call with a celery task that will fetch the actual bot output
-        async_to_sync(self.channel_layer.send)(
-            self.channel_name,
-            {
-                "type": "chat.message",
-                "text": {"msg": "Bot says hello", "source": "bot"},
-            },
-        )
-
+    # NOTE: The structure of 'event' is defined by the UI
     def chat_message(self, event):
-        text = event["text"]
-        self.send(text_data=json.dumps({"text": text}))
+        packet = json.dumps({
+            "type": "chat_message",
+            "text": event["text"],
+            "username": event["username"],
+            "bot_id": event["bot_id"],
+            "timestamp": event["timestamp"]
+        })
+        self.send(text_data=packet)
