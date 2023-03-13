@@ -14,15 +14,6 @@ def index(request):
     return HttpResponse("You are at the AI profiles index.")
 
 
-# TODO: Remove this login_required (only used for temporary testing of auth)
-@login_required
-def generate_profile(request):
-    image = Image.new('RGB', (200, 200), (255, 0, 0))
-    response = HttpResponse(content_type="image/png")
-    image.save(response, "PNG")
-    return response
-
-
 def fetch_profile(request):
     bot_id = request.GET.get('bot_id')
     image_only = request.GET.get('image_only')
