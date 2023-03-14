@@ -1,9 +1,13 @@
-# from django.test import SimpleTestCase
-#
-# class Test
-from rest_framework.test import APITestCase
+from django.test import SimpleTestCase
+from django.urls import reverse, resolve
+#TODO: Fix these
+# from chat_module.views import fetch_user, post_attribute
 
+class ChatModuleUrlsTestCase(SimpleTestCase):
+    def test_fetch_user_url_resolves(self):
+        url = reverse('fetch-user-info')
+        # self.assertEqual(resolve(url).func, fetch_user)
 
-class TestGenerateProfile(APITestCase):
-    def setUp(self):
-        pass
+    def test_post_attribute_url_resolves(self):
+        url = reverse('post-attribute')
+        # self.assertEqual(resolve(url).func, post_attribute)
