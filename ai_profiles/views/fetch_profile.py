@@ -9,6 +9,7 @@ from ai_profiles.models import BotProfile
 @api_view(['GET'])
 def fetch_profile(request):
     bot_id = request.GET.get('bot_id')
+    no_image = request.GET.get('no_image')
     image_only = request.GET.get('image_only')
 
     # If the 'bot_id' parameter is provided, filter by bot_id
@@ -20,6 +21,11 @@ def fetch_profile(request):
         profile = query_set.first()
     else:
         profile = BotProfile.objects.order_by('?').first()
+
+    if no_image:
+        output_dict = model_to_dict(profile)
+        del output_dict['profile_image']
+        return JsonResponse(output_dict)
 
     image_data = profile.profile_image.read()
     if image_only:
