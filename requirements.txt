@@ -9,3 +9,4 @@ channels
 celery
 openai
 drf-yasg
+coverage
