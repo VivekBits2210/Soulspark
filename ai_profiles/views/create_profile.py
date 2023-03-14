@@ -1,3 +1,4 @@
+from copy import deepcopy
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -19,8 +20,8 @@ def create_profile(request):
     favorites = request.data.get('favorites')
     profile_image = request.data.get('profile_image')
 
-    original_bot = get_object_or_404(BotProfile, pk=bot_id)
-    bot = original_bot.copy()
+    original_bot = BotProfile.objects.get(bot_id=bot_id)
+    bot = deepcopy(original_bot)
 
     if name:
         bot.name = name

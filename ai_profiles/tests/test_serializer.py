@@ -16,7 +16,7 @@ class BotProfileSerializerTestCase(APITestCase):
 
         # Create a SimpleUploadedFile object from the image content
         self.valid_data = {
-            'name': 'Bot1',
+            'name': 'Bot',
             'gender': 'M',
             'age': 30,
             'bio': 'I am Bot1',
@@ -51,7 +51,7 @@ class BotProfileSerializerTestCase(APITestCase):
         }
         serializer = BotProfileSerializer(data=invalid_data)
         self.assertFalse(serializer.is_valid())
-        self.assertEqual(set(serializer.errors.keys()), {'bio', 'profession', 'hobbies', 'favorites','profile_image'})
+        self.assertEqual(set(serializer.errors.keys()), {'name', 'physical_attributes', 'bio', 'profession', 'hobbies', 'favorites','profile_image'})
 
     @skip
     def test_invalid_profile_image(self):
@@ -80,9 +80,13 @@ class BotProfileSerializerTestCase(APITestCase):
     def tearDown(self):
         # remove all text files and files starting with 'trial' under the 'images' folder
         folder_path = os.path.join('images')
+        to_remove = []
         for filename in os.listdir(folder_path):
             if filename.startswith('test'):
                 file_path = os.path.join(folder_path, filename)
-                os.remove(file_path)
+                to_remove.append(file_path)
+
+        for path in to_remove:
+            os.remove(path)
 
         super().tearDown()
