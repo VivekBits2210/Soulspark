@@ -1,7 +1,6 @@
 from copy import deepcopy
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
@@ -40,4 +39,4 @@ def create_profile(request):
 
     bot.save()
     ChatHistory.objects.create(user=request.user, bot=bot, history={}).save()
-    return JsonResponse({"message": "BotProfile updated successfully!"})
+    return JsonResponse({"message": f"{bot.get_id()} bot updated successfully!"})

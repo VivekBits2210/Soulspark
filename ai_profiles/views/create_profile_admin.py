@@ -1,10 +1,8 @@
 import os
-
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
-
 from ai_profiles.serializers import BotProfileSerializer
 
 

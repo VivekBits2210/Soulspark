@@ -23,7 +23,7 @@ def validate_json(value):
 
 
 def validate_image_extension(value):
-    allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif']  # add any other allowed file extensions here
+    allowed_extensions = ['.jpg', '.jpeg', '.png']
     ext = os.path.splitext(value.name)[-1]
     if not ext.lower() in allowed_extensions:
         raise ValidationError(

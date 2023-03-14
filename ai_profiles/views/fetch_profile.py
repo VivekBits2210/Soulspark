@@ -1,4 +1,5 @@
 import base64
+from django.forms.models import model_to_dict
 from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 
@@ -28,16 +29,6 @@ def fetch_profile(request):
         return response
 
     encoded_image = base64.b64encode(image_data).decode('utf-8')
-
-    # serialize the BotProfile object to a JSON response
-    profile_data = {
-        'bot_id': profile.bot_id,
-        'gender': profile.gender,
-        'age': profile.age,
-        'profession': profile.profession,
-        'hobbies': profile.hobbies,
-        'favorites': profile.favorites,
-        'profile_image_url': profile.profile_image.url,
-        "profile_image": encoded_image,
-    }
-    return JsonResponse(profile_data)
+    output_dict = model_to_dict(profile)
+    output_dict['profile_image'] = encoded_image
+    return JsonResponse(output_dict)

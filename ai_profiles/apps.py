@@ -4,4 +4,3 @@ from django.apps import AppConfig
 class AiProfilesConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "ai_profiles"
-    label= "ai_profiles"
