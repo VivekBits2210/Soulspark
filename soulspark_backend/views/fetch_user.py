@@ -21,9 +21,9 @@ def fetch_user(request):
         profile = profile_queryset.first()
 
     user_profile = {
-        'uid': social_account.uid,
+        'uid': social_account.uid if social_account else None,
         'username': user.username,
-        'email': email.email,
+        'email': email.email if email else None,
         'age': profile.age,
         'gender': profile.gender,
         'level': profile.level,

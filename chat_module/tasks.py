@@ -33,8 +33,8 @@ def get_response(channel_name, input_data):
         packet,
     )
 
-    user = UserProfile.objects.get(username=username)
+    user_profile = UserProfile.objects.get(username=username)
     bot = BotProfile.objects.get(bot_id = bot_id)
-    chat_history_obj = ChatHistory.objects.get(user=user, bot=bot)
+    chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
     chat_history_obj.history.append(packet)
     chat_history_obj.save()
