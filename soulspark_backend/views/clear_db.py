@@ -9,7 +9,7 @@ from chat_module.models import UserProfile
 
 @api_view(['GET'])
 def clear_db(request):
-    db = int(request.GET.get('db'))
+    db = request.GET.get('db')
     if db == 'bot':
         BotProfile.objects.all().delete()
     elif db == 'user':

@@ -17,6 +17,7 @@ class BotProfileTestCase(TestCase):
             profession='AI assistant',
             hobbies={"hobbies": ["reading", "music"]},
             favorites={"color": "blue", "food": "pizza"},
+            physical_attributes={"hair": "black"},
             profile_image=SimpleUploadedFile("./static/trial.jpg", b"file_content", content_type="image/jpeg")
         )
 
@@ -28,6 +29,7 @@ class BotProfileTestCase(TestCase):
             bio='I am a chatbot too.',
             profession='Virtual assistant',
             hobbies={"hobbies": ["sports", "movies"]},
+            physical_attributes={"hair": "black"},
             favorites={"color": "green", "food": "pasta"},
             profile_image=SimpleUploadedFile("./static/trial.jpg", b"file_content", content_type="image/jpeg")
         )
@@ -51,6 +53,7 @@ class BotProfileTestCase(TestCase):
                 bio='I am another chatbot.',
                 profession='Assistant',
                 hobbies={"hobbies": ["traveling"]},
+                physical_attributes={"hair": "black"},
                 favorites={"color": "red", "food": "sushi"},
                 profile_image=SimpleUploadedFile("./static/trial.jpg", b"file_content", content_type="image/jpeg")
             )
@@ -65,7 +68,7 @@ class BotProfileTestCase(TestCase):
             age=30,
             bio='I am another chatbot.',
             profession='Assistant',
-            hobbies={"hobbies": [""]},
+            hobbies={"hobbies": []},
             favorites={"color": "red", "food": "sushi"},
             profile_image=SimpleUploadedFile("./static/trial.jpg", b"file_content", content_type="image/jpeg")
         )
@@ -78,11 +81,12 @@ class BotProfileTestCase(TestCase):
             bot_profile = BotProfile.objects.create(
                 name='Bot 2',
                 gender='G',
-                age=30,
+                    age=30,
                 bio='I am another chatbot.',
                 profession='Assistant',
                 hobbies={'hobbies': ['traveling']},
                 favorites={'color': 'red', 'food': 'sushi'},
+                physical_attributes={"hair": "black"},
                 profile_image=SimpleUploadedFile("./static/a.jpg", b"file_content", content_type="image/jpeg")
             )
 
@@ -96,7 +100,9 @@ class BotProfileTestCase(TestCase):
                 profession='Assistant',
                 hobbies={'hobbies': ['traveling']},
                 favorites={'color': 'red', 'food': 'sushi'},
-                profile_image=SimpleUploadedFile("./static/a.txt", b"file_content", content_type="text/plain")
+                physical_attributes={"hair": "black"},
+                profile_image=SimpleUploadedFile("./static/a.txt", b"file_content",
+                                                 content_type="text/plain").content_type
             )
 
     def test_save_method_upload_to(self):
