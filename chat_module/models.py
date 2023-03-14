@@ -23,6 +23,7 @@ class ChatHistory(models.Model):
     user = models.ForeignKey(app_settings.USER_MODEL, on_delete=models.CASCADE)
     bot = models.ForeignKey(BotProfile, on_delete=models.CASCADE)
     history = models.JSONField()
+    input_chars = models.IntegerField(default=0)
 
     REQUIRED_FIELDS = ['user', 'bot', 'history']
 
