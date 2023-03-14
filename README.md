@@ -39,7 +39,7 @@ After logging out of /admin,
 ```
 REST: /accounts/login
 ```
-click on "Google" to sign in (make sure your email address is part of the project -> [ask a dev to do this])
+click on "Google" to sign in (make sure your email address is a valid test email for this project -> [ask a dev to add you if it is not])
 
 To sign out,
 ```
