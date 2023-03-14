@@ -1,6 +1,6 @@
 from unittest import skip
 import os
-from rest_framework.exceptions import ValidationError
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from ai_profiles.models import BotProfile
@@ -32,6 +32,7 @@ class BotProfileTestCase(TestCase):
             profile_image=SimpleUploadedFile("./static/trial.jpg", b"file_content", content_type="image/jpeg")
         )
 
+        self.assertIsNotNone(bot_profile.bot_id)
         self.assertEqual(bot_profile.name, 'Jane Doe')
         self.assertEqual(bot_profile.gender, 'F')
         self.assertEqual(bot_profile.age, 30)
@@ -41,7 +42,7 @@ class BotProfileTestCase(TestCase):
         self.assertEqual(bot_profile.favorites, {'color': 'green', 'food': 'pasta'})
 
     def test_primary_key(self):
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValidationError):
             BotProfile.objects.create(
                 bot_id=self.bot_profile.bot_id,
                 name='Bot 2',
@@ -72,6 +73,19 @@ class BotProfileTestCase(TestCase):
             bot_profile.hobbies = "invalid value"
             bot_profile.save()
 
+    def test_invalid_gender(self):
+        with self.assertRaises(ValidationError):
+            bot_profile = BotProfile.objects.create(
+                name='Bot 2',
+                gender='G',
+                age=30,
+                bio='I am another chatbot.',
+                profession='Assistant',
+                hobbies={'hobbies': ['traveling']},
+                favorites={'color': 'red', 'food': 'sushi'},
+                profile_image=SimpleUploadedFile("./static/a.jpg", b"file_content", content_type="image/jpeg")
+            )
+
     def test_invalid_image(self):
         with self.assertRaises(ValidationError):
             bot_profile = BotProfile.objects.create(
@@ -84,6 +98,9 @@ class BotProfileTestCase(TestCase):
                 favorites={'color': 'red', 'food': 'sushi'},
                 profile_image=SimpleUploadedFile("./static/a.txt", b"file_content", content_type="text/plain")
             )
+
+    def test_save_method_upload_to(self):
+        self.assertTrue(os.path.exists(self.bot_profile.profile_image.path))
 
     def tearDown(self):
         # remove all text files and files starting with 'trial' under the 'images' folder
