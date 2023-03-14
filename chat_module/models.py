@@ -1,6 +1,3 @@
-from django.db import models
-
-# Create your models here.
 from ai_profiles.models import BotProfile
 from allauth import app_settings
 from django.db import models

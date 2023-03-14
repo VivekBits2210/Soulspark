@@ -1,4 +1,5 @@
 from asgiref.sync import async_to_sync
+from django.contrib.auth.models import User
 from django.utils import timezone
 from channels.layers import get_channel_layer
 
@@ -33,7 +34,8 @@ def get_response(channel_name, input_data):
         packet,
     )
 
-    user_profile = UserProfile.objects.get(username=username)
+    user = User.objects.get(username=username)
+    user_profile = UserProfile.objects.get(user=user)
     bot = BotProfile.objects.get(bot_id = bot_id)
     chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
     chat_history_obj.history.append(packet)

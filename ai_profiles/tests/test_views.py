@@ -1,4 +1,3 @@
-import base64
 import copy
 import json
 import os
@@ -43,10 +42,10 @@ class ViewsTest(APITestCase):
             'age': 25,
             'profession': 'Designer',
         }
-        self.client.force_login(self.user)
+        self.client.force_login(user=self.user)
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json(), {"message": "BotProfile updated successfully!"})
+        self.assertEqual(response.json(), {"message": f"{bot_id} bot updated successfully!"})
 
         new_bot = BotProfile.objects.get(bot_id=bot_id)
         self.assertEqual(new_bot.name, "Karen")
