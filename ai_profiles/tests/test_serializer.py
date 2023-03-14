@@ -21,7 +21,7 @@ class BotProfileSerializerTestCase(APITestCase):
             'age': 30,
             'bio': 'I am Bot1',
             'profession': 'Engineer',
-            'hobbies': {'reading': 'novels', 'sport': 'cricket'},
+            'hobbies': {'hobbies':['chess','cricket']},
             'physical_attributes': {"hair":"black"},
             'favorites': {'color': 'blue', 'food': 'pizza'},
             'profile_image': SimpleUploadedFile("test_serializer.jpg", image_content, content_type="image/jpeg")

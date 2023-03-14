@@ -16,6 +16,7 @@ def validate_name(value):
     if len(value.split()) > 1:
         raise ValidationError('Name must contain only one word.')
 
+
 def validate_json(value):
     if not isinstance(value, dict):
         raise ValidationError("Expected a dictionary, but got %s" % type(value).__name__)
