@@ -46,8 +46,8 @@ SITE_ID = 1
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 LOGIN_URL = "/accounts/login"
-LOGIN_REDIRECT_URL = ""
-LOGOUT_REDIRECT_URL = ""
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
