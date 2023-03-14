@@ -19,16 +19,39 @@ $ python3 manage.py runserver localhost:8000
 REST:  /fill-db
 ```
 
-Go to /admin and login with your super user credentials. Under "Social Application", you should now see "Google SSO"
-Under 'Bot Profiles', re-upload images for the tinder profiles using images from /static.
+Go to /admin and login with your super user credentials. \
+Under 'Sites'
+```
+Domain: localhost:8000
+Display: localhost
+```
 
+Under "Social Application",
+```
+Provider: Google
+Client ID: 485503899387-03u1pvv94g1k01tf9rhv7nno51tbfmls.apps.googleusercontent.com
+Client Secret: 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
+Key: (blank)
+Selected hosts: localhost:8000
+```
+
+After logging out of /admin,
 ```
 REST: /accounts/login
 ```
-After logging out of /admin, 
-click on "Google" to sign in (first make sure to add your email address to test Google Credentials -> [ask a dev to do this])
+click on "Google" to sign in (make sure your email address is part of the project -> [ask a dev to do this])
 
 To sign out,
 ```
 REST: /accounts/logout
+```
+
+Swagger
+```
+REST: /
+```
+
+Testing
+```
+$ python3 manage.py test
 ```
