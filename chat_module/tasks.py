@@ -12,7 +12,7 @@ channel_layer = get_channel_layer()
 # TODO: Make this a shared task once celery is setup
 # @shared_task
 def get_response(channel_name, input_data):
-    username = input_data['username']
+    username = input_data["username"]
     bot_id = input_data["bot_id"]
 
     # TODO: Integrate with the Dialogue Engine
@@ -27,7 +27,7 @@ def get_response(channel_name, input_data):
         "text": response,
         "username": username,
         "bot_id": bot_id,
-        "timestamp": timestamp
+        "timestamp": timestamp,
     }
     async_to_sync(channel_layer.send)(
         channel_name,
@@ -36,7 +36,7 @@ def get_response(channel_name, input_data):
 
     user = User.objects.get(username=username)
     user_profile = UserProfile.objects.get(user=user)
-    bot = BotProfile.objects.get(bot_id = bot_id)
+    bot = BotProfile.objects.get(bot_id=bot_id)
     chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
     chat_history_obj.history.append(packet)
     chat_history_obj.save()

@@ -24,21 +24,18 @@ SECRET_KEY = "django-insecure-7n287l5t%!5jo-m=7v*@798-o01!$+eu$(vhhisjm8z9vc=h*a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ["localhost"]
 
 ACCOUNT_EMAIL_REQUIRED = True
 
 # Application definition
-MY_APPS = [
-    "ai_profiles.apps.AiProfilesConfig",
-    "chat_module.apps.ChatModuleConfig"
-]
+MY_APPS = ["ai_profiles.apps.AiProfilesConfig", "chat_module.apps.ChatModuleConfig"]
 
 AUTH_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.google"
+    "allauth.socialaccount.providers.google",
 ]
 
 SITE_ID = 1
@@ -50,48 +47,49 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request'
-            ]
-        }
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": ["django.template.context_processors.request"]
+        },
     }
 ]
 
 # Project ID: soulspark-380421
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
         ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
+        "AUTH_PARAMS": {
+            "access_type": "online",
         },
-        'OAUTH_PKCE_ENABLED': True,
+        "OAUTH_PKCE_ENABLED": True,
     }
 }
-INSTALLED_APPS = [
-                     "daphne",
-                     "django.contrib.admin",
-                     "django.contrib.auth",
-                     "django.contrib.contenttypes",
-                     "django.contrib.sessions",
-                     "django.contrib.messages",
-                     "django.contrib.sites",
-                     "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
-                     "drf_yasg"] \
-                 + MY_APPS \
-                 + AUTH_APPS
+INSTALLED_APPS = (
+    [
+        "daphne",
+        "django.contrib.admin",
+        "django.contrib.auth",
+        "django.contrib.contenttypes",
+        "django.contrib.sessions",
+        "django.contrib.messages",
+        "django.contrib.sites",
+        "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
+        "drf_yasg",
+    ]
+    + MY_APPS
+    + AUTH_APPS
+)
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -129,11 +127,7 @@ ASGI_APPLICATION = "soulspark_backend.asgi.application"
 CELERY_BROKER_URL = ""
 CELERY_RESULT_BACKEND = ""
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

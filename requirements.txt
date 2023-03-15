@@ -12,3 +12,4 @@ drf-yasg
 coverage
 asgiref
 pytz
+black

@@ -1,4 +1,1 @@
-__all__ = [
-    'chat_module',
-    'ai_profiles'
-]
+__all__ = ["chat_module", "ai_profiles"]

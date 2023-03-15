@@ -51,8 +51,15 @@ Swagger
 REST: /
 ```
 
-Testing
+All tests
 ```
 $ python3 manage.py test
 ```
+
+Limited testing example (only tests from tests_urls.py under chat_module folder):
+```
+$ python3 manage.py test chat_module.tests.test_urls
+```
+
 *Unfixed bug: Firing the test suite creates dummy images inside the images folder, clear this folder between testing runs.*
+

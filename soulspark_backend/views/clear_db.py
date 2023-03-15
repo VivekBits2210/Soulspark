@@ -7,15 +7,15 @@ from ai_profiles.models import BotProfile
 from chat_module.models import UserProfile
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def clear_db(request):
-    db = request.GET.get('db')
-    if db == 'bot':
+    db = request.GET.get("db")
+    if db == "bot":
         BotProfile.objects.all().delete()
-    elif db == 'user':
+    elif db == "user":
         UserProfile.objects.all().delete()
-    elif db == 'all':
+    elif db == "all":
         SocialApp.objects.all().delete()
         BotProfile.objects.all().delete()
         UserProfile.objects.all().delete()
-    return JsonResponse({'status': 'ok'})
+    return JsonResponse({"status": "ok"})

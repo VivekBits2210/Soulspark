@@ -13,7 +13,7 @@ def timezone_validation(value):
 
 
 def gender_validation(value):
-    if value not in ['M', 'F']:
+    if value not in ["M", "F"]:
         raise ValidationError(f"{value} is not a valid gender.")
 
 
@@ -23,7 +23,7 @@ def level_validation(value):
 
 
 def interests_validation(value):
-    interests = value.split(',')
+    interests = value.split(",")
     for interest in interests:
         if not interest.strip():
             raise ValidationError("Invalid interests: comma-separated values expected.")
@@ -36,18 +36,34 @@ def age_validation(value):
 
 class UserProfile(models.Model):
     user = models.ForeignKey(app_settings.USER_MODEL, on_delete=models.CASCADE)
-    age = models.PositiveIntegerField(null=True, blank=True, validators=[age_validation])
-    gender = models.CharField(max_length=10, choices=[('M', 'Male'), ('F', 'Female'), ('O', 'Other')], null=True,
-                              blank=True, validators=[gender_validation])
-    gender_focus = models.CharField(max_length=10, choices=[('M', 'Male'), ('F', 'Female'), ('O', 'Other')], null=True,
-                                    blank=True, validators=[gender_validation])
-    timezone = models.CharField(max_length=32, validators=[timezone_validation], default='America/New_York')
+    age = models.PositiveIntegerField(
+        null=True, blank=True, validators=[age_validation]
+    )
+    gender = models.CharField(
+        max_length=10,
+        choices=[("M", "Male"), ("F", "Female"), ("O", "Other")],
+        null=True,
+        blank=True,
+        validators=[gender_validation],
+    )
+    gender_focus = models.CharField(
+        max_length=10,
+        choices=[("M", "Male"), ("F", "Female"), ("O", "Other")],
+        null=True,
+        blank=True,
+        validators=[gender_validation],
+    )
+    timezone = models.CharField(
+        max_length=32, validators=[timezone_validation], default="America/New_York"
+    )
     experience = models.IntegerField(default=0)
-    interests = models.CharField(max_length=250, null=True, blank=True, validators=[interests_validation])
+    interests = models.CharField(
+        max_length=250, null=True, blank=True, validators=[interests_validation]
+    )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ["username"]
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -59,9 +75,11 @@ class ChatHistory(models.Model):
     bot = models.ForeignKey(BotProfile, on_delete=models.CASCADE)
     history = models.JSONField(blank=True)
     input_chars = models.IntegerField(default=0)
-    level = models.DecimalField(max_digits=5, decimal_places=4, default=1.0, validators=[level_validation])
+    level = models.DecimalField(
+        max_digits=5, decimal_places=4, default=1.0, validators=[level_validation]
+    )
 
-    REQUIRED_FIELDS = ['user', 'bot', 'history']
+    REQUIRED_FIELDS = ["user", "bot", "history"]
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -75,7 +93,7 @@ class DeletedChatHistory(models.Model):
     input_chars = models.IntegerField(default=0)
     level = models.DecimalField(max_digits=5, decimal_places=4, default=1.0)
 
-    REQUIRED_FIELDS = ['user', 'bot', 'history']
+    REQUIRED_FIELDS = ["user", "bot", "history"]
 
     def save(self, *args, **kwargs):
         self.full_clean()
