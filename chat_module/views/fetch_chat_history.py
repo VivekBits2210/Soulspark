@@ -35,5 +35,7 @@ def fetch_chat_history(request):
     elif lines == 0:
         history = []
     else:
-        history = chat_history_queryset.first().history[-lines:]
+        history_object = chat_history_queryset.first()
+        bot_id = history_object.bot_id
+        history = history_object.history[-lines:]
     return JsonResponse({'bot_id': bot_id, 'history': history}, status=status.HTTP_200_OK)
