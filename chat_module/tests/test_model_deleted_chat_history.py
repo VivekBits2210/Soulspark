@@ -7,9 +7,7 @@ from chat_module.tests.utils import create_bot
 
 class ChatHistoryTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="tester", password="password"
-        )
+        self.user = User.objects.create_user(username="tester", password="password")
         self.bot = create_bot()
         self.maximal_data = {
             "user": self.user,

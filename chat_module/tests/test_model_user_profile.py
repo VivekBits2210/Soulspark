@@ -53,32 +53,32 @@ class UserProfileTestCase(TestCase):
 
     def test_user_profile_primary_key(self):
         with self.assertRaises(ValidationError):
-            profile1 = UserProfile.objects.create(**self.maximal_data)
-            profile2 = UserProfile.objects.create(user=self.user)
+            UserProfile.objects.create(**self.maximal_data)
+            UserProfile.objects.create(user=self.user)
 
     def test_invalid_gender(self):
         with self.assertRaises(ValidationError):
-            profile = UserProfile.objects.create(user=self.user, gender="X")
+            UserProfile.objects.create(user=self.user, gender="X")
 
     def test_invalid_age(self):
         with self.assertRaises(ValidationError):
-            profile = UserProfile.objects.create(user=self.user, gender="X", age=12)
+            UserProfile.objects.create(user=self.user, gender="X", age=12)
 
     def test_invalid_gender_focus(self):
         with self.assertRaises(ValidationError):
-            profile = UserProfile.objects.create(
+            UserProfile.objects.create(
                 user=self.user, gender="M", age=18, gender_focus="X"
             )
 
     def test_invalid_experience(self):
         with self.assertRaises(ValidationError):
-            profile = UserProfile.objects.create(
+            UserProfile.objects.create(
                 user=self.user, gender="M", age=18, gender_focus="F", experience=-1
             )
 
     def test_invalid_timezone(self):
         with self.assertRaises(ValidationError):
-            profile = UserProfile.objects.create(
+            UserProfile.objects.create(
                 user=self.user,
                 gender="M",
                 age=18,

@@ -47,7 +47,7 @@ class ChatHistoryTestCase(TestCase):
 
     def test_chat_history_deletion(self):
         chat_history = ChatHistory.objects.create(
-            user=self.user, bot=self.bot, history=[{"message":"x"}], level=1.0
+            user=self.user, bot=self.bot, history=[{"message": "x"}], level=1.0
         )
         chat_history_id = chat_history.id
         chat_history.delete()
