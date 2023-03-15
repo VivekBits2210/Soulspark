@@ -43,7 +43,7 @@ def customize_profile(request):
             previous_history = query_set.first().history
 
         ChatHistory.objects.create(user=request.user, bot=bot, history=previous_history)
-    except ValidationError as e:
-        return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST)
+    except (ValidationError, TypeError) as e:
+        return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST, safe=False)
 
     return JsonResponse({"bot_id": bot.bot_id}, status=status.HTTP_200_OK)

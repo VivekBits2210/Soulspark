@@ -6,7 +6,6 @@ from ai_profiles.models import BotProfile
 
 
 class BotProfileTestCase(TestCase):
-
     def setUp(self):
         self.bot_profile = BotProfile.objects.create(
             name='John',

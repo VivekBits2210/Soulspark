@@ -7,6 +7,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from ai_profiles.models import BotProfile
+from chat_module.models import ChatHistory
 
 
 class BotProfileCustomizeProfileTest(APITestCase):
@@ -17,6 +18,7 @@ class BotProfileCustomizeProfileTest(APITestCase):
             password='password'
         )
         self.client = Client()
+        self.client.force_login(user=self.user)
 
         image_path = os.path.join('static', 'trial.jpg')
         with open(image_path, 'rb') as f:
@@ -44,27 +46,19 @@ class BotProfileCustomizeProfileTest(APITestCase):
             'favorites': {'color': 'black'},
         }
 
-    def test_customize_profile_returns_valid_response(self):
-        self.client.force_login(user=self.user)
-        response = self.client.post(self.url, data=json.dumps(self.modified_data), content_type='application/json')
+        self.response = self.client.post(self.url, data=json.dumps(self.modified_data), content_type='application/json')
 
+    def test_customize_profile_returns_valid_response(self):
         # Response should be valid
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
         # Response should be a valid dictionary and contain bot_id
-        response_json = response.json()
+        response_json = self.response.json()
         self.assertIsInstance(response_json, dict)
         self.assertIn("bot_id", response_json.keys())
 
     def test_customize_profile_affects_db(self):
-        self.client.force_login(user=self.user)
-        response = self.client.post(self.url, data=json.dumps(self.modified_data), content_type='application/json')
-
-        # Response should be valid
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # Response should be a valid dictionary and contain bot_id
-        response_json = response.json()
+        response_json = self.response.json()
 
         # Customized bot should exist
         self.assertTrue(BotProfile.objects.filter(name=self.modified_data['name']).exists())
@@ -83,16 +77,13 @@ class BotProfileCustomizeProfileTest(APITestCase):
         # This should be a unique bot, not the same id as before
         self.assertNotEqual(customized_bot.bot_id, self.bot_profile.bot_id)
 
-    def test_customize_profile_has_correct_attributes(self):
-        self.client.force_login(user=self.user)
-        response = self.client.post(self.url, data=json.dumps(self.modified_data), content_type='application/json')
+        # Chat History Object should exist
+        history_queryset = ChatHistory.objects.filter(user=self.user, bot=customized_bot)
+        self.assertTrue(history_queryset.exists())
 
-        # Response should be valid
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_customize_profile_has_correct_attributes(self):
         customized_bot = BotProfile.objects.get(name=self.modified_data['name'])
 
-        # Response should be a valid dictionary and contain bot_id
-        response_json = response.json()
         # Assert all new attributes are copied over
         self.assertEqual(customized_bot.name, self.modified_data['name'])
         self.assertEqual(customized_bot.age, self.modified_data['age'])
@@ -104,12 +95,40 @@ class BotProfileCustomizeProfileTest(APITestCase):
         self.assertDictEqual(customized_bot.hobbies, self.bot_profile.hobbies)
         self.assertDictEqual(customized_bot.physical_attributes, self.bot_profile.physical_attributes)
 
-    # TODO: Try creating with false info in JSON
-
-    # TODO: Non-int bot id
-
-    # TODO: Missing bot id
-
     # TODO: Check history being copied over
+    def test_history_copied_over(self):
+        old_history = {'sample_history_key': 'sample_history_value'}
+        ChatHistory.objects.create(user=self.user, bot=self.bot_profile,
+                                   history=old_history)
+        self.response = self.client.post(self.url, data=json.dumps(self.modified_data), content_type='application/json')
+        self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
-    # TODO: Tear down, remove all images?
+        response_json = self.response.json()
+        self.assertIsInstance(response_json, dict)
+        self.assertIn("bot_id", response_json.keys())
+
+        # Customized bot should exist
+        returned_id = response_json['bot_id']
+        self.assertTrue(BotProfile.objects.filter(bot_id = returned_id).exists())
+        customized_bot = BotProfile.objects.get(bot_id = returned_id)
+
+        # Chat History Object should exist
+        history_queryset = ChatHistory.objects.filter(user=self.user, bot=customized_bot)
+        self.assertTrue(history_queryset.exists())
+        self.assertEqual(history_queryset.count(),1)
+        self.assertEqual(history_queryset.first().history, old_history)
+
+    def test_missing_bot_id_attribute_invalid(self):
+        self.modified_data['incorrect_attribute'] = 'incorrect_value'
+        self.response = self.client.post(self.url, data=json.dumps(self.modified_data), content_type='application/json')
+        self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_string_bot_id_cannot_be_non_integer(self):
+        self.modified_data['bot_id'] = 'invalid'
+        self.response = self.client.post(self.url, data=json.dumps(self.modified_data), content_type='application/json')
+        self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_string_bot_id_cannot_be_missing(self):
+        del self.modified_data['bot_id']
+        self.response = self.client.post(self.url, data=json.dumps(self.modified_data), content_type='application/json')
+        self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)

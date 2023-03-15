@@ -117,6 +117,12 @@ class BotProfileFetchViewTest(APITestCase):
         response = self.client.get(self.url, {'bot_id': -1})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    # TODO: Test no-integer bot id
+    def test_fetch_profile_non_integer_bot_id(self):
+        # Invalid bot id fails
+        response = self.client.get(self.url, {'bot_id': 'invalid'})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # TODO: Check other failure messages in fetch_profile and trigger them through a test
+    def test_fetch_profile_non_integer_n(self):
+        # Invalid n fails
+        response = self.client.get(self.url, {'n': 'invalid'})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
