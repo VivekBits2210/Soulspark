@@ -50,11 +50,11 @@ class BotProfileFetchViewTest(APITestCase):
 
     def test_fetch_profile_view_works(self):
         # API should work, return a dictionary with the right bot_id and a full response
-        response = self.client.get(self.url, {'bot_id': self.bot_profile.get_id()})
+        response = self.client.get(self.url, {'bot_id': self.bot_profile.bot_id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response_json = response.json()
         self.assertIsInstance(response_json, dict)
-        self.assertEqual(response_json['bot_id'], self.bot_profile.get_id())
+        self.assertEqual(response_json['bot_id'], self.bot_profile.bot_id)
         self.assertListEqual(sorted(self.bot_profile_fields), sorted(response_json.keys()))
 
     def test_fetch_profile_view_n_equals_one(self):
@@ -108,7 +108,7 @@ class BotProfileFetchViewTest(APITestCase):
     def test_fetch_profile_image_only_view(self):
         # API response should contain an image
         url = reverse('fetch_profile')
-        response = self.client.get(url, {'bot_id': self.bot_profile.get_id(), 'image_only': True})
+        response = self.client.get(url, {'bot_id': self.bot_profile.bot_id, 'image_only': True})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('image/jpeg', response['Content-Type'])
 

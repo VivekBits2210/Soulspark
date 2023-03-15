@@ -1,15 +1,15 @@
-# Soulspark
+# SoulSpark
 
 
 Backend setup
 ```
-$ python3 -m venv python_venv
+$ python -m venv python_venv
 $ source python_venv/bin/activate
-$ python3 -m pip install --upgrade pip setuptools
-$ python3 -m pip install -r requirements.txt
-$ python3 manage.py makemigrations
-$ python3 manage.py migrate
-$ python3 manage.py createsuperuser
+$ python -m pip install --upgrade pip setuptools
+$ python -m pip install -r requirements.txt
+$ python manage.py makemigrations
+$ python manage.py migrate
+$ python manage.py createsuperuser
 ```
 
 Create a super user with name 'admin' and an email that is NOT a real email
@@ -55,3 +55,4 @@ Testing
 ```
 $ python3 manage.py test
 ```
+*Unfixed bug: Firing the test suite creates dummy images inside the images folder, clear this folder between testing runs.*
