@@ -46,7 +46,7 @@ def customize_profile(request):
     try:
         bot = BotProfile.objects.create(**original_dict)
 
-        previous_history = {}
+        previous_history = []
         query_set = ChatHistory.objects.filter(user=request.user, bot=original_bot)
         if query_set.exists():
             previous_history = query_set.first().history
