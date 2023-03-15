@@ -23,8 +23,8 @@ def fetch_profile(request):
         query_set = BotProfile.objects.order_by('?')[:n]
         output_list = []
         for profile in query_set:
+            output_dict = model_to_dict(profile)
             if no_image:
-                output_dict = model_to_dict(profile)
                 del output_dict['profile_image']
             else:
                 image_data = profile.profile_image.read()
@@ -44,7 +44,7 @@ def fetch_profile(request):
 
         query_set = BotProfile.objects.filter(bot_id=bot_id)
         if not query_set.exists():
-            return JsonResponse({'error': f"No profile found for bot_id '{bot_id}'"}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': f"No profile found for bot_id '{bot_id}'"}, status=status.HTTP_404_NOT_FOUND)
         profile = query_set.first()
     else:
         profile = BotProfile.objects.order_by('?').first()

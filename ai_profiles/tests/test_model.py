@@ -127,13 +127,3 @@ class BotProfileTestCase(TestCase):
 
     def test_save_method_upload_to(self):
         self.assertTrue(os.path.exists(self.bot_profile.profile_image.path))
-
-    def tearDown(self):
-        # remove all text files and files starting with 'trial' under the 'images' folder
-        folder_path = os.path.join('images')
-        for filename in os.listdir(folder_path):
-            if filename.endswith('.txt') or filename.startswith('test'):
-                file_path = os.path.join(folder_path, filename)
-                os.remove(file_path)
-
-        super().tearDown()
