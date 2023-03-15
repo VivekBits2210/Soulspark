@@ -30,5 +30,5 @@ def unmatch(request):
     # delete all chat history objects for the user and bot
     chat_history_queryset.delete()
 
-    return JsonResponse({'message': f"All chat history for bot {bot_id} and user {user} has been moved to DeletedChatHistory"})
+    return JsonResponse({'message': f"All chat history for bot {bot_id} and user {user} moved to DeletedChatHistory"})
 

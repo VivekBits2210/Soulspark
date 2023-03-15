@@ -10,3 +10,4 @@ celery
 openai
 drf-yasg
 coverage
+asgiref
