@@ -13,7 +13,7 @@ class ChatConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         get_response.delay(self.channel_name, text_data_json)
 
-        username = text_data_json['username']
+        username = text_data_json["username"]
         bot_id = text_data_json["bot_id"]
         text = text_data_json["text"]
         packet = {
@@ -21,7 +21,7 @@ class ChatConsumer(WebsocketConsumer):
             "text": text,
             "username": username,
             "bot_id": bot_id,
-            "timestamp": text_data_json["timestamp"]
+            "timestamp": text_data_json["timestamp"],
         }
         async_to_sync(self.channel_layer.send)(
             self.channel_name,
@@ -41,11 +41,13 @@ class ChatConsumer(WebsocketConsumer):
 
     # NOTE: The structure of 'event' is defined by the UI
     def chat_message(self, event):
-        packet = json.dumps({
-            "type": "chat_message",
-            "text": event["text"],
-            "username": event["username"],
-            "bot_id": event["bot_id"],
-            "timestamp": event["timestamp"]
-        })
+        packet = json.dumps(
+            {
+                "type": "chat_message",
+                "text": event["text"],
+                "username": event["username"],
+                "bot_id": event["bot_id"],
+                "timestamp": event["timestamp"],
+            }
+        )
         self.send(text_data=packet)

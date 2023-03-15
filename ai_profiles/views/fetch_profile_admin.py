@@ -1,38 +1,19 @@
 import base64
-
-from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 from django.http import JsonResponse, HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
-from chat_module.models import UserProfile
-
-
-def get_gender_list(gender_focus):
-    if gender_focus == "M":
-        return ["M"]
-    elif gender_focus == "F":
-        return ["F"]
-    elif gender_focus == "E":
-        return ["M", "F"]
 
 
 @api_view(["GET"])
-@login_required
-def fetch_profile(request):
+def fetch_profile_admin(request):
     user = request.user
     n = request.GET.get("n")
     bot_id = request.GET.get("bot_id")
     no_image = request.GET.get("no_image")
     image_only = request.GET.get("image_only")
-
-    profile_queryset = UserProfile.objects.filter(user=user)
-    if not profile_queryset.exists():
-        profile = UserProfile.objects.create(user=user)
-    else:
-        profile = profile_queryset.first()
 
     if n:
         try:
@@ -43,10 +24,7 @@ def fetch_profile(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        gender_list = get_gender_list(profile.gender_focus)
-        query_set = BotProfile.objects.filter(
-            searchable=True, gender__in=gender_list
-        ).order_by("?")[:n]
+        query_set = BotProfile.objects.order_by("?")[:n]
         output_list = []
         for profile in query_set:
             output_dict = model_to_dict(profile)

@@ -7,8 +7,12 @@ class ModelTestCase(TestCase):
     def setUp(self):
         self.user = create_user()
         self.bot = create_bot()
-        self.chat_history = ChatHistory.objects.create(user=self.user, bot=self.bot, history=[])
-        self.deleted_chat_history = DeletedChatHistory.objects.create(user=self.user, bot=self.bot, history=[])
+        self.chat_history = ChatHistory.objects.create(
+            user=self.user, bot=self.bot, history=[]
+        )
+        self.deleted_chat_history = DeletedChatHistory.objects.create(
+            user=self.user, bot=self.bot, history=[]
+        )
 
     def tearDown(self):
         self.user.delete()

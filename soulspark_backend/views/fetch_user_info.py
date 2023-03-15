@@ -11,7 +11,7 @@ from chat_module.models import UserProfile
 
 
 @login_required
-@api_view(['GET'])
+@api_view(["GET"])
 def fetch_user_info(request):
     user = request.user
     email = EmailAddress.objects.filter(user=user).first()
@@ -27,6 +27,6 @@ def fetch_user_info(request):
         profile = profile_queryset.first()
 
     user_profile = model_to_dict(profile)
-    user_profile['uid'] = social_account.uid if social_account else None
-    user_profile['email'] = email.email if email else None
+    user_profile["uid"] = social_account.uid if social_account else None
+    user_profile["email"] = email.email if email else None
     return JsonResponse(user_profile, safe=False, status=status.HTTP_200_OK)
