@@ -9,13 +9,39 @@ from ai_profiles.models import BotProfile
 
 @api_view(['GET'])
 def fetch_profile(request):
+    n = request.GET.get('n')
     bot_id = request.GET.get('bot_id')
     no_image = request.GET.get('no_image')
     image_only = request.GET.get('image_only')
 
+    if n:
+        try:
+            n = int(n)
+        except ValueError:
+            return JsonResponse({'error': f"Invalid value for 'n': {n}"}, status=status.HTTP_400_BAD_REQUEST)
+
+        query_set = BotProfile.objects.order_by('?')[:n]
+        output_list = []
+        for profile in query_set:
+            if no_image:
+                output_dict = model_to_dict(profile)
+                del output_dict['profile_image']
+            else:
+                image_data = profile.profile_image.read()
+                encoded_image = base64.b64encode(image_data).decode('utf-8')
+                output_dict = model_to_dict(profile)
+                output_dict['profile_image'] = encoded_image
+            output_list.append(output_dict)
+
+        return JsonResponse(output_list, status=status.HTTP_200_OK, safe=False)
+
     # If the 'bot_id' parameter is provided, filter by bot_id
     if bot_id:
-        bot_id = int(bot_id)
+        try:
+            bot_id = int(bot_id)
+        except ValueError:
+            return JsonResponse({'error': f"{bot_id} is not an integer."}, status=status.HTTP_400_BAD_REQUEST)
+
         query_set = BotProfile.objects.filter(bot_id=bot_id)
         if not query_set.exists():
             return JsonResponse({'error': f"No profile found for bot_id '{bot_id}'"}, status=status.HTTP_400_BAD_REQUEST)
