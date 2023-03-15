@@ -3,13 +3,13 @@ from rest_framework.test import APITestCase, APIClient
 from django.test import TestCase, Client
 from django.urls import reverse
 from chat_module.models import ChatHistory
-from chat_module.tests.utils import create_user, create_bot
+from chat_module.tests.utils import create_user_and_profile, create_bot
 
 
 class ViewTestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = create_user()
+        self.user, _ = create_user_and_profile()
         self.bot = create_bot()
         self.chat_history = ChatHistory.objects.create(
             user=self.user, bot=self.bot, history=[]
@@ -72,7 +72,7 @@ class UnauthenticatedViewTestCase(TestCase):
 class AuthenticatedViewTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = create_user()
+        self.user, _ = create_user_and_profile()
         self.client.login(username=self.user.username, password="testpass")
 
     def test_index_view(self):
