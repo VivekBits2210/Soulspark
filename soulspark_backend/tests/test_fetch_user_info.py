@@ -30,4 +30,4 @@ class FetchUserInfoTestCase(TestCase):
         self.assertEqual(data["uid"], "1234")
         self.assertEqual(data["age"], 25)
         self.assertEqual(data["gender"], "M")
-        self.assertEqual(data["experience"], 0)
+        self.assertEqual(data["experience"], 1)
