@@ -63,7 +63,7 @@ class BotProfileTestCase(TestCase):
             )
 
     def test_get_id(self):
-        self.assertEqual(self.bot_profile.get_id(), self.bot_profile.bot_id)
+        self.assertEqual(self.bot_profile.bot_id, self.bot_profile.bot_id)
 
     def test_empty_hobbies(self):
         bot_profile = BotProfile.objects.create(

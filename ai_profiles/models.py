@@ -43,9 +43,6 @@ class BotProfile(models.Model):
     physical_attributes = models.JSONField(validators=[validate_json])
     profile_image = models.ImageField(upload_to='images/', validators=[validate_image_extension])
 
-    def get_id(self):
-        return self.bot_id
-
     def save(self, *args, **kwargs):
         self.full_clean()
         return super(BotProfile, self).save(*args, **kwargs)
