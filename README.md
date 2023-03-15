@@ -1,13 +1,13 @@
 # SoulSpark
 
 
-Backend setup
+Backend setup (Use Python 3.9.13)
 ```
 $ python -m venv python_venv
 $ source python_venv/bin/activate
 $ python -m pip install --upgrade pip setuptools
 $ python -m pip install -r requirements.txt
-$ python manage.py makemigrations
+$ python manage.py makemigrations chat_module ai_profiles 
 $ python manage.py migrate
 $ python manage.py createsuperuser
 ```
