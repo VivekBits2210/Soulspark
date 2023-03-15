@@ -17,8 +17,8 @@ schema_view = get_schema_view(
 )
 urlpatterns = [
     path("", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-    path("post-attribute", post_attribute.post_attribute, name="post-attribute"),
-    path("fetch-user-info", fetch_user_info.fetch_user_info, name="fetch-user-info"),
+    path("post-attribute", post_attribute.post_attribute, name="post_attribute"),
+    path("fetch-user-info", fetch_user_info.fetch_user_info, name="fetch_user_info"),
     path("fill-db", fill_db.fill_db, name="fill-db"),
     path("ai-profiles/", include("ai_profiles.urls")),
     path("chat-module/", include("chat_module.urls")),
