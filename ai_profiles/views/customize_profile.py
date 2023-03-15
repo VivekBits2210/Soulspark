@@ -1,5 +1,6 @@
 from copy import deepcopy
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -43,7 +44,10 @@ def customize_profile(request):
     if favorites:
         bot.favorites = favorites
 
-    bot.save()
-    #TODO: Fill history from before, don't create from scratch !!
-    ChatHistory.objects.create(user=request.user, bot=bot, history={}).save()
-    return JsonResponse({"message": f"{bot.get_id()} bot updated successfully!"}, status=status.HTTP_200_OK)
+    # TODO: Fill history from before, shouldn't be empty here!
+    try:
+        bot.save()
+        ChatHistory.objects.create(user=request.user, bot=bot, history={}).save()
+        return JsonResponse({"message": f"{bot.get_id()} bot updated successfully!"}, status=status.HTTP_200_OK)
+    except ValidationError as e:
+        return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST)

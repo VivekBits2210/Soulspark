@@ -1,4 +1,6 @@
 import os
+
+from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import JsonResponse
 from rest_framework import status
@@ -17,7 +19,10 @@ def create_profile_admin(request):
 
     serializer = BotProfileSerializer(data=input_data)
     if serializer.is_valid():
-        serializer.save()
-        return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        return JsonResponse(dict(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
+        try:
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST)
+
+    return JsonResponse(dict(serializer.errors), status=status.HTTP_400_BAD_REQUEST)

@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -26,7 +27,10 @@ def unmatch(request):
 
     # loop through each chat history object and create a corresponding DeletedChatHistory object
     for chat_history_obj in chat_history_queryset:
-        DeletedChatHistory.objects.create(user=chat_history_obj.user, bot=chat_history_obj.bot, history=chat_history_obj.history)
+        try:
+            DeletedChatHistory.objects.create(user=chat_history_obj.user, bot=chat_history_obj.bot, history=chat_history_obj.history)
+        except ValidationError as e:
+            return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST)
 
     # delete all chat history objects for the user and bot
     chat_history_queryset.delete()

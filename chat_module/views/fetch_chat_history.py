@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -27,7 +28,10 @@ def fetch_chat_history(request):
     if not chat_history_queryset.exists():
         history = []
         if bot_id:
-            ChatHistory.objects.create(user=user, bot=bot, history=history).save()
+            try:
+                ChatHistory.objects.create(user=user, bot=bot, history=history)
+            except ValidationError as e:
+                return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST)
     elif lines == 0:
         history = []
     else:
