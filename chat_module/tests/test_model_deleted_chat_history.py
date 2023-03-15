@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError
 from django.test import TestCase
 from chat_module.models import DeletedChatHistory
 from chat_module.tests.utils import create_bot
@@ -8,7 +7,7 @@ from chat_module.tests.utils import create_bot
 
 class ChatHistoryTestCase(TestCase):
     def setUp(self):
-        self.user, self.user_profile = User.objects.create_user(
+        self.user = User.objects.create_user(
             username="tester", password="password"
         )
         self.bot = create_bot()
@@ -24,7 +23,7 @@ class ChatHistoryTestCase(TestCase):
 
     def test_create_chat_history(self):
         chat_history = DeletedChatHistory.objects.create(
-            user=self.user, bot=self.bot, history={}, level=1.0
+            user=self.user, bot=self.bot, history=[], level=1.0
         )
         chat_history.save()
         self.assertIsNotNone(chat_history.id)
@@ -32,7 +31,7 @@ class ChatHistoryTestCase(TestCase):
     def test_invalid_level(self):
         with self.assertRaises(ValidationError):
             history = DeletedChatHistory.objects.create(
-                user=self.user, bot=self.bot, history={"key": "value"}, level=0
+                user=self.user, bot=self.bot, history=[{"key": "value"}], level=0
             )
 
     def test_chat_history_deletion(self):
@@ -53,7 +52,7 @@ class ChatHistoryTestCase(TestCase):
             history={"key": "value1"},
         )
 
-        with self.assertRaises(IntegrityError):
+        with self.assertRaises(ValidationError):
             history2 = DeletedChatHistory.objects.create(
                 user=self.user,
                 bot=self.bot,

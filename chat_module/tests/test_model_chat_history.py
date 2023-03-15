@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.db import IntegrityError
 from django.test import TestCase
 
 from ai_profiles.models import BotProfile
@@ -11,7 +10,7 @@ from chat_module.models import ChatHistory
 class ChatHistoryTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="tester", password="password")
-        self.bot_profile = BotProfile.objects.create(
+        self.bot = BotProfile.objects.create(
             name="John",
             gender="M",
             age=25,
@@ -36,19 +35,19 @@ class ChatHistoryTestCase(TestCase):
         }
 
     def test_create_chat_history(self):
-        chat_history = ChatHistory(user=self.user, bot=self.bot, history={}, level=1.0)
+        chat_history = ChatHistory(user=self.user, bot=self.bot, history=[], level=1.0)
         chat_history.save()
         self.assertIsNotNone(chat_history.id)
 
     def test_invalid_level(self):
         with self.assertRaises(ValidationError):
             history = ChatHistory.objects.create(
-                user=self.user, bot=self.bot, history={"key": "value"}, level=0
+                user=self.user, bot=self.bot, history=[], level=0
             )
 
     def test_chat_history_deletion(self):
         chat_history = ChatHistory.objects.create(
-            user=self.user, bot=self.bot, history={"messages": []}, level=1.0
+            user=self.user, bot=self.bot, history=[{"message":"x"}], level=1.0
         )
         chat_history_id = chat_history.id
         chat_history.delete()
@@ -60,15 +59,15 @@ class ChatHistoryTestCase(TestCase):
         history1 = ChatHistory(
             user=self.user,
             bot=self.bot,
-            history={"key": "value1"},
+            history=[{"key": "value1"}],
         )
         history1.save()
 
         # Saving a second DeletedChatHistory instance with the same (user, bot) pair should raise an IntegrityError
-        with self.assertRaises(IntegrityError):
+        with self.assertRaises(ValidationError):
             history2 = ChatHistory(
                 user=self.user,
                 bot=self.bot,
-                history={"key": "value2"},
+                history=[{"key": "value2"}],
             )
             history2.save()

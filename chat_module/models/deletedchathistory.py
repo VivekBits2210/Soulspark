@@ -8,7 +8,7 @@ from chat_module.models.validators import level_validation
 class DeletedChatHistory(models.Model):
     user = models.ForeignKey(app_settings.USER_MODEL, on_delete=models.CASCADE)
     bot = models.ForeignKey(BotProfile, on_delete=models.CASCADE)
-    history = models.JSONField()
+    history = models.JSONField(blank=True)
     input_chars = models.IntegerField(default=0)
     level = models.DecimalField(
         max_digits=5, decimal_places=4, default=1.0, validators=[level_validation]
