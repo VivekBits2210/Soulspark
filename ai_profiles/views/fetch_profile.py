@@ -40,7 +40,7 @@ def fetch_profile(request):
         try:
             bot_id = int(bot_id)
         except ValueError:
-            return JsonResponse({'error': f"{bot_id} is not an integer."}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': f"Bot ID {bot_id} is not an integer."}, status=status.HTTP_400_BAD_REQUEST)
 
         query_set = BotProfile.objects.filter(bot_id=bot_id)
         if not query_set.exists():

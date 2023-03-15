@@ -18,11 +18,11 @@ def unmatch(request):
     try:
         bot_id = int(bot_id)
     except ValueError:
-        return JsonResponse({'error': f"{bot_id} is not an integer."}, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'error': f"Bot ID {bot_id} is not an integer."}, status=status.HTTP_400_BAD_REQUEST)
 
     bot_queryset = BotProfile.objects.filter(bot_id=bot_id)
     if not bot_queryset.exists():
-        return JsonResponse({'error': f"bot {bot_id} does not exist."}, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'error': f"Bot {bot_id} does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
     bot = bot_queryset.first()
 
