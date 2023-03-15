@@ -1,6 +1,7 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-#TODO: Fix these
+
+
 # from chat_module.views import fetch_user, post_attribute
 
 class ChatModuleUrlsTestCase(SimpleTestCase):

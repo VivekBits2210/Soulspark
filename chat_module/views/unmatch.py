@@ -1,9 +1,6 @@
-# TODO: call this api when unmatching
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-
-#TODO: Fill
 from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory, DeletedChatHistory
 
