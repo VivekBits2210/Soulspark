@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.decorators import api_view
 from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory, DeletedChatHistory
@@ -11,12 +12,12 @@ def unmatch(request):
     user = request.user
     bot_id = request.GET.get('bot_id')
     if not bot_id:
-        return JsonResponse({'error': f"No bot_id given"})
+        return JsonResponse({'error': f"No bot_id given"}, status=status.HTTP_400_BAD_REQUEST)
 
     bot_id = int(bot_id)
     bot_queryset = BotProfile.objects.filter(bot_id=bot_id)
     if not bot_queryset.exists():
-        return JsonResponse({'error': f"bot {bot_id} does not exist."})
+        return JsonResponse({'error': f"bot {bot_id} does not exist."}, status=status.HTTP_400_BAD_REQUEST)
 
     bot = bot_queryset.first()
 
@@ -30,5 +31,6 @@ def unmatch(request):
     # delete all chat history objects for the user and bot
     chat_history_queryset.delete()
 
-    return JsonResponse({'message': f"All chat history for bot {bot_id} and user {user} moved to DeletedChatHistory"})
+    return JsonResponse({'message': f"All chat history for bot {bot_id} and user {user} moved to DeletedChatHistory"},
+                        status=status.HTTP_200_OK)
 

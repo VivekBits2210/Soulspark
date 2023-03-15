@@ -1,6 +1,7 @@
 from copy import deepcopy
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
@@ -9,7 +10,7 @@ from chat_module.models import ChatHistory
 
 @login_required()
 @api_view(['POST'])
-def create_profile(request):
+def customize_profile(request):
     bot_id = request.data.get('bot_id')
     name = request.data.get('name')
     gender = request.data.get('gender')
@@ -17,9 +18,16 @@ def create_profile(request):
     profession = request.data.get('profession')
     hobbies = request.data.get('hobbies')
     favorites = request.data.get('favorites')
-    profile_image = request.data.get('profile_image')
 
-    original_bot = BotProfile.objects.get(bot_id=bot_id)
+    if not bot_id:
+        return JsonResponse({'error': f"No bot_id given"}, status=status.HTTP_400_BAD_REQUEST)
+
+    bot_id = int(bot_id)
+    bot_queryset = BotProfile.objects.filter(bot_id=bot_id)
+    if not bot_queryset.exists():
+        return JsonResponse({'error': f"bot {bot_id} does not exist."}, status=status.HTTP_400_BAD_REQUEST)
+
+    original_bot = bot_queryset.first()
     bot = deepcopy(original_bot)
 
     if name:
@@ -34,9 +42,8 @@ def create_profile(request):
         bot.hobbies = hobbies
     if favorites:
         bot.favorites = favorites
-    if profile_image:
-        bot.profile_image = profile_image
 
     bot.save()
+    #TODO: Fill history from before, don't create from scratch !!
     ChatHistory.objects.create(user=request.user, bot=bot, history={}).save()
-    return JsonResponse({"message": f"{bot.get_id()} bot updated successfully!"})
+    return JsonResponse({"message": f"{bot.get_id()} bot updated successfully!"}, status=status.HTTP_200_OK)

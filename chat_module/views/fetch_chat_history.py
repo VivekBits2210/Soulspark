@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
@@ -17,7 +18,7 @@ def fetch_chat_history(request):
         bot_id = int(bot_id)
         bot_queryset = BotProfile.objects.filter(bot_id=bot_id)
         if not bot_queryset.exists():
-            return JsonResponse({'error': f"bot {bot_id} does not exist."})
+            return JsonResponse({'error': f"bot {bot_id} does not exist."}, status=status.HTTP_400_BAD_REQUEST)
         bot = bot_queryset.first()
         chat_history_queryset = ChatHistory.objects.filter(user=user, bot=bot)
     else:
@@ -31,4 +32,4 @@ def fetch_chat_history(request):
         history = []
     else:
         history = chat_history_queryset.first().history[-lines:]
-    return JsonResponse({'bot_id': bot_id, 'history': history})
+    return JsonResponse({'bot_id': bot_id, 'history': history}, status=status.HTTP_200_OK)

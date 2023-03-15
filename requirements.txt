@@ -11,3 +11,4 @@ openai
 drf-yasg
 coverage
 asgiref
+pytz
