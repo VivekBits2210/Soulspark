@@ -66,7 +66,6 @@ def fetch_profile_admin(request):
 
     image_data = profile.profile_image.read()
     if image_only:
-        # Return the profile image as an HTTP response
         response = HttpResponse(
             image_data, content_type="image/jpeg", status=status.HTTP_200_OK
         )

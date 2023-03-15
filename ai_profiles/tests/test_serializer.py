@@ -14,7 +14,6 @@ class BotProfileSerializerTestCase(APITestCase):
         with open(image_path, "rb") as f:
             image_content = f.read()
 
-        # Create a SimpleUploadedFile object from the image content
         self.valid_data = {
             "name": "Bot",
             "gender": "M",
@@ -78,7 +77,6 @@ class BotProfileSerializerTestCase(APITestCase):
 
     @skip
     def test_profile_image_resized(self):
-        # create a test image with dimensions larger than 100x100
         file = io.BytesIO()
         image = Image.new("RGB", (200, 200), "white")
         image.save(file, "jpeg")
