@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 from ai_profiles.models import BotProfile
 from chat_module.models import UserProfile
 
-
+# TODO: Remove these dangerous apis once the models have evolved well enough
 @api_view(['GET'])
 def fill_db(request):
     image_path = os.path.join('static', 'trial.jpg')

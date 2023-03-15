@@ -1,7 +1,7 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from channels.testing import WebsocketCommunicator
 from chat_module.consumers import ChatConsumer
-from chat_module.models import UserProfile, ChatHistory, BotProfile
+from chat_module.models import UserProfile, ChatHistory
 import json
 from chat_module.tasks import get_response
 from chat_module.tests.utils import create_user, create_bot

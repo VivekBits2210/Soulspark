@@ -1,12 +1,12 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 
 from chat_module.models import UserProfile
 
-
+#WARNING: Use post_attributes instead of these APIs, these are not registered under urls.
 @login_required
 @api_view(['GET'])
 def post_age(request):

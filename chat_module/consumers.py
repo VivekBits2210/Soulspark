@@ -1,9 +1,9 @@
 import json
 
 from ai_profiles.models import BotProfile
-from .levels import calculate_level
-from .models import UserProfile, ChatHistory
-from .tasks import get_response
+from chat_module.levels import calculate_level
+from chat_module.models import UserProfile, ChatHistory
+from chat_module.tasks import get_response
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
@@ -32,9 +32,11 @@ class ChatConsumer(WebsocketConsumer):
         bot = BotProfile.objects.get(bot_id=bot_id)
         chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
         chat_history_obj.history.append(packet)
-        chat_history_obj.input_chars += sum(1 for c in text if c.isalpha())
+        characters_sent = sum(1 for c in text if c.isalpha())
+        chat_history_obj.input_chars += characters_sent
+        user_profile.experience += characters_sent
+        chat_history_obj.level = calculate_level(num_chars=chat_history_obj.input_chars)
         chat_history_obj.save()
-        user_profile.level = calculate_level(chat_history_obj.input_chars)
         user_profile.save()
 
     # NOTE: The structure of 'event' is defined by the UI

@@ -77,16 +77,3 @@ class BotProfileSerializerTestCase(APITestCase):
         self.assertEqual(profile.profile_image.width, 100)
         self.assertEqual(profile.profile_image.height, 100)
 
-    def tearDown(self):
-        # remove all text files and files starting with 'trial' under the 'images' folder
-        folder_path = os.path.join('images')
-        to_remove = []
-        for filename in os.listdir(folder_path):
-            if filename.startswith('test'):
-                file_path = os.path.join(folder_path, filename)
-                to_remove.append(file_path)
-
-        for path in to_remove:
-            os.remove(path)
-
-        super().tearDown()
