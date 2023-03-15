@@ -52,6 +52,7 @@ class BotProfile(models.Model):
     profile_image = models.ImageField(
         upload_to="images/", validators=[validate_image_extension]
     )
+    searchable = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         self.full_clean()

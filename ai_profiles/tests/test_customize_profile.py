@@ -104,7 +104,6 @@ class BotProfileCustomizeProfileTest(APITestCase):
             customized_bot.physical_attributes, self.bot_profile.physical_attributes
         )
 
-    # TODO: Check history being copied over
     def test_history_copied_over(self):
         old_history = {"sample_history_key": "sample_history_value"}
         ChatHistory.objects.create(

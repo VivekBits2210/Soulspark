@@ -10,14 +10,13 @@ from ai_profiles.models import BotProfile
 
 class BotProfileFetchViewTest(APITestCase):
     def setUp(self):
-        self.url = reverse("fetch_profile")
+        self.url = reverse("fetch_profile_admin")
 
         self.user = User.objects.create_user(username="tester", password="password")
         self.bot_profile_fields = [
             f.name for f in BotProfile._meta.get_fields() if f.concrete
         ]
         self.client = Client()
-        self.client.force_login(user=self.user)
 
         image_path = os.path.join("static", "trial.jpg")
         with open(image_path, "rb") as f:
@@ -90,12 +89,6 @@ class BotProfileFetchViewTest(APITestCase):
         for index in range(n):
             response_keys = response_json[1].keys()
             self.assertListEqual(sorted(self.bot_profile_fields), sorted(response_keys))
-
-    # TODO: Test that if a non-searchable one is added, it doesn't show up in the list
-
-    # TODO: Test that if a user profile is created with gender_focus=M, only M are selected
-
-    # TODO: Test that if a user profile is created with gender_focus=E, everyone is selected
 
     def test_fetch_profile_without_bot_id(self):
         # API should work and return a random bot with a full response

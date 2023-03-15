@@ -40,6 +40,7 @@ def customize_profile(request):
     original_dict = model_to_dict(original_bot)
     original_dict.update(request_dict)
     del original_dict["bot_id"]
+    original_dict["searchable"] = False
 
     # Create bot and a corresponding chat history entry with user
     try:

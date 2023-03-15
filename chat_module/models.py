@@ -17,6 +17,11 @@ def gender_validation(value):
         raise ValidationError(f"{value} is not a valid gender.")
 
 
+def gender_focus_validation(value):
+    if value not in ["M", "F", "E"]:
+        raise ValidationError(f"{value} is not a valid gender focus.")
+
+
 def level_validation(value):
     if value < 1.0:
         raise ValidationError(f"{value} is not a valid level, should be >= 1.0.")
@@ -41,17 +46,16 @@ class UserProfile(models.Model):
     )
     gender = models.CharField(
         max_length=10,
-        choices=[("M", "Male"), ("F", "Female"), ("O", "Other")],
+        choices=[("M", "Male"), ("F", "Female")],
         null=True,
         blank=True,
         validators=[gender_validation],
     )
     gender_focus = models.CharField(
         max_length=10,
-        choices=[("M", "Male"), ("F", "Female"), ("O", "Other")],
-        null=True,
-        blank=True,
-        validators=[gender_validation],
+        choices=[("M", "Male"), ("F", "Female"), ("E", "Everyone")],
+        default='E',
+        validators=[gender_focus_validation],
     )
     timezone = models.CharField(
         max_length=32, validators=[timezone_validation], default="America/New_York"
