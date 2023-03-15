@@ -19,6 +19,10 @@ urlpatterns = [
         customize_profile.customize_profile,
         name="customize_profile",
     ),
-    path("fetch-profile-admin", fetch_profile_admin.fetch_profile_admin, name="fetch_profile_admin"),
+    path(
+        "fetch-profile-admin",
+        fetch_profile_admin.fetch_profile_admin,
+        name="fetch_profile_admin",
+    ),
     path("fetch-profile", fetch_profile.fetch_profile, name="fetch_profile"),
 ]

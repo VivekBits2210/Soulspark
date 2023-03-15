@@ -54,7 +54,7 @@ class UserProfile(models.Model):
     gender_focus = models.CharField(
         max_length=10,
         choices=[("M", "Male"), ("F", "Female"), ("E", "Everyone")],
-        default='E',
+        default="E",
         validators=[gender_focus_validation],
     )
     timezone = models.CharField(

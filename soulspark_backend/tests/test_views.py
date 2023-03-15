@@ -19,9 +19,7 @@ class FetchUserTestCase(TestCase):
         self.social_account = SocialAccount.objects.create(
             provider="facebook", uid="1234", user=self.user
         )
-        self.profile = UserProfile.objects.create(
-            user=self.user, age=25, gender="M"
-        )
+        self.profile = UserProfile.objects.create(user=self.user, age=25, gender="M")
 
     def test_fetch_user_authenticated(self):
         self.client.force_login(self.user)
@@ -49,7 +47,9 @@ class PostAttributeTestCase(TestCase):
         self.client.force_login(self.user)
         data = {"age": 30}
         response = self.client.post(
-            reverse("post_attribute"), data=json.dumps(data), content_type="application/json"
+            reverse("post_attribute"),
+            data=json.dumps(data),
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
         self.profile.refresh_from_db()
@@ -59,7 +59,9 @@ class PostAttributeTestCase(TestCase):
         self.client.force_login(self.user)
         data = {"gender": "F"}
         response = self.client.post(
-            reverse("post_attribute"), data=json.dumps(data), content_type="application/json"
+            reverse("post_attribute"),
+            data=json.dumps(data),
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
         self.profile.refresh_from_db()
@@ -69,7 +71,9 @@ class PostAttributeTestCase(TestCase):
         self.client.force_login(self.user)
         data = {"experience": 2500}
         response = self.client.post(
-            reverse("post_attribute"), data=json.dumps(data), content_type="application/json"
+            reverse("post_attribute"),
+            data=json.dumps(data),
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
         self.profile.refresh_from_db()
@@ -79,21 +83,26 @@ class PostAttributeTestCase(TestCase):
         self.client.force_login(self.user)
         data = {"invalid_key": "value"}
         response = self.client.post(
-            reverse("post_attribute"), data=json.dumps(data), content_type="application/json"
+            reverse("post_attribute"),
+            data=json.dumps(data),
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
-        self.assertDictEqual(response.json(),
-                             {"error": "Attributes ['invalid_key'] are not valid UserProfile attributes"})
+        self.assertDictEqual(
+            response.json(),
+            {
+                "error": "Attributes ['invalid_key'] are not valid UserProfile attributes"
+            },
+        )
 
     # TODO:Test multiple attribute push, all fine
     def test_post_multiple_valid_attributes(self):
         self.client.force_login(self.user)
-        data = {
-            "experience": 2500,
-            "gender": "F"
-        }
+        data = {"experience": 2500, "gender": "F"}
         response = self.client.post(
-            reverse("post_attribute"), data=json.dumps(data), content_type="application/json"
+            reverse("post_attribute"),
+            data=json.dumps(data),
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
         self.profile.refresh_from_db()
@@ -103,17 +112,19 @@ class PostAttributeTestCase(TestCase):
     # TODO:Test multiple attributes, some of which are not fine
     def test_post_multiple_attributes_some_invalid(self):
         self.client.force_login(self.user)
-        data = {
-            "experience": 2500,
-            "gender": "F",
-            "invalid_key": "invalid_value"
-        }
+        data = {"experience": 2500, "gender": "F", "invalid_key": "invalid_value"}
         response = self.client.post(
-            reverse("post_attribute"), data=json.dumps(data), content_type="application/json"
+            reverse("post_attribute"),
+            data=json.dumps(data),
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
-        self.assertDictEqual(response.json(),
-                             {"error": "Attributes ['invalid_key'] are not valid UserProfile attributes"})
+        self.assertDictEqual(
+            response.json(),
+            {
+                "error": "Attributes ['invalid_key'] are not valid UserProfile attributes"
+            },
+        )
         self.profile.refresh_from_db()
 
         # None of the updates have happened

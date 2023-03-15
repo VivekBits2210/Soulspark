@@ -24,14 +24,18 @@ def post_attribute(request):
     else:
         profile = profile_queryset.first()
 
-    profile_fields = set([
-        f.name for f in UserProfile._meta.get_fields() if f.concrete
-    ])
+    profile_fields = set([f.name for f in UserProfile._meta.get_fields() if f.concrete])
 
-    incorrect_attributes = [key for key in request_dict.keys() if key not in profile_fields]
-    if len(incorrect_attributes)>0:
-        return JsonResponse({"error": f"Attributes {incorrect_attributes} are not valid UserProfile attributes"}, status=status.HTTP_400_BAD_REQUEST)
-
+    incorrect_attributes = [
+        key for key in request_dict.keys() if key not in profile_fields
+    ]
+    if len(incorrect_attributes) > 0:
+        return JsonResponse(
+            {
+                "error": f"Attributes {incorrect_attributes} are not valid UserProfile attributes"
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     try:
         for key in request_dict.keys():
