@@ -1,7 +1,7 @@
 # SoulSpark
 
 
-Backend setup (Use Python 3.9.13)
+Backend setup (Ideally use Python 3.9.13)
 ```
 $ python -m venv python_venv
 $ source python_venv/bin/activate
@@ -20,7 +20,7 @@ REST:  /fill-db
 ```
 
 Go to /admin and login with your super user credentials. \
-Under 'Sites'
+Under 'Sites', edit the 'example' data to look like this
 ```
 Domain: localhost:8000
 Display: localhost
