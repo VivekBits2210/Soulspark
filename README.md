@@ -51,7 +51,15 @@ Swagger
 -> REST: /
 ```
 
-All tests
+API Documentation
+```
+-> REST: /admin/doc/views
+```
+Model Documentation
+```
+-> REST: /admin/doc/models
+```
+Run all tests
 ```
 $ python3 manage.py test
 ```

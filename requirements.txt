@@ -13,3 +13,4 @@ coverage==7.2.1
 asgiref==3.6.0
 pytz==2022.7.1
 black==23.1.0
+docutils==0.19

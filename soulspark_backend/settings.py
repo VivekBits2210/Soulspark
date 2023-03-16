@@ -85,6 +85,7 @@ INSTALLED_APPS = (
         "django.contrib.messages",
         "django.contrib.sites",
         "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
+        "django.contrib.admindocs",
         "drf_yasg",
     ]
     + MY_APPS
