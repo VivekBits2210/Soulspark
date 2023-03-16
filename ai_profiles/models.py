@@ -116,16 +116,17 @@ This model uses the following validators:
 
     # TODO: clean up the summary (favorites etc)
     def generate_summary(self):
-        gender = "Male" if self.gender == "M" else "Female"
-        hobbies = ", ".join(self.hobbies.values())
-        favorites = ", ".join(self.favorites.values())
-        physical_attributes = ", ".join(
-            [f"{key}: {value}" for key, value in self.physical_attributes.items()]
-        )
-
-        summary = f"{self.name} is a {gender} {self.age}-year-old {self.profession}. "
-        summary += f"{self.name}'s hobbies include {hobbies}. "
-        summary += f"{self.name}'s favorite things are {favorites}. "
-        summary += f"{self.name} has {physical_attributes}."
+        summary = ""
+        # gender = "Male" if self.gender == "M" else "Female"
+        # hobbies = ", ".join(self.hobbies.values())
+        # favorites = ", ".join(self.favorites.values())
+        # physical_attributes = ", ".join(
+        #     [f"{key}: {value}" for key, value in self.physical_attributes.items()]
+        # )
+        #
+        # summary = f"{self.name} is a {gender} {self.age}-year-old {self.profession}. "
+        # summary += f"{self.name}'s hobbies include {hobbies}. "
+        # summary += f"{self.name}'s favorite things are {favorites}. "
+        # summary += f"{self.name} has {physical_attributes}."
 
         return summary

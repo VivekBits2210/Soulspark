@@ -55,6 +55,8 @@ class ChatHistory(models.Model):
     level = models.DecimalField(
         max_digits=5, decimal_places=4, default=1.0, validators=[level_validation]
     )
+    user_summary = models.JSONField(blank=True, default=list)
+    bot_summary = models.JSONField(blank=True, default=list)
 
     REQUIRED_FIELDS = ["user", "bot", "history"]
 

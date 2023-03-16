@@ -102,15 +102,16 @@ This model uses the following validators:
 
     def generate_summary(self):
         # TODO: Improve
-        gender = "male" if self.gender == "M" else "female"
-        if self.gender_focus == "M":
-            gender_focus = "men"
-        elif self.gender_focus == "F":
-            gender_focus = "women"
-        else:
-            gender_focus = "everyone"
-
-        summary = f"{self.user.username} is a {self.age}-year-old {gender} interested in {gender_focus}. "
-        summary += f"They are in the {self.timezone} timezone and enjoy {self.interests}."
+        summary = ""
+        # gender = "male" if self.gender == "M" else "female"
+        # if self.gender_focus == "M":
+        #     gender_focus = "men"
+        # elif self.gender_focus == "F":
+        #     gender_focus = "women"
+        # else:
+        #     gender_focus = "everyone"
+        #
+        # summary = f"{self.user.username} is a {self.age}-year-old {gender} interested in {gender_focus}. "
+        # summary += f"They are in the {self.timezone} timezone and enjoy {self.interests}."
 
         return summary
