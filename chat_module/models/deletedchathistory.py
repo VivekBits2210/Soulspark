@@ -16,9 +16,6 @@ class DeletedChatHistory(models.Model):
 
     REQUIRED_FIELDS = ["user", "bot", "history"]
 
-    class Meta:
-        unique_together = ("user", "bot")
-
     def save(self, *args, **kwargs):
         self.full_clean()
         return super(DeletedChatHistory, self).save(*args, **kwargs)

@@ -11,17 +11,17 @@ from chat_module.models import ChatHistory, DeletedChatHistory
 @api_view(["POST"])
 def unmatch(request):
     user = request.user
-    bot_id = request.GET.get("bot_id")
-    if not bot_id:
+    request_dict = request.data
+    if "bot_id" not in request_dict:
         return JsonResponse(
             {"error": f"No bot_id given"}, status=status.HTTP_400_BAD_REQUEST
         )
 
     try:
-        bot_id = int(bot_id)
+        bot_id = int(request_dict["bot_id"])
     except ValueError:
         return JsonResponse(
-            {"error": f"Bot ID {bot_id} is not an integer."},
+            {"error": f"Bot ID {request_dict['bot_id']} is not an integer."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -29,7 +29,7 @@ def unmatch(request):
     if not bot_queryset.exists():
         return JsonResponse(
             {"error": f"Bot {bot_id} does not exist."},
-            status=status.HTTP_400_BAD_REQUEST,
+            status=status.HTTP_404_NOT_FOUND,
         )
 
     bot = bot_queryset.first()
