@@ -24,7 +24,7 @@ def fill_db(request):
         "age": 18,
         "interests": "reading and running",
         "favorites": {"color": "red", "food": "pizza"},
-        "physical_attributes": {"eye color": "blue"},
+        "physical_attributes": {"eyes": "blue"},
         "profession": "Air hostess",
         "profile_image": SimpleUploadedFile(
             "Nicole.jpg", image_content1, content_type="image/jpeg"
@@ -37,7 +37,7 @@ def fill_db(request):
         "age": 25,
         "interests": "hiking and jogging",
         "favorites": {"color": "blue", "food": "sushi"},
-        "physical_attributes": {"eye color": "black"},
+        "physical_attributes": {"eyes": "blue", "hair": "blonde", "skin":"fair", "figure":"slim"},
         "profession": "Secretary",
         "profile_image": SimpleUploadedFile(
             "Carla.jpg", image_content2, content_type="image/jpeg"
