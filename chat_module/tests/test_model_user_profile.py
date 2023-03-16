@@ -6,7 +6,7 @@ from chat_module.models import UserProfile
 
 class UserProfileTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="tester", password="password")
+        self.user = User.objects.create_user(username="tester", first_name="King", last_name="Jaineel", password="password")
 
         self.maximal_data = {
             "user": self.user,
@@ -15,7 +15,7 @@ class UserProfileTestCase(TestCase):
             "gender_focus": "F",
             "timezone": "Asia/Kolkata",
             "experience": 1,
-            "interests": "reading,gaming",
+            "interests": "reading and gaming",
         }
 
     def test_user_profile_creation_minimal(self):
@@ -53,7 +53,7 @@ class UserProfileTestCase(TestCase):
 
     def test_user_profile_primary_key(self):
         with self.assertRaises(ValidationError):
-            UserProfile.objects.create(**self.maximal_data)
+            profile = UserProfile.objects.create(**self.maximal_data)
             UserProfile.objects.create(user=self.user)
 
     def test_invalid_gender(self):
@@ -84,6 +84,6 @@ class UserProfileTestCase(TestCase):
                 age=18,
                 gender_focus="F",
                 experience=1,
-                interests="cooking,cleaning",
+                interests="cooking and cleaning",
                 timezone="invalid",
             )

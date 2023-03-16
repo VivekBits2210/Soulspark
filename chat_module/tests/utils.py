@@ -12,7 +12,7 @@ def create_user_and_profile(
     age=25,
     gender="M",
     gender_focus="F",
-    interests="testing,python",
+    interests="java and python",
 ):
     user = User.objects.create(username=username, password=password)
     profile = UserProfile.objects.create(
