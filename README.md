@@ -16,10 +16,10 @@ Create a super user with name 'admin' and an email that is NOT a real email
 
 ```
 $ python3 manage.py runserver localhost:8000
-REST:  /fill-db
+-> Run REST API:  /fill-db
 ```
 
-Go to /admin and login with your super user credentials. \
+Go to url /admin and login with your super user credentials. \
 Under 'Sites', edit the 'example' entry to look like this:
 ```
 Domain: localhost:8000
@@ -37,18 +37,18 @@ Selected hosts: localhost:8000
 
 After logging out of /admin,
 ```
-REST: /accounts/login
+-> REST: /accounts/login
 ```
 click on "Google" to sign in (make sure your email address is a valid test email for this project -> [ask a dev to add you if it is not])
 
 To sign out,
 ```
-REST: /accounts/logout
+-> REST: /accounts/logout
 ```
 
 Swagger
 ```
-REST: /
+-> REST: /
 ```
 
 All tests
