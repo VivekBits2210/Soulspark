@@ -107,7 +107,25 @@ This model uses the following validators:
         upload_to="images/", validators=[validate_image_extension]
     )
     searchable = models.BooleanField(default=True)
+    summary = models.TextField(blank=True, default="")
 
     def save(self, *args, **kwargs):
+        self.summary = self.generate_summary()
         self.full_clean()
         return super(BotProfile, self).save(*args, **kwargs)
+
+    # TODO: clean up the summary (favorites etc)
+    def generate_summary(self):
+        gender = "Male" if self.gender == "M" else "Female"
+        hobbies = ", ".join(self.hobbies.values())
+        favorites = ", ".join(self.favorites.values())
+        physical_attributes = ", ".join(
+            [f"{key}: {value}" for key, value in self.physical_attributes.items()]
+        )
+
+        summary = f"{self.name} is a {gender} {self.age}-year-old {self.profession}. "
+        summary += f"{self.name}'s hobbies include {hobbies}. "
+        summary += f"{self.name}'s favorite things are {favorites}. "
+        summary += f"{self.name} has {physical_attributes}."
+
+        return summary
