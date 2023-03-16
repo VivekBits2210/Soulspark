@@ -91,9 +91,27 @@ This model uses the following validators:
     )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    summary = models.TextField(blank=True, default="")
 
     REQUIRED_FIELDS = ["username"]
 
     def save(self, *args, **kwargs):
+        self.summary = self.generate_summary()
         self.full_clean()
         return super(UserProfile, self).save(*args, **kwargs)
+
+    def generate_summary(self):
+        # TODO: Improve
+        summary = ""
+        # gender = "male" if self.gender == "M" else "female"
+        # if self.gender_focus == "M":
+        #     gender_focus = "men"
+        # elif self.gender_focus == "F":
+        #     gender_focus = "women"
+        # else:
+        #     gender_focus = "everyone"
+        #
+        # summary = f"{self.user.username} is a {self.age}-year-old {gender} interested in {gender_focus}. "
+        # summary += f"They are in the {self.timezone} timezone and enjoy {self.interests}."
+
+        return summary
