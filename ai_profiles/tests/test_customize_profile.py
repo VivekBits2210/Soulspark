@@ -52,10 +52,8 @@ class BotProfileCustomizeProfileTest(APITestCase):
         )
 
     def test_customize_profile_returns_valid_response(self):
-        # Response should be valid
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
-        # Response should be a valid dictionary and contain bot_id
         response_json = self.response.json()
         self.assertIsInstance(response_json, dict)
         self.assertIn("bot_id", response_json.keys())

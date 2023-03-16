@@ -54,7 +54,6 @@ class BotProfileFetchViewTest(APITestCase):
         }
 
     def test_fetch_profile_view_works(self):
-        # API should work, return a dictionary with the right bot_id and a full response
         response = self.client.get(self.url, {"bot_id": self.bot_profile.bot_id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response_json = response.json()
@@ -65,7 +64,6 @@ class BotProfileFetchViewTest(APITestCase):
         )
 
     def test_fetch_profile_view_n_equals_one(self):
-        # API should work for n=1, return a list of size 1 and a full response
         n = 1
         response = self.client.get(self.url, {"n": n})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -78,7 +76,6 @@ class BotProfileFetchViewTest(APITestCase):
         self.assertListEqual(sorted(self.bot_profile_fields), sorted(response_keys))
 
     def test_fetch_profile_view_n_equals_teo(self):
-        # API should work for n=1, return a list of size 2 and a full response
         n = 2
         BotProfile.objects.create(**self.second_valid_bot_info)
         response = self.client.get(self.url, {"n": n})
@@ -92,9 +89,7 @@ class BotProfileFetchViewTest(APITestCase):
             response_keys = response_json[1].keys()
             self.assertListEqual(sorted(self.bot_profile_fields), sorted(response_keys))
 
-    # TODO: Test that if a non-searchable one is added, it doesn't show up in the list
     def test_fetch_profile_non_searchability(self):
-        # API should work not fetch anything  if a non searchable profile is added
         n = 2
         self.second_valid_bot_info["searchable"] = False
         BotProfile.objects.create(**self.second_valid_bot_info)
@@ -111,9 +106,7 @@ class BotProfileFetchViewTest(APITestCase):
         )
         self.assertEqual(response_dict["bot_id"], self.bot_profile.bot_id)
 
-    # TODO: Test that if a user profile is created with gender_focus=M, only M are selected (which is none)
     def test_fetch_profile_gender_focus_does_not_exist(self):
-        # API should work not fetch anything  if a non searchable profile is added
         n = 2
         UserProfile.objects.create(user=self.user, gender_focus="M")
         response = self.client.get(self.url, {"n": n})
@@ -123,9 +116,7 @@ class BotProfileFetchViewTest(APITestCase):
         self.assertIsInstance(response_json, list)
         self.assertEqual(len(response_json), 0)
 
-    # TODO: Test that if a user profile is created with gender_focus=E, everyone is selected
     def test_fetch_profile_gender_focus_everyone(self):
-        # API should work not fetch anything  if a non searchable profile is added
         n = 2
         UserProfile.objects.create(user=self.user, gender_focus="E")
         response = self.client.get(self.url, {"n": n})
@@ -146,7 +137,6 @@ class BotProfileFetchViewTest(APITestCase):
         self.assertEqual(len(response_json), 1)
 
     def test_fetch_profile_without_bot_id(self):
-        # API should work and return a random bot with a full response
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -158,7 +148,6 @@ class BotProfileFetchViewTest(APITestCase):
         )
 
     def test_fetch_profile_with_bit_id_without_image(self):
-        # API call should work and return a full response except the image
         response = self.client.get(
             self.url, {"bot_id": self.bot_profile.bot_id, "no_image": True}
         )
@@ -170,7 +159,6 @@ class BotProfileFetchViewTest(APITestCase):
         self.assertListEqual(sorted(response_json.keys()), sorted(response_json.keys()))
 
     def test_fetch_profile_image_only_view(self):
-        # API response should contain an image
         response = self.client.get(
             self.url, {"bot_id": self.bot_profile.bot_id, "image_only": True}
         )
@@ -178,16 +166,13 @@ class BotProfileFetchViewTest(APITestCase):
         self.assertIn("image/jpeg", response["Content-Type"])
 
     def test_fetch_profile_invalid_bot_id(self):
-        # Invalid bot id fails
         response = self.client.get(self.url, {"bot_id": -1})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_fetch_profile_non_integer_bot_id(self):
-        # Invalid bot id fails
         response = self.client.get(self.url, {"bot_id": "invalid"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_fetch_profile_non_integer_n(self):
-        # Invalid n fails
         response = self.client.get(self.url, {"n": "invalid"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

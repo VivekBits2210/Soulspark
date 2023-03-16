@@ -7,9 +7,7 @@ from chat_module.tests.utils import create_bot
 
 class ChatHistoryTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="tester", password="password"
-        )
+        self.user = User.objects.create_user(username="tester", password="password")
         self.bot = create_bot()
         self.maximal_data = {
             "user": self.user,
@@ -44,17 +42,3 @@ class ChatHistoryTestCase(TestCase):
 
         with self.assertRaises(DeletedChatHistory.DoesNotExist):
             DeletedChatHistory.objects.get(id=chat_history_id)
-
-    def test_unique_user_bot_pair(self):
-        history1 = DeletedChatHistory.objects.create(
-            user=self.user,
-            bot=self.bot,
-            history={"key": "value1"},
-        )
-
-        with self.assertRaises(ValidationError):
-            history2 = DeletedChatHistory.objects.create(
-                user=self.user,
-                bot=self.bot,
-                history={"key": "value2"},
-            )

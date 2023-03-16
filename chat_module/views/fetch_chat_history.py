@@ -12,7 +12,13 @@ from chat_module.models import UserProfile, ChatHistory
 @api_view(["GET"])
 def fetch_chat_history(request):
     user = request.user
-    lines = int(request.GET.get("lines", 10))
+    try:
+        lines = int(request.GET.get("lines",10))
+        if lines < 0:
+            lines = 10
+    except ValueError:
+        lines = 10
+
     bot_id = request.GET.get("bot_id")
     bot = None
     if bot_id:
@@ -27,10 +33,14 @@ def fetch_chat_history(request):
         if not bot_queryset.exists():
             return JsonResponse(
                 {"error": f"bot {bot_id} does not exist."},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_404_NOT_FOUND,
             )
         bot = bot_queryset.first()
         chat_history_queryset = ChatHistory.objects.filter(user=user, bot=bot)
+        if lines == 0:
+            return JsonResponse(
+                {"bot_id": bot_id, "history": []}, status=status.HTTP_200_OK
+            )
     else:
         chat_history_queryset = ChatHistory.objects.filter(user=user)
 
@@ -41,12 +51,11 @@ def fetch_chat_history(request):
                 ChatHistory.objects.create(user=user, bot=bot, history=history)
             except ValidationError as e:
                 return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST)
-    elif lines == 0:
-        history = []
     else:
         history_object = chat_history_queryset.first()
         bot_id = history_object.bot_id
         history = history_object.history[-lines:]
+
     return JsonResponse(
         {"bot_id": bot_id, "history": history}, status=status.HTTP_200_OK
     )
