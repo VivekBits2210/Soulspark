@@ -16,7 +16,7 @@ class ChatHistoryTestCase(TestCase):
             age=25,
             bio="I am a chatbot.",
             profession="AI assistant",
-            hobbies={"hobbies": ["reading", "music"]},
+            interests = "music and running",
             favorites={"color": "blue", "food": "pizza"},
             physical_attributes={"hair": "black"},
             profile_image=SimpleUploadedFile(
@@ -31,7 +31,7 @@ class ChatHistoryTestCase(TestCase):
             "gender_focus": "F",
             "timezone": "Asia/Kolkata",
             "experience": 1,
-            "interests": "reading,gaming",
+            "interests": "reading and gaming",
         }
 
     def test_create_chat_history(self):

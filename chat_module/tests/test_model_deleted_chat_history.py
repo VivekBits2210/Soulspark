@@ -16,7 +16,7 @@ class ChatHistoryTestCase(TestCase):
             "gender_focus": "F",
             "timezone": "Asia/Kolkata",
             "experience": 1,
-            "interests": "reading,gaming",
+            "interests": "reading and gaming",
         }
 
     def test_create_chat_history(self):

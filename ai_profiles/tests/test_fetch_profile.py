@@ -30,7 +30,7 @@ class BotProfileFetchViewTest(APITestCase):
             "age": 30,
             "bio": "I am a chatbot too.",
             "profession": "Engineer",
-            "hobbies": {"hobbies": ["reading", "cricket"]},
+            "interests": "reading and cricket",
             "physical_attributes": {"hair": "black"},
             "favorites": {"color": "blue", "food": "pizza"},
             "profile_image": SimpleUploadedFile(
@@ -45,7 +45,7 @@ class BotProfileFetchViewTest(APITestCase):
             "age": 22,
             "bio": "I am a chatbot also",
             "profession": "Engineer",
-            "hobbies": {"hobbies": ["reading", "cricket"]},
+            "interests": "jogging and music",
             "physical_attributes": {"hair": "black"},
             "favorites": {"color": "blue", "food": "pizza"},
             "profile_image": SimpleUploadedFile(
@@ -108,7 +108,7 @@ class BotProfileFetchViewTest(APITestCase):
 
     def test_fetch_profile_gender_focus_does_not_exist(self):
         n = 2
-        UserProfile.objects.create(user=self.user, gender_focus="M")
+        profile = UserProfile.objects.create(user=self.user, gender_focus="M")
         response = self.client.get(self.url, {"n": n})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -118,7 +118,7 @@ class BotProfileFetchViewTest(APITestCase):
 
     def test_fetch_profile_gender_focus_everyone(self):
         n = 2
-        UserProfile.objects.create(user=self.user, gender_focus="E")
+        profile = UserProfile.objects.create(user=self.user, gender_focus="E")
         response = self.client.get(self.url, {"n": n})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

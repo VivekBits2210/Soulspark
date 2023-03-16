@@ -13,7 +13,7 @@ class BotProfileTestCase(TestCase):
             age=25,
             bio="I am a chatbot.",
             profession="AI assistant",
-            hobbies={"hobbies": ["reading", "music"]},
+            interests="reading and music",
             favorites={"color": "blue", "food": "pizza"},
             physical_attributes={"hair": "black"},
             profile_image=SimpleUploadedFile(
@@ -32,7 +32,7 @@ class BotProfileTestCase(TestCase):
             "age": 30,
             "bio": "I am a chatbot too.",
             "profession": "Engineer",
-            "hobbies": {"reading": "novels", "sport": "cricket"},
+            "interests": "reading and cricket",
             "physical_attributes": {"hair": "black"},
             "favorites": {"color": "blue", "food": "pizza"},
             "profile_image": SimpleUploadedFile(
@@ -47,7 +47,7 @@ class BotProfileTestCase(TestCase):
         self.assertEqual(bot_profile.age, 30)
         self.assertEqual(bot_profile.bio, "I am a chatbot too.")
         self.assertEqual(bot_profile.profession, "Engineer")
-        self.assertEqual(bot_profile.hobbies, {"reading": "novels", "sport": "cricket"})
+        self.assertEqual(bot_profile.interests, "reading and cricket")
         self.assertEqual(bot_profile.physical_attributes, {"hair": "black"})
         self.assertEqual(bot_profile.favorites, {"color": "blue", "food": "pizza"})
 
@@ -60,7 +60,7 @@ class BotProfileTestCase(TestCase):
                 age=20,
                 bio="I am another chatbot.",
                 profession="Assistant",
-                hobbies={"hobbies": ["traveling"]},
+                interests="travelling",
                 physical_attributes={"hair": "black"},
                 favorites={"color": "red", "food": "sushi"},
                 profile_image=SimpleUploadedFile(
@@ -71,24 +71,6 @@ class BotProfileTestCase(TestCase):
     def test_id(self):
         self.assertEqual(self.bot_profile.bot_id, self.bot_profile.bot_id)
 
-    def test_empty_hobbies(self):
-        bot_profile = BotProfile.objects.create(
-            name="Bot",
-            gender="M",
-            age=30,
-            bio="I am another chatbot.",
-            profession="Assistant",
-            hobbies={"hobbies": []},
-            favorites={"color": "red", "food": "sushi"},
-            physical_attributes={"eye_color": "blue"},
-            profile_image=SimpleUploadedFile(
-                "test.jpg", b"file_content", content_type="image/jpeg"
-            ),
-        )
-        with self.assertRaises(ValidationError):
-            bot_profile.hobbies = "invalid value"
-            bot_profile.save()
-
     def test_invalid_gender(self):
         with self.assertRaises(ValidationError):
             bot_profile = BotProfile.objects.create(
@@ -97,7 +79,7 @@ class BotProfileTestCase(TestCase):
                 age=30,
                 bio="I am another chatbot.",
                 profession="Assistant",
-                hobbies={"hobbies": ["traveling"]},
+                interests="cricket and running",
                 favorites={"color": "red", "food": "sushi"},
                 physical_attributes={"hair": "black"},
                 profile_image=SimpleUploadedFile(
@@ -113,7 +95,7 @@ class BotProfileTestCase(TestCase):
                 age=30,
                 bio="I am another chatbot.",
                 profession="Assistant",
-                hobbies={"hobbies": ["traveling"]},
+                interests="running",
                 favorites={"color": "red", "food": "sushi"},
                 physical_attributes={"hair": "black"},
                 profile_image=SimpleUploadedFile(
@@ -129,7 +111,7 @@ class BotProfileTestCase(TestCase):
                 age=30,
                 bio="I am another chatbot.",
                 profession="Assistant",
-                hobbies={"hobbies": ["traveling"]},
+                interests="running",
                 favorites={"color": "red", "food": "sushi"},
                 physical_attributes={"hair": "black"},
                 profile_image=SimpleUploadedFile(

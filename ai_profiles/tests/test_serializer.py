@@ -20,7 +20,7 @@ class BotProfileSerializerTestCase(APITestCase):
             "age": 30,
             "bio": "I am Bot1",
             "profession": "Engineer",
-            "hobbies": {"hobbies": ["chess", "cricket"]},
+            "interests": "chess and cricket",
             "physical_attributes": {"hair": "black"},
             "favorites": {"color": "blue", "food": "pizza"},
             "profile_image": SimpleUploadedFile(
@@ -40,7 +40,7 @@ class BotProfileSerializerTestCase(APITestCase):
         self.assertEqual(profile.age, self.valid_data["age"])
         self.assertEqual(profile.bio, self.valid_data["bio"])
         self.assertEqual(profile.profession, self.valid_data["profession"])
-        self.assertEqual(profile.hobbies, self.valid_data["hobbies"])
+        self.assertEqual(profile.interests, self.valid_data["interests"])
         self.assertEqual(profile.favorites, self.valid_data["favorites"])
         self.assertIsNotNone(profile.profile_image)
 
@@ -56,11 +56,8 @@ class BotProfileSerializerTestCase(APITestCase):
             set(serializer.errors.keys()),
             {
                 "name",
-                "physical_attributes",
                 "bio",
                 "profession",
-                "hobbies",
-                "favorites",
                 "profile_image",
             },
         )

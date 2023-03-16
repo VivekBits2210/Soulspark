@@ -64,6 +64,7 @@ This model uses the following validators:
     user = models.OneToOneField(
         app_settings.USER_MODEL, on_delete=models.CASCADE, primary_key=True
     )
+    name = models.TextField(blank=True, default="")
     age = models.PositiveIntegerField(
         null=True, blank=True, validators=[age_validation]
     )
@@ -80,6 +81,7 @@ This model uses the following validators:
         default="E",
         validators=[gender_focus_validation],
     )
+    country = models.TextField(null=True, default="USA")
     timezone = models.CharField(
         max_length=32, validators=[timezone_validation], default="America/New_York"
     )
@@ -96,22 +98,39 @@ This model uses the following validators:
     REQUIRED_FIELDS = ["username"]
 
     def save(self, *args, **kwargs):
-        self.summary = self.generate_summary()
         self.full_clean()
+        self.name = self.get_name()
+        self.summary = self.generate_summary()
         return super(UserProfile, self).save(*args, **kwargs)
 
     def generate_summary(self):
-        # TODO: Improve
-        summary = ""
-        # gender = "male" if self.gender == "M" else "female"
-        # if self.gender_focus == "M":
-        #     gender_focus = "men"
-        # elif self.gender_focus == "F":
-        #     gender_focus = "women"
-        # else:
-        #     gender_focus = "everyone"
-        #
-        # summary = f"{self.user.username} is a {self.age}-year-old {gender} interested in {gender_focus}. "
-        # summary += f"They are in the {self.timezone} timezone and enjoy {self.interests}."
+        gender_string, pronoun = self.get_gender_string()
+        gender_focus_string = self.get_gender_focus_string()
 
+        summary = f"{self.name} is a {self.age}-year-old" if self.age else f"{self.name} is a"
+        summary += f" {gender_string}" if gender_string else ""
+        summary += f" interested in {gender_focus_string}" if gender_focus_string else ""
+        summary += f". {pronoun} lives in the country {self.country}" if self.country else ""
+        summary += f". {pronoun} enjoys {self.interests}." if self.interests != "" else "."
         return summary
+
+    def get_name(self):
+        return f"{self.user.first_name} {self.user.last_name}"
+
+    def get_gender_string(self):
+        if self.gender == "M":
+            return tuple(["guy", "He"])
+        elif self.gender == "F":
+            return tuple(["girl", "She"])
+        elif not self.gender:
+            return tuple([None, "They"])
+
+    def get_gender_focus_string(self):
+        if self.gender_focus == "M":
+            return "men"
+        elif self.gender_focus == "F":
+            return "women"
+        elif self.gender_focus == "E":
+            return "both men and women"
+        elif not self.gender_focus:
+            return None

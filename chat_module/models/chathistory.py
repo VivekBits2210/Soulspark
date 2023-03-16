@@ -50,7 +50,7 @@ class ChatHistory(models.Model):
     """
     user = models.ForeignKey(app_settings.USER_MODEL, on_delete=models.CASCADE)
     bot = models.ForeignKey(BotProfile, on_delete=models.CASCADE)
-    history = models.JSONField(blank=True)
+    history = models.JSONField(blank=True, default=list)
     input_chars = models.IntegerField(default=0)
     level = models.DecimalField(
         max_digits=5, decimal_places=4, default=1.0, validators=[level_validation]

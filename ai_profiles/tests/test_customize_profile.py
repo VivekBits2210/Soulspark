@@ -27,7 +27,7 @@ class BotProfileCustomizeProfileTest(APITestCase):
             "age": 30,
             "bio": "I am a chatbot too.",
             "profession": "Engineer",
-            "hobbies": {"hobbies": ["reading", "cricket"]},
+            "interests": "reading and cricket",
             "physical_attributes": {"hair": "black"},
             "favorites": {"color": "blue", "food": "pizza"},
             "profile_image": SimpleUploadedFile(
@@ -97,7 +97,7 @@ class BotProfileCustomizeProfileTest(APITestCase):
         self.assertDictEqual(customized_bot.favorites, self.modified_data["favorites"])
 
         # Assert attributes unmentioned are same as before
-        self.assertDictEqual(customized_bot.hobbies, self.bot_profile.hobbies)
+        self.assertEqual(customized_bot.interests, self.bot_profile.interests)
         self.assertDictEqual(
             customized_bot.physical_attributes, self.bot_profile.physical_attributes
         )

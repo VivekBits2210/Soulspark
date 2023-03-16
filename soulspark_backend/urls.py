@@ -22,7 +22,7 @@ urlpatterns = [
     path("fill-db", fill_db.fill_db, name="fill-db"),
     path("ai-profiles/", include("ai_profiles.urls")),
     path("chat-module/", include("chat_module.urls")),
-    path("accounts/", include(("allauth.urls","authentication"), namespace="Authentication")),
+    path("accounts/", include("allauth.urls")),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path("admin/", admin.site.urls),
 ]

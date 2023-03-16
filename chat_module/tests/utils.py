@@ -12,7 +12,7 @@ def create_user_and_profile(
     age=25,
     gender="M",
     gender_focus="F",
-    interests="testing,python",
+    interests="java and python",
 ):
     user = User.objects.create(username=username, password=password)
     profile = UserProfile.objects.create(
@@ -32,7 +32,7 @@ def create_bot():
         age=25,
         bio="I am a chatbot.",
         profession="AI assistant",
-        hobbies={"hobbies": ["reading", "music"]},
+        interests="jogging and music",
         favorites={"color": "blue", "food": "pizza"},
         physical_attributes={"hair": "black"},
         profile_image=SimpleUploadedFile(
