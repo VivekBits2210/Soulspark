@@ -26,7 +26,7 @@ class BotProfileCreateProfileAdminTest(APITestCase):
             "age": 30,
             "bio": "I am a chatbot too.",
             "profession": "Engineer",
-            "hobbies": {"hobbies": ["reading", "cricket"]},
+            "interests": "reading and cricket",
             "physical_attributes": {"hair": "black"},
             "favorites": {"color": "blue", "food": "pizza"},
             "profile_image": "trial.jpg",
@@ -47,7 +47,7 @@ class BotProfileCreateProfileAdminTest(APITestCase):
         self.assertEqual(bot.age, self.valid_bot_info["age"])
         self.assertEqual(bot.bio, self.valid_bot_info["bio"])
         self.assertEqual(bot.profession, self.valid_bot_info["profession"])
-        self.assertEqual(bot.hobbies, self.valid_bot_info["hobbies"])
+        self.assertEqual(bot.interests, self.valid_bot_info["interests"])
         self.assertEqual(
             bot.physical_attributes, self.valid_bot_info["physical_attributes"]
         )

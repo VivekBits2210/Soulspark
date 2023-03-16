@@ -110,8 +110,8 @@ This model uses the following validators:
         summary = f"{self.name} is a {self.age}-year-old" if self.age else f"{self.name} is a"
         summary += f" {gender_string}" if gender_string else ""
         summary += f" interested in {gender_focus_string}" if gender_focus_string else ""
-        summary += f" and living in the country {self.country}" if self.country else ""
-        summary += f". {pronoun} enjoys {self.interests}." if self.interests!="" else "."
+        summary += f". {pronoun} lives in the country {self.country}" if self.country else ""
+        summary += f". {pronoun} enjoys {self.interests}." if self.interests != "" else "."
         return summary
 
     def get_name(self):

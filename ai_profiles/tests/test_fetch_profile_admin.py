@@ -28,7 +28,7 @@ class BotProfileFetchViewTest(APITestCase):
             "age": 30,
             "bio": "I am a chatbot too.",
             "profession": "Engineer",
-            "hobbies": {"hobbies": ["reading", "cricket"]},
+            "interests": "reading and cricket",
             "physical_attributes": {"hair": "black"},
             "favorites": {"color": "blue", "food": "pizza"},
             "profile_image": SimpleUploadedFile(
@@ -43,7 +43,7 @@ class BotProfileFetchViewTest(APITestCase):
             "age": 22,
             "bio": "I am a chatbot also",
             "profession": "Engineer",
-            "hobbies": {"hobbies": ["reading", "cricket"]},
+            "interests": "reading and cricket",
             "physical_attributes": {"hair": "black"},
             "favorites": {"color": "blue", "food": "pizza"},
             "profile_image": SimpleUploadedFile(

@@ -32,7 +32,7 @@ def create_bot():
         age=25,
         bio="I am a chatbot.",
         profession="AI assistant",
-        hobbies={"hobbies": ["reading", "music"]},
+        interests="jogging and music",
         favorites={"color": "blue", "food": "pizza"},
         physical_attributes={"hair": "black"},
         profile_image=SimpleUploadedFile(

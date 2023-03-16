@@ -22,9 +22,9 @@ def fill_db(request):
         "name": "Nicole",
         "gender": "F",
         "age": 18,
-        "hobbies": {"hobbies": ["reading", "painting"]},
+        "interests": "reading and running",
         "favorites": {"color": "red", "food": "pizza"},
-        "physical_attributes": {"eye_color": "blue"},
+        "physical_attributes": {"eye color": "blue"},
         "profession": "Air hostess",
         "profile_image": SimpleUploadedFile(
             "Nicole.jpg", image_content1, content_type="image/jpeg"
@@ -35,9 +35,9 @@ def fill_db(request):
         "name": "Carla",
         "gender": "F",
         "age": 25,
-        "hobbies": {"hobbies": ["hiking", "yoga"]},
+        "interests": "hiking and jogging",
         "favorites": {"color": "blue", "food": "sushi"},
-        "physical_attributes": {"eye_color": "black"},
+        "physical_attributes": {"eye color": "black"},
         "profession": "Secretary",
         "profile_image": SimpleUploadedFile(
             "Carla.jpg", image_content2, content_type="image/jpeg"
