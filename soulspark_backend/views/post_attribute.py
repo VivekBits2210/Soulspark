@@ -8,7 +8,6 @@ from rest_framework.decorators import api_view
 from chat_module.models import UserProfile
 
 
-# TODO: Check if the attribute sent in is a valid settable attribute
 @login_required
 @api_view(["POST"])
 def post_attribute(request):
