@@ -20,13 +20,13 @@ REST:  /fill-db
 ```
 
 Go to /admin and login with your super user credentials. \
-Under 'Sites', edit the 'example' data to look like this
+Under 'Sites', edit the 'example' entry to look like this:
 ```
 Domain: localhost:8000
 Display: localhost
 ```
 
-Under "Social Application",
+Under "Social Application", add the entry below:
 ```
 Provider: Google
 Client ID: 485503899387-03u1pvv94g1k01tf9rhv7nno51tbfmls.apps.googleusercontent.com
