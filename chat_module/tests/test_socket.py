@@ -85,8 +85,7 @@ class ChatConsumerTestCase(TestCase):
 
 class GetResponseTestCase(TestCase):
     def setUp(self):
-        self.user = create_user()
-        self.user_profile = UserProfile.objects.create(user=self.user)
+        self.user, self.user_profile = create_user_and_profile()
         self.bot = create_bot()
         self.chat_history = ChatHistory.objects.create(
             user=self.user_profile.user, bot=self.bot, history=[], input_chars=0
