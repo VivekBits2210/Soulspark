@@ -91,6 +91,11 @@ INSTALLED_APPS = (
         "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
         "django.contrib.admindocs",
         "drf_yasg",
+        "theme",
+
+        #third-party apps
+        "tailwind",
+        
     ]
     + MY_APPS
     + AUTH_APPS
@@ -182,3 +187,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+
+TAILWIND_APP_NAME = "theme"
