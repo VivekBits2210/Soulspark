@@ -9,10 +9,8 @@ class DialogueEngine:
         self.chat_history = chat_history
         self.client = GPTClient()
         self.components = Components(user_profile, bot, chat_history)
-        # self.indicator_limit = 10
 
-    def run(self, message):
-        self.chat_history.append(message)
+    def run(self):
         messages, customizations = self.components.generate_indicator_prompt()
         self.client.customize_model_parameters(customizations)
         indicator_message = self.client.generate_reply(messages)["message"]["content"]
@@ -28,9 +26,7 @@ class DialogueEngine:
         self.client.customize_model_parameters(customizations)
         return self.client.generate_reply(messages)["message"]["content"]
 
-    # TODO: When storing bot messages, always store each sentence in a different message line.
     # TODO: For summarization flow, need to calculate the size of the story prompt in terms of tokens
-    # TODO: Once tokens hit some threshold of (tokens/max-allowed), call async summarizer, leave T messages intact at the end
     # TODO: Add Output Limit guardrails to the summarizer prompt
 
 
@@ -51,16 +47,17 @@ if __name__ == "__main__":
     user_profile = UserProfile.objects.get(name="Vivek")
     chat_history = [
         {"source": "Vivek", "message": "Talk to me; I wanna know more about chess."},
-        {"source": "Carla", "message": "Sure, we can talk about Magnus Carlsen"},
+        {"source": "Carla", "message": "Sure, we can talk about Magnus Carlsen!"},
         {
             "source": "Vivek",
             "message": "Can you imagine actually saying something instead of generic shit.",
         },
-        {"source": "Carla", "message": "Huh?"},
+        {"source": "Carla", "message": "Oh, I'm sorry, we'll figure it out"},
+        {"source": "Vivek", "message": "Tell me something interesting about yourself."},
     ]
     engine = DialogueEngine(
         user_profile=user_profile, bot=bot, chat_history=chat_history
     )
     print(
-        f"ENGINE: {engine.run({'source': 'Vivek', 'message': 'Tell me something interesting'})}"
+        f"ENGINE: {engine.run()}"
     )

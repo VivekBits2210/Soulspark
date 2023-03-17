@@ -1,5 +1,9 @@
 class RecipeMock:
     def __init__(self, user_profile, bot):
+        self.INDICATORS = [
+            "sadness",
+            "happiness",
+        ]
         self.user_profile = user_profile
         self.bot = bot
         self.regions = []
@@ -16,7 +20,7 @@ class RecipeMock:
 
     def construct_indicator_system_message(self):
         return (
-            "Randomly fill values for x1,x2...xn: " "'sadness:x1/10|happiness:x2/10'",
+            "Randomly fill values for x1,x2: 'sadness:x1/10|happiness:x2/10'",
             {"temperature": 0},
         )
 

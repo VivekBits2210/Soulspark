@@ -11,26 +11,17 @@ except ModuleNotFoundError:
 
 class Components:
     def __init__(self, user_profile, bot, chat_history):
-        self.chat_conversation = None
         self.user_profile = user_profile
         self.bot = bot
-        self._chat_history = chat_history
+        self.chat_history = chat_history
+        self.chat_conversation = self.construct_conversation_from_chat_history()
         self.recipe = (
             Recipe(user_profile, bot) if is_recipe else RecipeMock(user_profile, bot)
         )
 
-    @property
-    def chat_history(self):
-        return self._chat_history
-
-    @chat_history.setter
-    def chat_history(self, value):
-        self._chat_history = value
-        self.chat_conversation = self.construct_conversation_from_chat_history()
-
     def construct_conversation_from_chat_history(self):
         conversation = ""
-        for entry in self._chat_history:
+        for entry in self.chat_history:
             conversation += f"{entry['source']}: {entry['message']}\n"
         return conversation if len(conversation) > 0 else None
 
@@ -74,6 +65,9 @@ class Components:
             name, value = indicator.split(":")
             numerator, denominator = value.split("/")
             indicator_mapping[name] = int(numerator) * 10 // int(denominator)
+        for indicator in self.recipe.INDICATORS:
+            if indicator not in indicator_mapping:
+                indicator_mapping[indicator] = 0
         return indicator_mapping
 
     def find_region(self, indicator_vector):
