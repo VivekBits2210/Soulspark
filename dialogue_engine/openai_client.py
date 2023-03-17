@@ -1,4 +1,5 @@
 import openai
+
 try:
     from dialogue_engine.secrets import API_KEY
 except ModuleNotFoundError:
@@ -22,6 +23,7 @@ class GPTClient:
             messages=messages
         )
         return response["choices"][0]
+
 
 # Test fragment
 # if __name__ == "__main__":
