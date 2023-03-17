@@ -51,7 +51,6 @@ class ChatConsumer(WebsocketConsumer):
 
     # NOTE: The structure of 'event' is defined by the UI
     def chat_message(self, event):
-        print("Event:", event)
         packet = json.dumps(
             {
                 "type": "chat_message",
