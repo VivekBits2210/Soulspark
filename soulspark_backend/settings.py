@@ -137,7 +137,23 @@ ASGI_APPLICATION = "soulspark_backend.asgi.application"
 CELERY_BROKER_URL = ""
 CELERY_RESULT_BACKEND = ""
 
-CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
+
+## For redis
+# CHANNEL_LAYERS = {
+#     "default": {
+#     'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#     "CONFIG": {
+#         "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

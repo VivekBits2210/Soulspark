@@ -10,45 +10,66 @@ from channels.generic.websocket import WebsocketConsumer
 
 # TODO: When storing bot messages from dialog engine, always store each sentence in a different message line.
 class ChatConsumer(WebsocketConsumer):
+    def connect(self):
+        # self.chat_box_name = self.scope["url_route"]["kwargs"]["chat_box_name"]
+        self.chat_box_name = "1"
+        self.group_name = "chat_%s" % self.chat_box_name
+
+        async_to_sync(self.channel_layer.group_add)(self.group_name, self.channel_name)
+
+        self.accept()
+
+
+
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
-        get_response.delay(self.channel_name, text_data_json)
+        # get_response.delay(self.channel_name, text_data_json)
 
-        username = text_data_json["username"]
-        bot_id = text_data_json["bot_id"]
-        text = text_data_json["text"]
+        print("text_data_json:", text_data_json)
+
+        # username = text_data_json["username"]
+        # bot_id = text_data_json["bot_id"]
+        # text = text_data_json["text"]
+        # packet = {
+        #     "type": "chat_message",
+        #     "text": text,
+        #     "username": username,
+        #     "bot_id": bot_id,
+        #     "timestamp": text_data_json["timestamp"],
+        # }
+
         packet = {
             "type": "chat_message",
-            "text": text,
-            "username": username,
-            "bot_id": bot_id,
-            "timestamp": text_data_json["timestamp"],
+            "text": {"msg": text_data_json["text"], "source": "bot"},
         }
-        async_to_sync(self.channel_layer.send)(
-            self.channel_name,
+        async_to_sync(self.channel_layer.group_send)(
+            # self.channel_name,
+            self.group_name,
             packet,
         )
+        print("done")
 
-        user_profile = UserProfile.objects.get(username=username)
-        bot = BotProfile.objects.get(bot_id=bot_id)
-        chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
-        chat_history_obj.history.append(packet)
-        characters_sent = sum(1 for c in text if c.isalpha())
-        chat_history_obj.input_chars += characters_sent
-        user_profile.experience += characters_sent
-        chat_history_obj.level = calculate_level(num_chars=chat_history_obj.input_chars)
-        chat_history_obj.save()
-        user_profile.save()
+        # user_profile = UserProfile.objects.get(username=username)
+        # bot = BotProfile.objects.get(bot_id=bot_id)
+        # chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
+        # chat_history_obj.history.append(packet)
+        # characters_sent = sum(1 for c in text if c.isalpha())
+        # chat_history_obj.input_chars += characters_sent
+        # user_profile.experience += characters_sent
+        # chat_history_obj.level = calculate_level(num_chars=chat_history_obj.input_chars)
+        # chat_history_obj.save()
+        # user_profile.save()
 
     # NOTE: The structure of 'event' is defined by the UI
     def chat_message(self, event):
+        print("Event:", event)
         packet = json.dumps(
             {
                 "type": "chat_message",
                 "text": event["text"],
-                "username": event["username"],
-                "bot_id": event["bot_id"],
-                "timestamp": event["timestamp"],
+                # "username": event["username"],
+                # "bot_id": event["bot_id"],
+                # "timestamp": event["timestamp"],
             }
         )
         self.send(text_data=packet)
