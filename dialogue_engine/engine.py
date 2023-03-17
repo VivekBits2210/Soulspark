@@ -4,4 +4,4 @@ class DialogueEngine:
         self.user = user
         self.bot = bot
 
-    #TODO: Call the indicator prompt and parse the output here
+    # TODO: Call the indicator prompt and parse the output here
