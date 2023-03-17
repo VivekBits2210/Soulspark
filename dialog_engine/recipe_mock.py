@@ -9,7 +9,7 @@ class RecipeMock:
         self.regions = []
         self.templates = {}
 
-    def construct_story_system_message(self):
+    def construct_story_system_message(self, user_summary, bot_summary):
         return (
             f"This is a story about {self.user_profile.name} and {self.bot.name}. {self.bot.summary} {self.user_profile.summary} "
             f"Behave as {self.bot.name}, a very "
@@ -25,4 +25,7 @@ class RecipeMock:
         )
 
     def construct_summarization_system_message(self):
-        return "Summarize the conversation.", {"temperature": 0.7}
+        return "Summarize the conversation.", {"temperature": 0}
+
+    def construct_summary_consolidation_system_message(self):
+        return "Summarize the summary.", {"temperature": 0}
