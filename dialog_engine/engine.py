@@ -3,7 +3,7 @@ from dialog_engine.components import Components
 from dialog_engine.models import GPTUsageRecord
 from dialog_engine.tasks import summarizer
 
-
+#TODO: Integrate both summaries as input into the story prompt (system message?)
 class DialogEngine:
     def __init__(self, user_profile, chat_history_record):
         self.user_profile = user_profile
@@ -26,11 +26,12 @@ class DialogEngine:
         hook = self.components.fetch_template(
             self.components.find_region(indicator_vector)
         )
-        messages, customizations = self.components.generate_story_prompt(hook)
+        user_summary = self.chat_history_record.user_summary
+        bot_summary = self.chat_history_record.bot_summary
+        messages, customizations = self.components.generate_story_prompt(hook, user_summary, bot_summary)
         self.client.customize_model_parameters(customizations)
         response, story_tokens = self.client.generate_reply(messages)
 
-        # TODO: Record all prompts and interactions in a table
         if story_tokens > 1500:
             summarizer.delay(self)
 
