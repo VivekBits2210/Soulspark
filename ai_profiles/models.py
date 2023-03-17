@@ -5,7 +5,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 import nltk
 
-nltk.download('punkt')
+nltk.download("punkt")
 from textblob import TextBlob
 
 
@@ -62,58 +62,59 @@ def validate_image_extension(value):
 
 class BotProfile(models.Model):
     """
-BotProfile Model
-=================
+    BotProfile Model
+    =================
 
-This model represents a bot profile.
+    This model represents a bot profile.
 
-Attributes
-----------
-bot_id : AutoField
-    The ID of the bot.
-name : CharField
-    The name of the bot.
-gender : CharField
-    The gender of the bot, represented as "M" (male) or "F" (female).
-age : IntegerField
-    The age of the bot.
-bio : CharField
-    The biography of the bot.
-profession : TextField
-    The profession of the bot.
-interests : CharField
-    The hobbies of the bot, represented as a string (e.g. "running and music").
-favorites : JSONField
-    The favorites of the bot, represented as a dictionary.
-physical_attributes : JSONField
-    The physical attributes of the bot, represented as a dictionary.
-profile_image : ImageField
-    The profile image of the bot.
-searchable : BooleanField
-    Indicates whether the bot is searchable. Customized bot profiles are not searchable as they are specific to a user.
-    The fetch_profile endpoint can only fetch searchable profiles. In order to fetch customized bot profile, use fetch_chat_history
-    without the bot_id parameter.
+    Attributes
+    ----------
+    bot_id : AutoField
+        The ID of the bot.
+    name : CharField
+        The name of the bot.
+    gender : CharField
+        The gender of the bot, represented as "M" (male) or "F" (female).
+    age : IntegerField
+        The age of the bot.
+    bio : CharField
+        The biography of the bot.
+    profession : TextField
+        The profession of the bot.
+    interests : CharField
+        The hobbies of the bot, represented as a string (e.g. "running and music").
+    favorites : JSONField
+        The favorites of the bot, represented as a dictionary.
+    physical_attributes : JSONField
+        The physical attributes of the bot, represented as a dictionary.
+    profile_image : ImageField
+        The profile image of the bot.
+    searchable : BooleanField
+        Indicates whether the bot is searchable. Customized bot profiles are not searchable as they are specific to a user.
+        The fetch_profile endpoint can only fetch searchable profiles. In order to fetch customized bot profile, use fetch_chat_history
+        without the bot_id parameter.
 
-Methods
--------
-save(self, args, kwargs)
-    Cleans the model instance and saves it to the database. This function runs validators before saving any data to the database.
+    Methods
+    -------
+    save(self, args, kwargs)
+        Cleans the model instance and saves it to the database. This function runs validators before saving any data to the database.
 
-Notes
------
-This model requires the following imports:
+    Notes
+    -----
+    This model requires the following imports:
 
-- ``from os import path``
-- ``from django.core.validators import RegexValidator``
-- ``from django.db import models``
-- ``from django.core.exceptions import ValidationError``
+    - ``from os import path``
+    - ``from django.core.validators import RegexValidator``
+    - ``from django.db import models``
+    - ``from django.core.exceptions import ValidationError``
 
-This model uses the following validators:
+    This model uses the following validators:
 
-- ``validate_age``: Validates that the age is between 18 and 60.
-- ``validate_name``: Validates that the name contains only alphabets and only one word.
-- ``validate_image_extension``: Validates that the image has a valid extension (.jpg, .jpeg, or .png).
+    - ``validate_age``: Validates that the age is between 18 and 60.
+    - ``validate_name``: Validates that the name contains only alphabets and only one word.
+    - ``validate_image_extension``: Validates that the image has a valid extension (.jpg, .jpeg, or .png).
     """
+
     bot_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, validators=[validate_name])
     gender = models.CharField(
@@ -125,9 +126,13 @@ This model uses the following validators:
     age = models.IntegerField(validators=[validate_age])
     bio = models.CharField(max_length=300)
     profession = models.CharField(max_length=100)
-    interests = models.CharField(max_length=250, default="", blank=True, validators=[interests_validation])
+    interests = models.CharField(
+        max_length=250, default="", blank=True, validators=[interests_validation]
+    )
     favorites = models.JSONField(validators=[validate_dict], blank=True, default=dict)
-    physical_attributes = models.JSONField(validators=[validate_dict], blank=True, default=dict)
+    physical_attributes = models.JSONField(
+        validators=[validate_dict], blank=True, default=dict
+    )
     profile_image = models.ImageField(
         upload_to="images/", validators=[validate_image_extension]
     )
@@ -142,8 +147,10 @@ This model uses the following validators:
     def generate_summary(self):
         gender_string, pronoun, second_pronoun = self.get_gender_string()
         summary = f"{self.name} is a {self.age}-year-old {gender_string}. {pronoun} enjoys {self.interests}."
-        summary += f" {second_pronoun} {self.get_physical_attributes_string()}. {second_pronoun} favorite " \
-                   f"{self.get_favorites_string()}."
+        summary += (
+            f" {second_pronoun} {self.get_physical_attributes_string()}. {second_pronoun} favorite "
+            f"{self.get_favorites_string()}."
+        )
 
         return summary
 
@@ -155,7 +162,11 @@ This model uses the following validators:
             singular, plural = plural_singular_detector(key)
             string = f"{key} is {value}" if singular == key else f"{key} are {value}"
             result.append(string)
-        return ", ".join(result[:-1]) + " and " + result[-1] if len(result) > 1 else result[0]
+        return (
+            ", ".join(result[:-1]) + " and " + result[-1]
+            if len(result) > 1
+            else result[0]
+        )
 
     def get_favorites_string(self):
         result = []

@@ -13,7 +13,7 @@ from chat_module.models import ChatHistory
 def fetch_chat_history(request):
     user = request.user
     try:
-        lines = int(request.GET.get("lines",10))
+        lines = int(request.GET.get("lines", 10))
         if lines < 0:
             lines = 10
     except ValueError:

@@ -15,7 +15,9 @@ class Components:
         self.user_profile = user_profile
         self.bot = bot
         self._chat_history = chat_history
-        self.recipe = Recipe(user_profile, bot) if is_recipe else RecipeMock(user_profile, bot)
+        self.recipe = (
+            Recipe(user_profile, bot) if is_recipe else RecipeMock(user_profile, bot)
+        )
 
     @property
     def chat_history(self):
@@ -30,7 +32,7 @@ class Components:
         conversation = ""
         for entry in self._chat_history:
             conversation += f"{entry['source']}: {entry['message']}\n"
-        return conversation if len(conversation)>0 else None
+        return conversation if len(conversation) > 0 else None
 
     def generate_indicator_prompt(self):
         prompt, api_customizations = self.recipe.construct_indicator_system_message()
@@ -38,27 +40,32 @@ class Components:
         # TODO: Check performance improvement when below prompt is few-shotted
         messages = [
             {"role": "system", "content": prompt},
-            {"role": "user", "content": self.chat_conversation}
         ]
+        if self.chat_conversation:
+            messages.append({"role": "user", "content": self.chat_conversation})
         return messages, api_customizations
 
     def generate_story_prompt(self, hook=None):
         prompt, api_customizations = self.recipe.construct_story_system_message()
-        messages = [
-            {"role": "system", "content": prompt}
-        ]
+        messages = [{"role": "system", "content": prompt}]
         if self.chat_conversation:
             messages.append({"role": "user", "content": self.chat_conversation})
         if hook:
-            messages.append({"role": "system", "content": f"Expected reply from {bot.name}: {hook}"})
+            messages.append(
+                {"role": "system", "content": f"Expected reply from {bot.name}: {hook}"}
+            )
         return messages, api_customizations
 
     def generate_summarization_prompt(self):
-        prompt, api_customizations = self.recipe.construct_summarization_system_message()
+        (
+            prompt,
+            api_customizations,
+        ) = self.recipe.construct_summarization_system_message()
         messages = [
             {"role": "system", "content": prompt},
-            {"role": "user", "content": self.chat_conversation}
         ]
+        if self.chat_conversation:
+            messages.append({"role": "user", "content": self.chat_conversation})
         return messages, api_customizations
 
     def parse_indicator_message(self, message_text):
@@ -72,8 +79,12 @@ class Components:
     def find_region(self, indicator_vector):
         for i, region in enumerate(self.recipe.regions):
             lower_bounds, upper_bounds = region
-            if all(lower_bound <= coord <= upper_bound for lower_bound, upper_bound, coord in
-                   zip(lower_bounds, upper_bounds, indicator_vector)):
+            if all(
+                lower_bound <= coord <= upper_bound
+                for lower_bound, upper_bound, coord in zip(
+                    lower_bounds, upper_bounds, indicator_vector
+                )
+            ):
                 return i
         return -1
 
@@ -81,7 +92,9 @@ class Components:
         if region_index == -1:
             return None
         probability_distribution = self.recipe.templates[region_index]
-        return random.choices(probability_distribution.keys(), weights=probability_distribution.values())[0]
+        return random.choices(
+            probability_distribution.keys(), weights=probability_distribution.values()
+        )[0]
 
 
 # Really useful test fragment
@@ -89,7 +102,7 @@ if __name__ == "__main__":
     import sys
     import os
 
-    sys.path.insert(1, '../soulspark-backend')
+    sys.path.insert(1, "../soulspark-backend")
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "soulspark_backend.settings")
     from django.core.wsgi import get_wsgi_application
 
@@ -111,8 +124,11 @@ if __name__ == "__main__":
     print(f"RESPONSE: {client.generate_reply(messages)['message']['content']}")
 
     chat_history = [
-        {'source': 'Vivek', 'message': 'Talk to me'},
-        {'source': 'Vivek', 'message': 'Can you imagine actually saying something instead of generic shit.'},
+        {"source": "Vivek", "message": "Talk to me"},
+        {
+            "source": "Vivek",
+            "message": "Can you imagine actually saying something instead of generic shit.",
+        },
     ]
 
     components.chat_history = chat_history
@@ -122,10 +138,13 @@ if __name__ == "__main__":
     print(f"RESPONSE: {client.generate_reply(messages)['message']['content']}")
 
     chat_history = [
-        {'source': 'Vivek', 'message': 'Talk to me; I wanna know more about chess.'},
-        {'source': 'Carla', 'message': 'Sure, we can talk about Magnus Carlsen'},
-        {'source': 'Vivek', 'message': 'Can you imagine actually saying something instead of generic shit.'},
-        {'source': 'Carla', 'message': 'Huh?'},
+        {"source": "Vivek", "message": "Talk to me; I wanna know more about chess."},
+        {"source": "Carla", "message": "Sure, we can talk about Magnus Carlsen"},
+        {
+            "source": "Vivek",
+            "message": "Can you imagine actually saying something instead of generic shit.",
+        },
+        {"source": "Carla", "message": "Huh?"},
     ]
 
     components.chat_history = chat_history

@@ -17,8 +17,8 @@ class FetchChatHistoryTestCase(APITestCase):
         self.client.force_login(user=self.user)
 
         self.valid_history = [
-            {'message': 'hi', 'from': 'user'},
-            {'message': 'hey, how can I help', 'from': 'bot'}
+            {"message": "hi", "from": "user"},
+            {"message": "hey, how can I help", "from": "bot"},
         ]
 
     def test_fetch_chat_history_works(self):
@@ -32,7 +32,7 @@ class FetchChatHistoryTestCase(APITestCase):
 
     def test_fetch_chat_history_with_bot_id_works(self):
         # API should work, return a dictionary with the right bot_id and a full response
-        response = self.client.get(self.url, {'bot_id': self.bot.bot_id})
+        response = self.client.get(self.url, {"bot_id": self.bot.bot_id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response_json = response.json()
         self.assertIsInstance(response_json, dict)
@@ -41,9 +41,11 @@ class FetchChatHistoryTestCase(APITestCase):
 
     def test_fetch_chat_history_with_history_works(self):
         # API should work, return a dictionary with the right bot_id and a full response
-        ChatHistory.objects.create(user=self.user, bot=self.bot, history=self.valid_history)
+        ChatHistory.objects.create(
+            user=self.user, bot=self.bot, history=self.valid_history
+        )
 
-        response = self.client.get(self.url, {'bot_id': self.bot.bot_id})
+        response = self.client.get(self.url, {"bot_id": self.bot.bot_id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response_json = response.json()
         self.assertIsInstance(response_json, dict)
@@ -51,9 +53,11 @@ class FetchChatHistoryTestCase(APITestCase):
         self.assertEqual(response_json["history"], self.valid_history)
 
     def test_fetch_chat_history_with_history_and_lines_works(self):
-        ChatHistory.objects.create(user=self.user, bot=self.bot, history=self.valid_history)
+        ChatHistory.objects.create(
+            user=self.user, bot=self.bot, history=self.valid_history
+        )
 
-        response = self.client.get(self.url, {'bot_id': self.bot.bot_id, 'lines': 1})
+        response = self.client.get(self.url, {"bot_id": self.bot.bot_id, "lines": 1})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response_json = response.json()
         self.assertIsInstance(response_json, dict)

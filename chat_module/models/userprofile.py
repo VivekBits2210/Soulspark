@@ -13,54 +13,55 @@ from chat_module.models.validators import (
 
 class UserProfile(models.Model):
     """
-UserProfile Model
-==================
+    UserProfile Model
+    ==================
 
-This model represents a user profile.
+    This model represents a user profile.
 
-Attributes
-----------
-user : OneToOneField
-    The user associated with the profile.
-age : PositiveIntegerField
-    The age of the user.
-gender : CharField
-    The gender of the user, represented as "M" (male) or "F" (female).
-gender_focus : CharField
-    The gender focus of the user, represented as "M" (male), "F" (female), or "E" (everyone). The default value is "E".
-timezone : CharField
-    The timezone of the user.
-experience : PositiveIntegerField
-    The experience points of the user.
-interests : CharField
-    The interests of the user, separated by commas.
-is_active : BooleanField
-    Indicates whether the user is active.
-is_staff : BooleanField
-    Indicates whether the user is staff.
+    Attributes
+    ----------
+    user : OneToOneField
+        The user associated with the profile.
+    age : PositiveIntegerField
+        The age of the user.
+    gender : CharField
+        The gender of the user, represented as "M" (male) or "F" (female).
+    gender_focus : CharField
+        The gender focus of the user, represented as "M" (male), "F" (female), or "E" (everyone). The default value is "E".
+    timezone : CharField
+        The timezone of the user.
+    experience : PositiveIntegerField
+        The experience points of the user.
+    interests : CharField
+        The interests of the user, separated by commas.
+    is_active : BooleanField
+        Indicates whether the user is active.
+    is_staff : BooleanField
+        Indicates whether the user is staff.
 
-Methods
--------
-save(self, args, kwargs)
-    Cleans the model instance and saves it to the database. Custom save functions runs validators before saving any model object
+    Methods
+    -------
+    save(self, args, kwargs)
+        Cleans the model instance and saves it to the database. Custom save functions runs validators before saving any model object
 
-Notes
------
-This model requires the following imports:
+    Notes
+    -----
+    This model requires the following imports:
 
-- ``from django.db import models``
-- ``from allauth import app_settings``
-- ``from chat_module.models.validators``
+    - ``from django.db import models``
+    - ``from allauth import app_settings``
+    - ``from chat_module.models.validators``
 
-This model uses the following validators:
+    This model uses the following validators:
 
-- ``age_validation``: Validates that the user is 13 years old or older.
-- ``gender_validation``: Validates that the gender is "M" (male) or "F" (female).
-- ``gender_focus_validation``: Validates that the gender focus is "M" (male), "F" (female), or "E" (everyone).
-- ``timezone_validation``: Validates that the timezone is a valid timezone.
-- ``experience_validation``: Validates that the experience points are greater than or equal to 0.
-- ``interests_validation``: Validates that the interests are valid comma-separated values.
+    - ``age_validation``: Validates that the user is 13 years old or older.
+    - ``gender_validation``: Validates that the gender is "M" (male) or "F" (female).
+    - ``gender_focus_validation``: Validates that the gender focus is "M" (male), "F" (female), or "E" (everyone).
+    - ``timezone_validation``: Validates that the timezone is a valid timezone.
+    - ``experience_validation``: Validates that the experience points are greater than or equal to 0.
+    - ``interests_validation``: Validates that the interests are valid comma-separated values.
     """
+
     user = models.OneToOneField(
         app_settings.USER_MODEL, on_delete=models.CASCADE, primary_key=True
     )
@@ -107,11 +108,19 @@ This model uses the following validators:
         gender_string, pronoun = self.get_gender_string()
         gender_focus_string = self.get_gender_focus_string()
 
-        summary = f"{self.name} is a {self.age}-year-old" if self.age else f"{self.name} is a"
+        summary = (
+            f"{self.name} is a {self.age}-year-old" if self.age else f"{self.name} is a"
+        )
         summary += f" {gender_string}" if gender_string else ""
-        summary += f" interested in {gender_focus_string}" if gender_focus_string else ""
-        summary += f". {pronoun} lives in the country {self.country}" if self.country else ""
-        summary += f". {pronoun} enjoys {self.interests}." if self.interests != "" else "."
+        summary += (
+            f" interested in {gender_focus_string}" if gender_focus_string else ""
+        )
+        summary += (
+            f". {pronoun} lives in the country {self.country}" if self.country else ""
+        )
+        summary += (
+            f". {pronoun} enjoys {self.interests}." if self.interests != "" else "."
+        )
         return summary
 
     def get_name(self):

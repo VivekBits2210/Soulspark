@@ -14,8 +14,8 @@ class ComponentTestcase(TestCase):
     def test_construct_conversation_from_chat_history(self):
         components = Components(self.user_profile, self.bot, self.chat_history)
         chat_history = [
-            {'source': 'User', 'message': 'Hello'},
-            {'source': 'Bot', 'message': 'Hi there'}
+            {"source": "User", "message": "Hello"},
+            {"source": "Bot", "message": "Hi there"},
         ]
         components.chat_history = chat_history
         expected_conversation = "User: Hello\nBot: Hi there\n"
@@ -27,7 +27,9 @@ class ComponentTestcase(TestCase):
         chat_history = []
 
         components = Components(user_profile, bot, chat_history)
-        components.recipe.construct_indicator_system_message = MagicMock(return_value=("indicator prompt", {}))
+        components.recipe.construct_indicator_system_message = MagicMock(
+            return_value=("indicator prompt", {})
+        )
 
         messages, customizations = components.generate_indicator_prompt()
 
@@ -43,7 +45,9 @@ class ComponentTestcase(TestCase):
         chat_history = []
 
         components = Components(user_profile, bot, chat_history)
-        components.recipe.construct_story_system_message = MagicMock(return_value=("story prompt", {}))
+        components.recipe.construct_story_system_message = MagicMock(
+            return_value=("story prompt", {})
+        )
 
         messages, customizations = components.generate_story_prompt()
 
@@ -70,7 +74,7 @@ class ComponentTestcase(TestCase):
             "confusion": 7,
             "horny": 6,
             "disappointment": 8,
-            "boredom": 9
+            "boredom": 9,
         }
         self.assertEqual(indicator_mapping, expected_mapping)
 

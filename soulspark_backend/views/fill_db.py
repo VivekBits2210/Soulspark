@@ -37,7 +37,12 @@ def fill_db(request):
         "age": 25,
         "interests": "hiking and jogging",
         "favorites": {"color": "blue", "food": "sushi"},
-        "physical_attributes": {"eyes": "blue", "hair": "blonde", "skin":"fair", "figure":"slim"},
+        "physical_attributes": {
+            "eyes": "blue",
+            "hair": "blonde",
+            "skin": "fair",
+            "figure": "slim",
+        },
         "profession": "Secretary",
         "profile_image": SimpleUploadedFile(
             "Carla.jpg", image_content2, content_type="image/jpeg"
