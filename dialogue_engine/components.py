@@ -1,89 +1,87 @@
 import random
 
+is_recipe = False
 try:
-    from dialogue_engine.recipe import \
-        construct_story_system_message, \
-        construct_indicator_system_message, \
-        construct_summarization_system_message, \
-        regions, \
-        templates
+    from dialogue_engine.recipe import Recipe
+
+    is_recipe = True
 except ModuleNotFoundError:
-    construct_story_system_message = lambda u, b: \
-                                         f"This is a story about {u.name} and {b.name}. {b.summary} {u.summary} " \
-                                         f"Behave as {b.name}, a very " \
-                                         f"enthusiastic, excited, warm, loving and curious person. " \
-                                         f"You are talking to {u.name}. ", {}
-    construct_indicator_system_message = lambda u, b: "Randomly fill values for x1,x2...xn: " \
-                                                      "'sadness:x1/10|happiness:x2/10'", \
-                                         {'temperature': 0}
-    construct_summarization_system_message = lambda u, b: "Summarize the conversation.", {'temperature': 0.7}
-    regions = []
-    templates = {}
-
-def construct_conversation_from_chat_history(chat_history):
-    conversation = ""
-    for entry in chat_history:
-        conversation += f"{entry['source']}: {entry['message']}\n"
-    return conversation
+    from dialogue_engine.recipe_mock import RecipeMock
 
 
-def generate_indicator_prompt(user_profile, bot, chat_history):
-    prompt, api_customizations = construct_indicator_system_message(user_profile, bot)
+class Components:
+    def __init__(self, user_profile, bot, chat_history):
+        self.chat_conversation = None
+        self.user_profile = user_profile
+        self.bot = bot
+        self._chat_history = chat_history
+        self.recipe = Recipe(user_profile, bot) if is_recipe else RecipeMock(user_profile, bot)
 
-    # TODO: Check performance improvement when below prompt is few-shotted
-    messages = [
-        {"role": "system", "content": prompt},
-        {"role": "user", "content": construct_conversation_from_chat_history(chat_history)}
-    ]
-    return messages, api_customizations
+    @property
+    def chat_history(self):
+        return self._chat_history
 
+    @chat_history.setter
+    def chat_history(self, value):
+        self._chat_history = value
+        self.chat_conversation = self.construct_conversation_from_chat_history()
 
-def generate_story_prompt(user_profile, bot):
-    prompt, api_customizations = construct_story_system_message(user_profile, bot)
-    messages = [
-        {"role": "system", "content": prompt}
-    ]
-    return messages, api_customizations
+    def construct_conversation_from_chat_history(self):
+        conversation = ""
+        for entry in self._chat_history:
+            conversation += f"{entry['source']}: {entry['message']}\n"
+        return conversation if len(conversation)>0 else None
 
+    def generate_indicator_prompt(self):
+        prompt, api_customizations = self.recipe.construct_indicator_system_message()
 
-def generate_summarization_prompt(user_profile, bot, chat_history):
-    prompt, api_customizations = construct_summarization_system_message(user_profile, bot)
-    messages = [
-        {"role": "system", "content": prompt},
-        {"role": "user", "content": construct_conversation_from_chat_history(chat_history)}
-    ]
-    return messages, api_customizations
+        # TODO: Check performance improvement when below prompt is few-shotted
+        messages = [
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": self.chat_conversation}
+        ]
+        return messages, api_customizations
 
+    def generate_story_prompt(self, hook=None):
+        prompt, api_customizations = self.recipe.construct_story_system_message()
+        messages = [
+            {"role": "system", "content": prompt}
+        ]
+        if self.chat_conversation:
+            messages.append({"role": "user", "content": self.chat_conversation})
+        if hook:
+            messages.append({"role": "system", "content": f"Expected reply from {bot.name}: {hook}"})
+        return messages, api_customizations
 
-def parse_indicator_message(message_text):
-    indicator_mapping = {}
-    for indicator in message_text.split("|"):
-        name, value = indicator.split(":")
-        numerator, denominator = value.split("/")
-        indicator_mapping[name] = int(numerator) * 10 // int(denominator)
-    return indicator_mapping
+    def generate_summarization_prompt(self):
+        prompt, api_customizations = self.recipe.construct_summarization_system_message()
+        messages = [
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": self.chat_conversation}
+        ]
+        return messages, api_customizations
 
+    def parse_indicator_message(self, message_text):
+        indicator_mapping = {}
+        for indicator in message_text.split("|"):
+            name, value = indicator.split(":")
+            numerator, denominator = value.split("/")
+            indicator_mapping[name] = int(numerator) * 10 // int(denominator)
+        return indicator_mapping
 
-def find_region(regions, indicator_vector):
-    """
-    Finds the region a given point belongs to in an N-dimensional space.
+    def find_region(self, indicator_vector):
+        for i, region in enumerate(self.recipe.regions):
+            lower_bounds, upper_bounds = region
+            if all(lower_bound <= coord <= upper_bound for lower_bound, upper_bound, coord in
+                   zip(lower_bounds, upper_bounds, indicator_vector)):
+                return i
+        return -1
 
-    Returns:
-    int: The index of the region the point belongs to, or -1 if the point does not belong to any region.
-    """
-    for i, region in enumerate(regions):
-        lower_bounds, upper_bounds = region
-        if all(lower_bound <= coord <= upper_bound for lower_bound, upper_bound, coord in
-               zip(lower_bounds, upper_bounds, indicator_vector)):
-            return i
-    return -1
-
-
-def fetch_template(region_index, templates):
-    if region_index == -1:
-        return None
-    probability_distribution = templates[region_index]
-    return random.choices(probability_distribution.keys(), weights=probability_distribution.values())[0]
+    def fetch_template(self, region_index):
+        if region_index == -1:
+            return None
+        probability_distribution = self.recipe.templates[region_index]
+        return random.choices(probability_distribution.keys(), weights=probability_distribution.values())[0]
 
 
 # Really useful test fragment
@@ -103,8 +101,9 @@ if __name__ == "__main__":
     bot = BotProfile.objects.get(name="Carla")
     user_profile = UserProfile.objects.get(name="Vivek")
     client = GPTClient()
+    components = Components(user_profile, bot, [])
 
-    messages, customizations = generate_story_prompt(user_profile, bot)
+    messages, customizations = components.generate_story_prompt()
     client.customize_model_parameters(customizations)
     messages.extend([{"role": "user", "content": f"{user_profile.name}: Hey there"}])
     print(f"MESSAGES: {messages}")
@@ -116,7 +115,8 @@ if __name__ == "__main__":
         {'source': 'Vivek', 'message': 'Can you imagine actually saying something instead of generic shit.'},
     ]
 
-    messages, customizations = generate_indicator_prompt(user_profile, bot, chat_history)
+    components.chat_history = chat_history
+    messages, customizations = components.generate_indicator_prompt()
     client.customize_model_parameters(customizations)
     print(f"MESSAGES: {messages}")
     print(f"RESPONSE: {client.generate_reply(messages)['message']['content']}")
@@ -128,7 +128,8 @@ if __name__ == "__main__":
         {'source': 'Carla', 'message': 'Huh?'},
     ]
 
-    messages, customizations = generate_summarization_prompt(user_profile, bot, chat_history)
+    components.chat_history = chat_history
+    messages, customizations = components.generate_summarization_prompt()
     client.customize_model_parameters(customizations)
     print(f"MESSAGES: {messages}")
     print(f"RESPONSE: {client.generate_reply(messages)['message']['content']}")
