@@ -1,5 +1,6 @@
 from django.urls import path
 from chat_module.views import index, fetch_chat_history, unmatch
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     # path("", index.index, name="chat_module_index"),

@@ -24,7 +24,7 @@ def get_response(channel_name, input_data):
     timestamp = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
     packet = {
         "type": "chat_message",
-        "text": response,
+        "text": {'msg': response, 'source': 'bot'},
         "username": username,
         "bot_id": bot_id,
         "timestamp": timestamp,

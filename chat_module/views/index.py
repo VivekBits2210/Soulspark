@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from django.shortcuts import render
 
 
+##todo: you can get rid of this func
 @api_view(["GET"])
 def index(request):
     return HttpResponse("You are at the chat module index.")
@@ -11,7 +12,7 @@ def index(request):
 
 class ChatView(APIView):
     def get(self, request):
+        ## todo: query chat history and pass to chat.html
         return render(request, "chat/chat.html")
-    # template_name: str = "chat/chat.html"
 
 
