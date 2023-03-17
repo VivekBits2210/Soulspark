@@ -14,5 +14,3 @@ class ChatView(APIView):
     def get(self, request):
         ## todo: query chat history and pass to chat.html
         return render(request, "chat/chat.html")
-
-

@@ -22,14 +22,13 @@ class ChatConsumer(WebsocketConsumer):
 
         packet = {
             "type": "chat_message",
-            "text": {'msg': text, 'source': 'user'},
+            "text": {"msg": text, "source": "user"},
             "username": username,
             "bot_id": bot_id,
             ##todo: timestamp implementation from frontend?
             # "timestamp": text_data_json["timestamp"],
-            'timestamp': timestamp,
+            "timestamp": timestamp,
         }
-
 
         async_to_sync(self.channel_layer.send)(
             self.channel_name,

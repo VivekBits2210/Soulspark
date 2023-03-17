@@ -92,10 +92,8 @@ INSTALLED_APPS = (
         "django.contrib.admindocs",
         "drf_yasg",
         "theme",
-
-        #third-party apps
+        # third-party apps
         "tailwind",
-        
     ]
     + MY_APPS
     + AUTH_APPS
@@ -149,11 +147,7 @@ CELERY_RESULT_BACKEND = ""
 # }
 
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -203,7 +197,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 
 TAILWIND_APP_NAME = "theme"
