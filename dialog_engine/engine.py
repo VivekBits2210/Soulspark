@@ -32,7 +32,7 @@ class DialogEngine:
 
         # TODO: Record all prompts and interactions in a table
         if story_tokens > 1500:
-            summarizer.delay(self.chat_history_record)
+            summarizer.delay(self)
 
         usage_record = GPTUsageRecord.objects.create(
             user=self.user_profile.user,
