@@ -23,6 +23,6 @@ urlpatterns = [
     path("ai-profiles/", include("ai_profiles.urls")),
     path("chat-module/", include("chat_module.urls")),
     path("accounts/", include("allauth.urls")),
-    path('admin/doc/', include('django.contrib.admindocs.urls')),
+    path("admin/doc/", include("django.contrib.admindocs.urls")),
     path("admin/", admin.site.urls),
 ]

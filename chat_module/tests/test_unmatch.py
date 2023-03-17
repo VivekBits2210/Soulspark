@@ -16,8 +16,8 @@ class UnmatchTestCase(APITestCase):
         self.client.force_login(user=self.user)
 
         self.valid_history = [
-            {'message': 'hi', 'from': 'user'},
-            {'message': 'hey, how can I help', 'from': 'bot'}
+            {"message": "hi", "from": "user"},
+            {"message": "hey, how can I help", "from": "bot"},
         ]
 
     def test_unmatch_works_without_history(self):
@@ -28,22 +28,28 @@ class UnmatchTestCase(APITestCase):
         self.assertFalse(query_set.exists())
 
     def test_unmatch_works_with_history(self):
-        ChatHistory.objects.create(user=self.user, bot=self.bot, history=self.valid_history)
+        ChatHistory.objects.create(
+            user=self.user, bot=self.bot, history=self.valid_history
+        )
         response = self.client.post(self.url, data={"bot_id": self.bot.bot_id})
         self.assertEqual(response.status_code, 200)
 
-        deleted_query_set = DeletedChatHistory.objects.filter(user=self.user, bot=self.bot)
+        deleted_query_set = DeletedChatHistory.objects.filter(
+            user=self.user, bot=self.bot
+        )
         self.assertTrue(deleted_query_set.exists())
-        self.assertEqual(deleted_query_set.count(),1)
+        self.assertEqual(deleted_query_set.count(), 1)
 
-        deleted_history= deleted_query_set.first()
+        deleted_history = deleted_query_set.first()
         self.assertEqual(deleted_history.history, self.valid_history)
 
         query_set = ChatHistory.objects.filter(user=self.user, bot=self.bot)
         self.assertFalse(query_set.exists())
 
     def test_unmatch_twice(self):
-        ChatHistory.objects.create(user=self.user, bot=self.bot, history=self.valid_history)
+        ChatHistory.objects.create(
+            user=self.user, bot=self.bot, history=self.valid_history
+        )
         response = self.client.post(self.url, data={"bot_id": self.bot.bot_id})
         self.assertEqual(response.status_code, 200)
         self.assertFalse(
@@ -53,7 +59,9 @@ class UnmatchTestCase(APITestCase):
             DeletedChatHistory.objects.filter(user=self.user, bot=self.bot).exists()
         )
 
-        ChatHistory.objects.create(user=self.user, bot=self.bot, history=self.valid_history)
+        ChatHistory.objects.create(
+            user=self.user, bot=self.bot, history=self.valid_history
+        )
         response = self.client.post(self.url, data={"bot_id": self.bot.bot_id})
         self.assertEqual(response.status_code, 200)
         self.assertFalse(

@@ -48,6 +48,7 @@ class ChatHistory(models.Model):
     - ``from django.db import models``
     - ``from chat_module.models.validators import level_validation``
     """
+
     user = models.ForeignKey(app_settings.USER_MODEL, on_delete=models.CASCADE)
     bot = models.ForeignKey(BotProfile, on_delete=models.CASCADE)
     history = models.JSONField(blank=True, default=list)

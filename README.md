@@ -10,7 +10,7 @@ $ python -m pip install -r requirements.txt
 $ python manage.py makemigrations chat_module ai_profiles 
 $ python manage.py migrate
 ```
-Create a super user with name 'admin' and an email that is NOT a real email
+Create a superuser with name 'admin' and an email that is NOT a real email
 ```
 $ python manage.py createsuperuser
 ```
@@ -22,7 +22,7 @@ $ python3 manage.py runserver localhost:8000
 -> REST: /admin
 ```
 
-Go to the admin URL and login with your super user credentials. \
+Go to the admin URL and login with your superuser credentials. \
 Under 'Sites', edit the 'example' entry to look like this:
 ```
 Domain name: "localhost:8000"

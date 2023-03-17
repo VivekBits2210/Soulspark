@@ -6,7 +6,12 @@ from chat_module.models import UserProfile
 
 class UserProfileTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="tester", first_name="King", last_name="Jaineel", password="password")
+        self.user = User.objects.create_user(
+            username="tester",
+            first_name="King",
+            last_name="Jaineel",
+            password="password",
+        )
 
         self.maximal_data = {
             "user": self.user,

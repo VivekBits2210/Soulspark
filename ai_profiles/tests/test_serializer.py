@@ -30,8 +30,6 @@ class BotProfileSerializerTestCase(APITestCase):
 
     def test_create_valid_bot_profile(self):
         serializer = BotProfileSerializer(data=self.valid_data)
-        if not serializer.is_valid():
-            print(serializer.errors)
         self.assertTrue(serializer.is_valid())
         profile = serializer.save()
         self.assertIsNotNone(profile.bot_id)

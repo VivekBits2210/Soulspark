@@ -53,5 +53,5 @@ class BotProfileCreateProfileAdminTest(APITestCase):
         )
         self.assertEqual(bot.favorites, self.valid_bot_info["favorites"])
 
-        # The image is picked up from static folder and then stored, these values wont be equal
+        # The image is picked up from static folder and then stored, these values will not be equal
         self.assertNotEqual(bot.profile_image, self.valid_bot_info["profile_image"])

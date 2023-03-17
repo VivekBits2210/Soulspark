@@ -16,7 +16,7 @@ class ChatHistoryTestCase(TestCase):
             age=25,
             bio="I am a chatbot.",
             profession="AI assistant",
-            interests = "music and running",
+            interests="music and running",
             favorites={"color": "blue", "food": "pizza"},
             physical_attributes={"hair": "black"},
             profile_image=SimpleUploadedFile(
