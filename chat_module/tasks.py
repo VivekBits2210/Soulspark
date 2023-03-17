@@ -1,4 +1,5 @@
 from asgiref.sync import async_to_sync
+from celery import shared_task
 from django.contrib.auth.models import User
 from django.utils import timezone
 from channels.layers import get_channel_layer
@@ -9,13 +10,12 @@ from chat_module.models import ChatHistory, UserProfile
 channel_layer = get_channel_layer()
 
 
-# TODO: Make this a shared task once celery is setup
-# @shared_task
+@shared_task
 def get_response(channel_name, input_data):
     username = input_data["username"]
     bot_id = input_data["bot_id"]
 
-    # TODO: Integrate with the Dialogue Engine
+    # TODO: Integrate with the Dialog Engine
     canned_response = """
     This is a canned bot response.
     """

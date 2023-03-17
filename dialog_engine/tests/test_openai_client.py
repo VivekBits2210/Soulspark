@@ -1,6 +1,6 @@
 import openai.error
 from django.test import TestCase
-from dialogue_engine import GPTClient
+from dialog_engine.openai_client import GPTClient
 
 
 class GPTClientTestCase(TestCase):
@@ -25,7 +25,7 @@ class GPTClientTestCase(TestCase):
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": "What is the capital of France?"},
         ]
-        response = client.generate_reply(messages)
+        response, _ = client.generate_reply(messages)
         self.assertIsNotNone(response)
         self.assertIn("message", response)
         self.assertIsInstance(response["message"], dict)

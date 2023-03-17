@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 from django.test import TestCase
 
-from dialogue_engine.components import Components
+from dialog_engine.components import Components
 
 
 # TODO: Generate an actual bot profile and user profile object

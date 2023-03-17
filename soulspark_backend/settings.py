@@ -29,7 +29,10 @@ ALLOWED_HOSTS = ["localhost"]
 ACCOUNT_EMAIL_REQUIRED = True
 
 # Application definition
-MY_APPS = ["ai_profiles.apps.AiProfilesConfig", "chat_module.apps.ChatModuleConfig"]
+MY_APPS = ["ai_profiles.apps.AiProfilesConfig",
+           "chat_module.apps.ChatModuleConfig",
+           "dialog_engine.apps.DialogEngineConfig",
+           ]
 
 AUTH_APPS = [
     "allauth",

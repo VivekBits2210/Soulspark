@@ -82,5 +82,5 @@ cython_debug/
 /client_secret.json
 /chat_module/migrations/
 /ai_profiles/migrations/
-/dialogue_engine/recipe.py
-/dialogue_engine/secrets.py
+/dialog_engine/recipe.py
+/dialog_engine/secrets.py
