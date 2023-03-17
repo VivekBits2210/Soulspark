@@ -56,7 +56,11 @@ class Components:
             )
         return messages, api_customizations
 
-    def generate_summarization_prompt(self):
+    def consolidate_summary(self, summary):
+        pass
+        #TODO: Fill
+
+    def generate_summarization_prompt(self, keep_limit, summary_index):
         (
             prompt,
             api_customizations,
@@ -64,8 +68,11 @@ class Components:
         messages = [
             {"role": "system", "content": prompt},
         ]
-        if self.chat_conversation != "":
-            messages.append({"role": "user", "content": self.chat_conversation})
+        chat_conversation = self.construct_conversation_from_chat_history(
+            history=self.chat_history[summary_index+1:-keep_limit]
+        )
+        if chat_conversation != "":
+            messages.append({"role": "user", "content": chat_conversation})
         return messages, api_customizations
 
     def parse_indicator_message(self, message_text):
@@ -112,7 +119,7 @@ class Components:
 #     application = get_wsgi_application()
 #     from ai_profiles.models import BotProfile
 #     from chat_module.models import UserProfile
-#     from openai_client _chat_history
+#     from dialog_engine.openai_client import GPTClient
 #
 #     bot = BotProfile.objects.get(name="Carla")
 #     user_profile = UserProfile.objects.get(name="Vivek")

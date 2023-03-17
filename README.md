@@ -71,3 +71,7 @@ $ python3 manage.py test chat_module.tests.test_urls
 
 *Unfixed bug: Firing the test suite creates many dummy images prefixed with 'test'/'trial' inside the images folder, clear this folder between testing runs.*
 
+Valid way to count lines of code    
+```
+$cloc . --exclude-dir=images,python_venv,.idea,migrations -v --by-file
+```

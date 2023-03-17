@@ -28,4 +28,7 @@ class GPTUsageRecord(models.Model):
         unique_together = ("user", "bot", "chat_history_length")
 
     def __str__(self):
-        return f"GPTUsageRecord({self.user.username}, {self.bot.name}, indicator_tokens={self.indicator_tokens}, story_tokens={self.story_tokens}, total_tokens={self.total_tokens}, indicator_vector={self.indicator_vector}, indicator_version={self.indicator_version}, chat_history_length={self.chat_history_length})"
+        return f"GPTUsageRecord({self.user.username}, {self.bot.name}, indicator_tokens={self.indicator_tokens}, " \
+               f"story_tokens={self.story_tokens}, total_tokens={self.total_tokens}, " \
+               f"indicator_vector={self.indicator_vector}, indicator_version={self.indicator_version}, " \
+               f"chat_history_length={self.chat_history_length})"
