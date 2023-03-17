@@ -1,3 +1,4 @@
+import openai.error
 from django.test import TestCase
 from dialogue_engine import GPTClient
 
@@ -32,18 +33,18 @@ class GPTClientTestCase(TestCase):
         self.assertIn('content', response['message'])
 
         # Test for empty messages
-        with self.assertRaises(ValueError):
+        with self.assertRaises(openai.error.InvalidRequestError):
             client.generate_reply([])
 
         # Test for invalid message format
-        with self.assertRaises(KeyError):
+        with self.assertRaises(openai.error.InvalidRequestError):
             client.generate_reply([
                 {"invalid_key": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": "What is the capital of France?"},
             ])
 
         # Test for invalid role
-        with self.assertRaises(ValueError):
+        with self.assertRaises(openai.error.InvalidRequestError):
             client.generate_reply([
                 {"role": "invalid_role", "content": "You are a helpful assistant."},
                 {"role": "user", "content": "What is the capital of France?"},

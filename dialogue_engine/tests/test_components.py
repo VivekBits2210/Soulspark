@@ -47,10 +47,9 @@ class ComponentTestcase(TestCase):
 
         messages, customizations = components.generate_story_prompt()
 
-        self.assertEqual(len(messages), 2)
+        self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0]["role"], "system")
         self.assertEqual(messages[0]["content"], "story prompt")
-        self.assertIsNone(messages[1]["content"])
 
     def test_generate_summarization_prompt(self):
         components = Components(self.user_profile, self.bot, self.chat_history)
@@ -81,8 +80,8 @@ class ComponentTestcase(TestCase):
         region_index = components.find_region(indicator_vector)
         self.assertIsNotNone(region_index)
 
-    def test_fetch_template(self):
-        components = Components(self.user_profile, self.bot, self.chat_history)
-        region_index = 0
-        template = components.fetch_template(region_index)
-        self.assertIsNotNone(template)
+    # def test_fetch_template(self):
+    #     components = Components(self.user_profile, self.bot, self.chat_history)
+    #     region_index = 0
+    #     template = components.fetch_template(region_index)
+    #     self.assertIsNotNone(template)

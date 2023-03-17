@@ -27,6 +27,5 @@ class DialogueEngine:
 
     #TODO: When storing bot messages, always store each sentence in a different message line.
     #TODO: For summarization flow, need to calculate the size of the story prompt in terms of tokens
-    #TODO: Once tokens hit some threshold, call async summarizer, leave T messages intact at the end
-    #TODO: Add Output Limit guardrails to the summarizer
-    #TODO: Think about importance ratings
+    #TODO: Once tokens hit some threshold of (tokens/max-allowed), call async summarizer, leave T messages intact at the end
+    #TODO: Add Output Limit guardrails to the summarizer prompt

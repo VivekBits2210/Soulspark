@@ -147,7 +147,6 @@ This model uses the following validators:
 
         return summary
 
-    # TODO: test this for 1-2 attributes
     def get_physical_attributes_string(self):
         result = []
         if len(self.physical_attributes) == 0:
