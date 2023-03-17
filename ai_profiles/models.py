@@ -150,7 +150,7 @@ This model uses the following validators:
     # TODO: test this for 1-2 attributes
     def get_physical_attributes_string(self):
         result = []
-        if len(self.physical_attributes)==0:
+        if len(self.physical_attributes) == 0:
             return ""
         for key, value in self.physical_attributes.items():
             singular, plural = plural_singular_detector(key)
@@ -160,7 +160,7 @@ This model uses the following validators:
 
     def get_favorites_string(self):
         result = []
-        if len(self.favorites)==0:
+        if len(self.favorites) == 0:
             return ""
         for key, value in self.favorites.items():
             string = f"{key} is {value}"
