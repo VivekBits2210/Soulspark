@@ -6,8 +6,7 @@ try:
         construct_indicator_system_message, \
         construct_summarization_system_message, \
         regions, \
-        templates, \
-        INDICATORS
+        templates
 except ModuleNotFoundError:
     construct_story_system_message = lambda u, b: \
                                          f"This is a story about {u.name} and {b.name}. {b.summary} {u.summary} " \
@@ -21,9 +20,6 @@ except ModuleNotFoundError:
     regions = []
     templates = {}
 
-    INDICATORS = ['sad', 'happy']
-
-
 def construct_conversation_from_chat_history(chat_history):
     conversation = ""
     for entry in chat_history:
@@ -31,8 +27,8 @@ def construct_conversation_from_chat_history(chat_history):
     return conversation
 
 
-def generate_indicator_prompt(user_profile, bot, chat_history, indicators=INDICATORS):
-    prompt, api_customizations = construct_indicator_system_message(user_profile, bot, indicators)
+def generate_indicator_prompt(user_profile, bot, chat_history):
+    prompt, api_customizations = construct_indicator_system_message(user_profile, bot)
 
     # TODO: Check performance improvement when below prompt is few-shotted
     messages = [
@@ -50,10 +46,11 @@ def generate_story_prompt(user_profile, bot):
     return messages, api_customizations
 
 
-def generate_summarization_prompt(user_profile, bot):
+def generate_summarization_prompt(user_profile, bot, chat_history):
     prompt, api_customizations = construct_summarization_system_message(user_profile, bot)
     messages = [
-        {"role": "system", "content": prompt}
+        {"role": "system", "content": prompt},
+        {"role": "user", "content": construct_conversation_from_chat_history(chat_history)}
     ]
     return messages, api_customizations
 
@@ -116,12 +113,22 @@ if __name__ == "__main__":
 
     chat_history = [
         {'source': 'Vivek', 'message': 'Talk to me'},
-        # {'source': 'Carla', 'message': 'What?'},
         {'source': 'Vivek', 'message': 'Can you imagine actually saying something instead of generic shit.'},
-        # {'source': 'Carla', 'message': 'Huh?'},
     ]
 
     messages, customizations = generate_indicator_prompt(user_profile, bot, chat_history)
+    client.customize_model_parameters(customizations)
+    print(f"MESSAGES: {messages}")
+    print(f"RESPONSE: {client.generate_reply(messages)['message']['content']}")
+
+    chat_history = [
+        {'source': 'Vivek', 'message': 'Talk to me; I wanna know more about chess.'},
+        {'source': 'Carla', 'message': 'Sure, we can talk about Magnus Carlsen'},
+        {'source': 'Vivek', 'message': 'Can you imagine actually saying something instead of generic shit.'},
+        {'source': 'Carla', 'message': 'Huh?'},
+    ]
+
+    messages, customizations = generate_summarization_prompt(user_profile, bot, chat_history)
     client.customize_model_parameters(customizations)
     print(f"MESSAGES: {messages}")
     print(f"RESPONSE: {client.generate_reply(messages)['message']['content']}")
