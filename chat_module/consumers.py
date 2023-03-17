@@ -7,6 +7,7 @@ from chat_module.tasks import get_response
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
+
 # TODO: When storing bot messages from dialog engine, always store each sentence in a different message line.
 class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):

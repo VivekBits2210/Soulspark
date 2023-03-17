@@ -3,6 +3,7 @@ import random
 is_recipe = False
 try:
     from dialog_engine.recipe import Recipe
+
     is_recipe = True
 except ModuleNotFoundError:
     from dialog_engine.recipe_mock import RecipeMock
@@ -34,7 +35,9 @@ class Components:
         messages = [
             {"role": "system", "content": prompt},
         ]
-        chat_conversation = self.construct_conversation_from_chat_history(history=self.chat_history[-indicator_limit:])
+        chat_conversation = self.construct_conversation_from_chat_history(
+            history=self.chat_history[-indicator_limit:]
+        )
         if chat_conversation != "":
             messages.append({"role": "user", "content": chat_conversation})
         return messages, api_customizations
@@ -46,7 +49,10 @@ class Components:
             messages.append({"role": "user", "content": self.chat_conversation})
         if hook:
             messages.append(
-                {"role": "system", "content": f"Expected reply from {self.bot.name}: {hook}"}
+                {
+                    "role": "system",
+                    "content": f"Expected reply from {self.bot.name}: {hook}",
+                }
             )
         return messages, api_customizations
 
@@ -77,10 +83,10 @@ class Components:
         for i, region in enumerate(self.recipe.regions):
             lower_bounds, upper_bounds = region
             if all(
-                    lower_bound <= coord <= upper_bound
-                    for lower_bound, upper_bound, coord in zip(
-                        lower_bounds, upper_bounds, indicator_vector
-                    )
+                lower_bound <= coord <= upper_bound
+                for lower_bound, upper_bound, coord in zip(
+                    lower_bounds, upper_bounds, indicator_vector
+                )
             ):
                 return i
         return -1

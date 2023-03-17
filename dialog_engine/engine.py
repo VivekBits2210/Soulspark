@@ -3,6 +3,7 @@ from dialog_engine.components import Components
 from dialog_engine.models import GPTUsageRecord
 from dialog_engine.tasks import summarizer
 
+
 class DialogEngine:
     def __init__(self, user_profile, chat_history_record):
         self.user_profile = user_profile
@@ -40,8 +41,8 @@ class DialogEngine:
             story_tokens=story_tokens,
             total_tokens=indicator_tokens + story_tokens,
             indicator_vector=indicator_vector,
-            indicator_version='v1',
-            chat_history_length=len(self.chat_history)
+            indicator_version="v1",
+            chat_history_length=len(self.chat_history),
         )
         print(usage_record)
         return response

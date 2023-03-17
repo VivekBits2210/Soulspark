@@ -21,7 +21,10 @@ class GPTClient:
 
     def generate_reply(self, messages):
         response = openai.ChatCompletion.create(**self.parameters, messages=messages)
-        return response["choices"][0]["message"]["content"], response["usage"]["total_tokens"]
+        return (
+            response["choices"][0]["message"]["content"],
+            response["usage"]["total_tokens"],
+        )
 
 
 # Test fragment

@@ -13,8 +13,16 @@ class GPTUsageRecord(models.Model):
     indicator_version = models.CharField(max_length=10)
     chat_history_length = models.IntegerField(default=0)
 
-    REQUIRED_FIELDS = ["user", "bot", "indicator_cost", "story_cost", "total_cost", "indicator_tuple",
-                       "indicator_version", "chat_history_length"]
+    REQUIRED_FIELDS = [
+        "user",
+        "bot",
+        "indicator_cost",
+        "story_cost",
+        "total_cost",
+        "indicator_tuple",
+        "indicator_version",
+        "chat_history_length",
+    ]
 
     class Meta:
         unique_together = ("user", "bot", "chat_history_length")
