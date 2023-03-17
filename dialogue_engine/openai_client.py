@@ -5,7 +5,7 @@ try:
 except ModuleNotFoundError:
     API_KEY = "fake-key"
 
-
+#TODO: Handle errors thrown by GPTClient like RateLimit etc somehow?
 class GPTClient:
     def __init__(self):
         openai.api_key = API_KEY
