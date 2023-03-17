@@ -8,23 +8,19 @@ class DialogueEngine:
         self.bot = bot
         self.chat_history = chat_history
         self.client = GPTClient()
+        self.components = Components(user_profile, bot, chat_history)
         self.indicator_limit = 10
 
     def run(self, message):
         self.chat_history.append(message)
-        messages, customizations = generate_indicator_prompt(user_profile=self.user_profile,
-                                                             bot=self.bot,
-                                                             chat_history=self.chat_history[-self.indicator_limit:])
+        messages, customizations = self.components.generate_indicator_prompt()
         self.client.customize_model_parameters(customizations)
 
         indicator_message = self.client.generate_reply(messages)['message']['content']
-        indicator_dict = parse_indicator_message(indicator_message)
+        indicator_dict = self.components.parse_indicator_message(indicator_message)
         indicator_vector = tuple(indicator_dict[key] for key in sorted(indicator_dict.keys()))
 
-        hook = fetch_template(find_region(indicator_vector))
-        messages, customizations = generate_story_prompt(self.user_profile,
-                                                         self.bot,
-                                                         self.chat_history,
-                                                         hook)
+        hook = self.components.fetch_template(self.components.find_region(indicator_vector))
+        messages, customizations = self.components.generate_story_prompt(hook)
         self.client.customize_model_parameters(customizations)
         return self.client.generate_reply(messages)['message']['content']
