@@ -9,17 +9,20 @@ except ModuleNotFoundError:
 class GPTClient:
     def __init__(self):
         openai.api_key = API_KEY
-        self.model = "gpt-3.5-turbo"
-        self.presence_penalty = 1.2
-        self.frequency_penalty = 1.2
-        self.temperature = 1.4
+        self.parameters = {
+            "model": "gpt-3.5-turbo",
+            "presence_penalty": 1.2,
+            "frequency_penalty": 1.2,
+            "temperature": 1.4
+        }
+
+    def customize_model_parameters(self, customizations):
+        self.parameters.update(customizations)
+
 
     def generate_reply(self, messages):
         response = openai.ChatCompletion.create(
-            model=self.model,
-            temperature=self.temperature,
-            presence_penalty=self.presence_penalty,
-            frequency_penalty=self.frequency_penalty,
+            **self.parameters,
             messages=messages
         )
         return response["choices"][0]

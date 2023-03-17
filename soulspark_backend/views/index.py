@@ -4,4 +4,4 @@ from rest_framework.decorators import api_view
 
 @api_view(["GET"])
 def index(request):
-    return HttpResponse("Soulspark Index Page")
+    return HttpResponse("SoulSpark Index Page")

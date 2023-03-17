@@ -1,19 +1,18 @@
 # A P-dimensional region where P is the number of indicators
 import random
 
+try:
+    from dialogue_engine.recipe import regions, templates
+except ModuleNotFoundError:
+    regions = []
+
+    templates = {}
+
 
 class TemplatingEngine:
     def __init__(self):
-        self.regions = self.load_regions()  # [(diag_endpoint_1, diag_endpoint_2)...]
-        self.templates = self.load_templates()  # {Region_index  -> {Hook String: Probability Mass}}
-
-    # TODO: Add regions
-    def load_regions(self):
-        return []
-
-    # TODO: Add templates
-    def load_templates(self):
-        return {}
+        self.regions = regions  # [(diag_endpoint_1, diag_endpoint_2)...]
+        self.templates = templates  # {Region_index  -> {Hook String: Probability Mass}}
 
     def find_region(self, indicator_vector):
         """
@@ -30,5 +29,7 @@ class TemplatingEngine:
         return -1
 
     def fetch_template(self, region_index):
+        if region_index == -1:
+            return None
         probability_distribution = self.templates[region_index]
         return random.choices(probability_distribution.keys(), weights=probability_distribution.values())[0]

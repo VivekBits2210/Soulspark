@@ -99,7 +99,7 @@ This model uses the following validators:
 
     def save(self, *args, **kwargs):
         self.full_clean()
-        self.name = self.get_name()
+        self.name = self.user.first_name
         self.summary = self.generate_summary()
         return super(UserProfile, self).save(*args, **kwargs)
 
