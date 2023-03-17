@@ -38,10 +38,12 @@ def generate_indicator_prompt(user_profile, bot, chat_history):
     return messages, api_customizations
 
 
-def generate_story_prompt(user_profile, bot):
+def generate_story_prompt(user_profile, bot, chat_history, hook):
     prompt, api_customizations = construct_story_system_message(user_profile, bot)
     messages = [
-        {"role": "system", "content": prompt}
+        {"role": "system", "content": prompt},
+        {"role": "user", "content": construct_conversation_from_chat_history(chat_history)},
+        {"role": "system", "content": f"Expected reply from {bot.name}: {hook}"},
     ]
     return messages, api_customizations
 
@@ -64,7 +66,7 @@ def parse_indicator_message(message_text):
     return indicator_mapping
 
 
-def find_region(regions, indicator_vector):
+def find_region(indicator_vector):
     """
     Finds the region a given point belongs to in an N-dimensional space.
 
@@ -79,7 +81,7 @@ def find_region(regions, indicator_vector):
     return -1
 
 
-def fetch_template(region_index, templates):
+def fetch_template(region_index):
     if region_index == -1:
         return None
     probability_distribution = templates[region_index]
