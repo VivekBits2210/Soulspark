@@ -1,3 +1,4 @@
+import logging
 from dialog_engine.openai_client import GPTClient
 from dialog_engine.components import Components
 from dialog_engine.models import GPTUsageRecord
@@ -17,8 +18,9 @@ class DialogEngine:
         messages, customizations = self.components.generate_indicator_prompt()
         self.client.customize_model_parameters(customizations)
         indicator_message, indicator_tokens = self.client.generate_reply(messages)
-
+        logging.info(f"Indicator Response: {indicator_message}")
         indicator_dict = self.components.parse_indicator_message(indicator_message)
+        logging.info(f"Indicator Dict: {indicator_dict}")
         indicator_vector = tuple(
             indicator_dict[key] for key in sorted(indicator_dict.keys())
         )
@@ -26,11 +28,16 @@ class DialogEngine:
         hook = self.components.fetch_template(
             self.components.find_region(indicator_vector)
         )
+        logging.info(f"Hook: {hook}")
         user_summary = self.chat_history_record.user_summary
         bot_summary = self.chat_history_record.bot_summary
+        logging.info(f"User Summary: {user_summary}")
+        logging.info(f"Bot Summary: {bot_summary}")
+
         messages, customizations = self.components.generate_story_prompt(user_summary, bot_summary, hook)
         self.client.customize_model_parameters(customizations)
         response, story_tokens = self.client.generate_reply(messages)
+        logging.info(f"Story Response: {response}")
 
         usage_record = GPTUsageRecord.objects.create(
             user=self.user_profile.user,
@@ -41,6 +48,8 @@ class DialogEngine:
             indicator_version="v1",
             chat_history_length=len(self.chat_history),
         )
+        logging.info(f"GPT Usage: {usage_record}")
+
         if story_tokens > summarizer_limit:
             summarizer.delay(self.client, self.components, self.chat_history_record, usage_record)
 
