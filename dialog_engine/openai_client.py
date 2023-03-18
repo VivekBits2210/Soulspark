@@ -7,7 +7,7 @@ try:
     from dialog_engine.secrets import API_KEY_LIST
 except ModuleNotFoundError:
     API_KEY_LIST = ["fake-key-1", "fake-key-2"]
-logger = logging.getLogger('my_logger')
+logger = logging.getLogger("my_logger")
 
 
 class GPTClient:
@@ -19,14 +19,16 @@ class GPTClient:
             "temperature": 1.5,
         }
         self.api_key_list = API_KEY_LIST
-        self.ALLOWED_PARAMETERS = {"model": str,
-                                   "temperature": float,
-                                   "top_p": float,
-                                   "max_tokens": int,
-                                   "presence_penalty": float,
-                                   "frequency_penalty": float,
-                                   "logit_bias": dict,
-                                   "user": str}
+        self.ALLOWED_PARAMETERS = {
+            "model": str,
+            "temperature": float,
+            "top_p": float,
+            "max_tokens": int,
+            "presence_penalty": float,
+            "frequency_penalty": float,
+            "logit_bias": dict,
+            "user": str,
+        }
 
     def customize_model_parameters(self, customizations):
         disallowed_keys = set(customizations) - set(self.ALLOWED_PARAMETERS)
@@ -36,8 +38,10 @@ class GPTClient:
         for key, value in customizations.items():
             t = self.ALLOWED_PARAMETERS[key]
             if not isinstance(value, t):
-                raise ValidationError(f"Value {value} for parameter {key} is of invalid type {type(value)}. "
-                                      f"Allowed type is {self.ALLOWED_PARAMETERS[key]}.")
+                raise ValidationError(
+                    f"Value {value} for parameter {key} is of invalid type {type(value)}. "
+                    f"Allowed type is {self.ALLOWED_PARAMETERS[key]}."
+                )
         self.parameters.update(customizations)
 
     def generate_reply(self, messages, retries=3):
@@ -47,7 +51,9 @@ class GPTClient:
         for retry in range(retries):
             try:
                 logger.info(f"Waiting on OpenAI...")
-                response = openai.ChatCompletion.create(**self.parameters, messages=messages)
+                response = openai.ChatCompletion.create(
+                    **self.parameters, messages=messages
+                )
                 logger.info(f"OpenAI responded!")
                 return (
                     response["choices"][0]["message"]["content"],

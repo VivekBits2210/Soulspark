@@ -5,6 +5,7 @@ from django.shortcuts import render
 
 from django.views.generic import TemplateView
 
+
 ##todo: you can get rid of this func
 @api_view(["GET"])
 def index(request):

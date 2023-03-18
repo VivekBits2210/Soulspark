@@ -57,7 +57,9 @@ class ComponentTestcase(TestCase):
 
     def test_generate_summarization_prompt(self):
         components = Components(self.user_profile, self.bot, self.chat_history)
-        messages, customizations = components.generate_summarization_prompt(keep_limit=5,summary_index=5)
+        messages, customizations = components.generate_summarization_prompt(
+            keep_limit=5, summary_index=5
+        )
         self.assertIsNotNone(messages)
         self.assertIsNotNone(customizations)
 

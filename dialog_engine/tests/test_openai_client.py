@@ -79,7 +79,7 @@ class GPTClientTestCase(TestCase):
 
         # Test for invalid keys
         with self.assertRaises(ValidationError):
-            self.client.api_key_list = ['fake-key-1', 'fake-key-2']
+            self.client.api_key_list = ["fake-key-1", "fake-key-2"]
             messages = [
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": "What is the capital of France?"},
