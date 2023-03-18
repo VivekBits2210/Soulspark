@@ -27,7 +27,7 @@ class Components:
 
         conversation = ""
         for entry in history:
-            conversation += f"{entry['source']}: {entry['message']}\n"
+            conversation += f"{entry['who']}: {entry['message']}\n"
         return conversation if len(conversation) > 0 else None
 
     def generate_indicator_prompt(self, indicator_limit=10):
@@ -62,8 +62,8 @@ class Components:
     def consolidate_summarization_prompt(self, summary):
         prompt, api_customizations = self.recipe.construct_summary_consolidation_system_message()
         messages = [{"role": "system", "content": prompt}]
-        if summary and summary != "":
-            messages.append({"role": "user", "content": summary})
+        if summary and len(summary)>0:
+            messages.append({"role": "user", "content": self.stringify(summary)})
         return messages, api_customizations
 
     def generate_summarization_prompt(self, keep_limit, summary_index):
@@ -146,9 +146,9 @@ class Components:
 #     print(f"RESPONSE: {client.generate_reply(messages)}")
 #
 #     chat_history = [
-#         {"source": "Vivek", "message": "Talk to me"},
+#         {"who": "Vivek", "message": "Talk to me"},
 #         {
-#             "source": "Vivek",
+#             "who": "Vivek",
 #             "message": "Can you imagine actually saying something instead of generic shit.",
 #         },
 #     ]
@@ -160,13 +160,13 @@ class Components:
 #     print(f"RESPONSE: {client.generate_reply(messages)}")
 #
 #     chat_history = [
-#         {"source": "Vivek", "message": "Talk to me; I wanna know more about chess."},
-#         {"source": "Carla", "message": "Sure, we can talk about Magnus Carlsen"},
+#         {"who": "Vivek", "message": "Talk to me; I wanna know more about chess."},
+#         {"who": "Carla", "message": "Sure, we can talk about Magnus Carlsen"},
 #         {
-#             "source": "Vivek",
+#             "who": "Vivek",
 #             "message": "Can you imagine actually saying something instead of generic shit.",
 #         },
-#         {"source": "Carla", "message": "Huh?"},
+#         {"who": "Carla", "message": "Huh?"},
 #     ]
 #
 #     components.chat_history = chat_history

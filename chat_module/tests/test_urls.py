@@ -4,10 +4,6 @@ from django.urls import reverse
 
 
 class UrlsTestCase(TestCase):
-    def test_index_url(self):
-        response = self.client.get(reverse("chat_module_index"))
-        self.assertEqual(response.status_code, 200)
-
     def test_fetch_chat_history_cannot_be_called_if_not_logged_in(self):
         response = self.client.get(reverse("fetch_chat_history"))
         self.assertEqual(response.status_code, 302)

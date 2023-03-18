@@ -32,20 +32,17 @@ class DialogEngine:
         self.client.customize_model_parameters(customizations)
         response, story_tokens = self.client.generate_reply(messages)
 
-        if story_tokens > summarizer_limit:
-            summarizer.delay(self.client, self.components, self.chat_history_record)
-
         usage_record = GPTUsageRecord.objects.create(
             user=self.user_profile.user,
             bot=self.bot,
             indicator_tokens=indicator_tokens,
             story_tokens=story_tokens,
-            total_tokens=indicator_tokens + story_tokens,
             indicator_vector=indicator_vector,
             indicator_version="v1",
             chat_history_length=len(self.chat_history),
         )
-        print(usage_record)
+        if story_tokens > summarizer_limit:
+            summarizer.delay(self.client, self.components, self.chat_history_record, usage_record)
         return response
 
 # if __name__ == "__main__":
@@ -64,14 +61,14 @@ class DialogEngine:
 #     bot = BotProfile.objects.get(name="Carla")
 #     user_profile = UserProfile.objects.get(name="Vivek")
 #     chat_history = [
-#         {"source": "Vivek", "message": "Talk to me; I wanna know more about chess."},
-#         {"source": "Carla", "message": "Sure, we can talk about Magnus Carlsen!"},
+#         {"who": "Vivek", "message": "Talk to me; I wanna know more about chess."},
+#         {"who": "Carla", "message": "Sure, we can talk about Magnus Carlsen!"},
 #         {
-#             "source": "Vivek",
+#             "who": "Vivek",
 #             "message": "Can you imagine actually saying something instead of generic shit.",
 #         },
-#         {"source": "Carla", "message": "Oh, I'm sorry, we'll figure it out"},
-#         {"source": "Vivek", "message": "Tell me something interesting about yourself."},
+#         {"who": "Carla", "message": "Oh, I'm sorry, we'll figure it out"},
+#         {"who": "Vivek", "message": "Tell me something interesting about yourself."},
 #     ]
 #     chat_history_record=ChatHistory(user=user_profile.user,
 #                                     bot=bot,

@@ -12,7 +12,6 @@ class GPTUsageRecordModelTestCase(TestCase):
             "bot": self.bot,
             "indicator_tokens": 10,
             "story_tokens": 20,
-            "total_tokens": 30,
             "indicator_vector": "0.1,0.2,0.3",
             "indicator_version": "1.0",
             "chat_history_length": 50,
@@ -45,7 +44,7 @@ class GPTUsageRecordModelTestCase(TestCase):
     def test_str_representation(self):
         gpt_usage_record = GPTUsageRecord.objects.create(**self.gpt_usage_record_data)
         expected_str = f"GPTUsageRecord({self.user.username}, {self.bot.name}, indicator_tokens={10}, " \
-                       f"story_tokens={20}, total_tokens={30}, " \
+                       f"story_tokens={20}, summarizer_tokens={None}, " \
                        f"indicator_vector=0.1,0.2,0.3, indicator_version={1.0}, " \
                        f"chat_history_length={50})"
         self.assertEqual(str(gpt_usage_record), expected_str)

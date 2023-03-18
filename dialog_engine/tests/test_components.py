@@ -16,8 +16,8 @@ class ComponentTestcase(TestCase):
     def test_construct_conversation_from_chat_history(self):
         components = Components(self.user_profile, self.bot, self.chat_history)
         chat_history = [
-            {"source": "User", "message": "Hello"},
-            {"source": "Bot", "message": "Hi there"},
+            {"who": "User", "message": "Hello"},
+            {"who": "Bot", "message": "Hi there"},
         ]
         components.chat_history = chat_history
         expected_conversation = "User: Hello\nBot: Hi there\n"
