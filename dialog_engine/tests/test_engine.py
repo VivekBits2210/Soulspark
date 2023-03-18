@@ -34,9 +34,7 @@ class EngineTestCase(APITestCase):
             {"who": "Carla", "message": "Yeah"},
             {"who": "Vivek", "message": "This is the first message that should not be included in the summary"},
             {"who": "Carla", "message": "Yeah, you're right, now we are in the second message"},
-            {"who": "Vivek", "message": "True, and now this is the third"},
-            {"who": "Carla", "message": "Fourth! What a structured and neat way to end this conversation"},
-            {"who": "Vivek", "message": "I agree (fifth)."},
+            {"who": "Vivek", "message": "So Carla, where should I go during my summer?"},
         ]
         self.valid_bot_summary = [
             "Carla loves chess.",

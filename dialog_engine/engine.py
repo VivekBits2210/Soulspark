@@ -28,7 +28,7 @@ class DialogEngine:
         )
         user_summary = self.chat_history_record.user_summary
         bot_summary = self.chat_history_record.bot_summary
-        messages, customizations = self.components.generate_story_prompt(hook, user_summary, bot_summary)
+        messages, customizations = self.components.generate_story_prompt(user_summary, bot_summary, hook)
         self.client.customize_model_parameters(customizations)
         response, story_tokens = self.client.generate_reply(messages)
 
@@ -43,7 +43,10 @@ class DialogEngine:
         )
         if story_tokens > summarizer_limit:
             summarizer.delay(self.client, self.components, self.chat_history_record, usage_record)
-        return response
+
+        tokens = response.split(':', 1)
+        response_string = tokens[0] if len(tokens)==1 else tokens[1]
+        return response_string
 
 # if __name__ == "__main__":
 #     import sys
