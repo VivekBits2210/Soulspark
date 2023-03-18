@@ -3,6 +3,7 @@ Pillow==9.4.0
 six==1.16.0
 psycopg2-binary==2.9.5
 django-allauth==0.52.0
+django-tailwind==3.5.0
 djangorestframework==3.14.0
 daphne==4.0.0
 channels==4.0.0

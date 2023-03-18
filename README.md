@@ -3,11 +3,10 @@
 
 Backend setup (Ideally use Python 3.9.13)
 ```
-$ python -m venv python_venv
+$ python3 -m venv python_venv
 $ source python_venv/bin/activate
 $ python -m pip install --upgrade pip setuptools
 $ python -m pip install -r requirements.txt
-$ python manage.py makemigrations chat_module ai_profiles 
 $ python manage.py migrate
 ```
 Create a superuser with name 'admin' and an email that is NOT a real email
@@ -17,19 +16,19 @@ $ python manage.py createsuperuser
 
 Run the server and load DB by opening the /fill-db URL
 ```
-$ python3 manage.py runserver localhost:8000
+$ python manage.py runserver localhost:8000
 -> Run REST API:  /fill-db
 -> REST: /admin
 ```
 
 Go to the admin URL and login with your superuser credentials. \
-Under 'Sites', edit the 'example' entry to look like this:
+In the 'Sites' table, edit the 'example' entry to look like this:
 ```
 Domain name: "localhost:8000"
 Display name: "localhost"
 ```
 
-Under "Social Application", add the entry below:
+In the "Social Application" table, add the entry below:
 ```
 Provider: Google (drop-down)
 Name: SSO
@@ -43,7 +42,7 @@ After logging out of /admin,
 ```
 -> REST: /accounts/login
 ```
-Click on "Google" to sign in (make sure your email address is a valid test email for this project -> [ask a dev to add you as test user])
+Click on "Google" to sign in. Make sure your email address is a valid test email for this project. *If not, ask a dev to add you as test user*.
 
 To sign out,
 ```
@@ -61,12 +60,12 @@ Database Documentation
 ```
 Run all tests
 ```
-$ python3 manage.py test
+$ python manage.py test
 ```
 
 Limited testing example (only tests from tests_urls.py under chat_module folder):
 ```
-$ python3 manage.py test chat_module.tests.test_urls
+$ python manage.py test chat_module.tests.test_urls
 ```
 
 *Unfixed bug: Firing the test suite creates many dummy images prefixed with 'test'/'trial' inside the images folder, clear this folder between testing runs.*

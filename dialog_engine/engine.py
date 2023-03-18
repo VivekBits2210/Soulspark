@@ -3,7 +3,7 @@ from dialog_engine.components import Components
 from dialog_engine.models import GPTUsageRecord
 from dialog_engine.tasks import summarizer
 
-#TODO: Integrate both summaries as input into the story prompt (system message?)
+
 class DialogEngine:
     def __init__(self, user_profile, chat_history_record):
         self.user_profile = user_profile
@@ -47,7 +47,6 @@ class DialogEngine:
         )
         print(usage_record)
         return response
-
 
 # if __name__ == "__main__":
 #     import sys
