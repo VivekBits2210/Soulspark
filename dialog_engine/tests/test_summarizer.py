@@ -77,7 +77,7 @@ class TestSummarizer(APITestCase):
         self.keep_limit = 5
 
     def test_summarization_clean_run(self):
-        print(f"USAGE_RECORD_BEFORE:{self.gpt_usage_record}")
+        print(f"\nUSAGE_RECORD_BEFORE:{self.gpt_usage_record}")
         print(f"SUMMARY_INDEX:{self.chat_history_record.summary_index}")
         print(f"INITIAL_USER_SUMMARY: {self.chat_history_record.user_summary}")
         print(f"INITIAL_BOT_SUMMARY: {self.chat_history_record.bot_summary}")
