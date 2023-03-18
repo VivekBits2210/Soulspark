@@ -91,6 +91,9 @@ INSTALLED_APPS = (
         "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
         "django.contrib.admindocs",
         "drf_yasg",
+        "theme",
+        # third-party apps
+        "tailwind",
     ]
     + MY_APPS
     + AUTH_APPS
@@ -131,6 +134,18 @@ ASGI_APPLICATION = "soulspark_backend.asgi.application"
 # TODO: Setup celery and fill these
 CELERY_BROKER_URL = ""
 CELERY_RESULT_BACKEND = ""
+
+
+## For redis
+# CHANNEL_LAYERS = {
+#     "default": {
+#     'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#     "CONFIG": {
+#         "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
+
 
 CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
@@ -182,3 +197,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+TAILWIND_APP_NAME = "theme"
