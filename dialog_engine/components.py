@@ -4,10 +4,12 @@ is_recipe = False
 RecipeClass = None
 try:
     from dialog_engine.recipe import Recipe
+
     RecipeClass = Recipe
     is_recipe = True
 except ModuleNotFoundError:
     from dialog_engine.recipe_mock import RecipeMock
+
     RecipeClass = RecipeMock
 
 
@@ -62,7 +64,7 @@ class Components:
     def consolidate_summarization_prompt(self, summary):
         prompt, api_customizations = self.recipe.construct_summary_consolidation_system_message()
         messages = [{"role": "system", "content": prompt}]
-        if summary and len(summary)>0:
+        if summary and len(summary) > 0:
             messages.append({"role": "user", "content": self.stringify(summary)})
         return messages, api_customizations
 
@@ -74,17 +76,21 @@ class Components:
         messages = [
             {"role": "system", "content": prompt},
         ]
-        chat_conversation = self.construct_conversation_from_chat_history(
-            history=self.chat_history[summary_index + 1:-keep_limit]
-        )
-        if chat_conversation != "":
-            messages.append({"role": "user", "content": chat_conversation})
+        if summary_index + 1 <= len(self.chat_history) - keep_limit:
+            chat_conversation = self.construct_conversation_from_chat_history(
+                history=self.chat_history[summary_index + 1:-keep_limit]
+            )
+            if chat_conversation != "":
+                messages.append({"role": "user", "content": chat_conversation})
         return messages, api_customizations
 
     def parse_indicator_message(self, message_text):
         indicator_mapping = {}
         for indicator in message_text.split("|"):
-            name, value = indicator.split(":")
+            try:
+                name, value = indicator.split(":")
+            except ValueError:
+                continue
             numerator, denominator = value.split("/")
             indicator_mapping[name] = int(numerator) * 10 // int(denominator)
         for indicator in self.recipe.INDICATORS:
@@ -115,9 +121,8 @@ class Components:
     def stringify(self, summary):
         result = ""
         for i, item in enumerate(summary):
-            result += f"{i+1}. {item}\n"
+            result += f"{i + 1}. {item}\n"
         return result
-
 
 # Really useful test fragment
 # if __name__ == "__main__":
