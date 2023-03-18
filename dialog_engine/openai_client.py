@@ -1,3 +1,4 @@
+import logging
 import random
 import openai
 from django.core.exceptions import ValidationError
@@ -39,6 +40,7 @@ class GPTClient:
         self.parameters.update(customizations)
 
     def generate_reply(self, messages, retries=3):
+        logging.info(f"Prompt: {messages}")
         openai.api_key = random.choice(self.api_key_list)
         exception_list = []
         for retry in range(retries):

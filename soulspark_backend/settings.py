@@ -30,6 +30,23 @@ AUTH_APPS = [
     "allauth.socialaccount.providers.google",
 ]
 
+LOGGING = {
+    'version': 1,
+    # 'disable_existing_loggers': False,
+    'handlers': {
+        'console_handler': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'level': 'INFO',
+            'handlers': ['console_handler'],
+        },
+    },
+
+}
+
 SITE_ID = 1
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
