@@ -42,14 +42,14 @@ class GPTClientTestCase(TestCase):
         message, tokens = self.client.generate_reply(self.valid_messages)
         self.assertIsInstance(message, str)
         self.assertIsInstance(tokens, int)
-        self.assertTrue(tokens>=0)
+        self.assertTrue(tokens >= 0)
 
     def test_generate_reply_with_customization(self):
         self.client.customize_model_parameters(self.valid_customizations)
         message, tokens = self.client.generate_reply(self.valid_messages)
         self.assertIsInstance(message, str)
         self.assertIsInstance(tokens, int)
-        self.assertTrue(tokens>=0)
+        self.assertTrue(tokens >= 0)
 
     def test_invalid_parameters_returns_invalid_request_error(self):
         # Test for empty messages
@@ -77,7 +77,7 @@ class GPTClientTestCase(TestCase):
                 ]
             )
 
-        #Test for invalid keys
+        # Test for invalid keys
         with self.assertRaises(ValidationError):
             self.client.api_key_list = ['fake-key-1', 'fake-key-2']
             messages = [

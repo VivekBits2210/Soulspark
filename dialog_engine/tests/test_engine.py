@@ -2,7 +2,8 @@ from rest_framework.test import APITestCase
 from chat_module.models import ChatHistory
 from chat_module.tests.utils import create_bot, create_user_and_profile
 from dialog_engine.engine import DialogEngine
-
+import logging
+logger = logging.getLogger("my_logger")
 
 class EngineTestCase(APITestCase):
     def setUp(self):
@@ -63,6 +64,6 @@ class EngineTestCase(APITestCase):
             user_profile=self.user_profile,
             chat_history_record=chat_history_record
         )
-        print(
+        logger.info(
             f"\n\nENGINE OUTPUT: {engine.run()}"
         )
