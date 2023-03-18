@@ -26,13 +26,14 @@ class DialogEngine:
         hook = self.components.fetch_template(
             self.components.find_region(indicator_vector)
         )
-        messages, customizations = self.components.generate_story_prompt(hook)
+        user_summary = self.chat_history_record.user_summary
+        bot_summary = self.chat_history_record.bot_summary
+        messages, customizations = self.components.generate_story_prompt(hook, user_summary, bot_summary)
         self.client.customize_model_parameters(customizations)
         response, story_tokens = self.client.generate_reply(messages)
 
-        # TODO: Record all prompts and interactions in a table
         if story_tokens > 1500:
-            summarizer.delay(self.chat_history_record)
+            summarizer.delay(self)
 
         usage_record = GPTUsageRecord.objects.create(
             user=self.user_profile.user,
@@ -46,7 +47,6 @@ class DialogEngine:
         )
         print(usage_record)
         return response
-
 
 # if __name__ == "__main__":
 #     import sys

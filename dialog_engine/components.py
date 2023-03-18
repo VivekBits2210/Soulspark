@@ -42,8 +42,9 @@ class Components:
             messages.append({"role": "user", "content": chat_conversation})
         return messages, api_customizations
 
-    def generate_story_prompt(self, hook=None):
-        prompt, api_customizations = self.recipe.construct_story_system_message()
+    def generate_story_prompt(self, user_summary, bot_summary, hook=None):
+        prompt, api_customizations = self.recipe.construct_story_system_message(self.stringify(user_summary),
+                                                                                self.stringify(bot_summary))
         messages = [{"role": "system", "content": prompt}]
         if self.chat_conversation != "":
             messages.append({"role": "user", "content": self.chat_conversation})
@@ -56,7 +57,14 @@ class Components:
             )
         return messages, api_customizations
 
-    def generate_summarization_prompt(self):
+    def consolidate_summarization_prompt(self, summary):
+        prompt, api_customizations = self.recipe.construct_summary_consolidation_system_message()
+        messages = [{"role": "system", "content": prompt}]
+        if summary and summary != "":
+            messages.append({"role": "user", "content": summary})
+        return messages, api_customizations
+
+    def generate_summarization_prompt(self, keep_limit, summary_index):
         (
             prompt,
             api_customizations,
@@ -64,8 +72,11 @@ class Components:
         messages = [
             {"role": "system", "content": prompt},
         ]
-        if self.chat_conversation != "":
-            messages.append({"role": "user", "content": self.chat_conversation})
+        chat_conversation = self.construct_conversation_from_chat_history(
+            history=self.chat_history[summary_index + 1:-keep_limit]
+        )
+        if chat_conversation != "":
+            messages.append({"role": "user", "content": chat_conversation})
         return messages, api_customizations
 
     def parse_indicator_message(self, message_text):
@@ -83,10 +94,10 @@ class Components:
         for i, region in enumerate(self.recipe.regions):
             lower_bounds, upper_bounds = region
             if all(
-                lower_bound <= coord <= upper_bound
-                for lower_bound, upper_bound, coord in zip(
-                    lower_bounds, upper_bounds, indicator_vector
-                )
+                    lower_bound <= coord <= upper_bound
+                    for lower_bound, upper_bound, coord in zip(
+                        lower_bounds, upper_bounds, indicator_vector
+                    )
             ):
                 return i
         return -1
@@ -98,6 +109,12 @@ class Components:
         return random.choices(
             probability_distribution.keys(), weights=probability_distribution.values()
         )[0]
+
+    def stringify(self, summary):
+        result = ""
+        for i, item in enumerate(summary):
+            result += f"{i+1}. {item}\n"
+        return result
 
 
 # Really useful test fragment
@@ -112,7 +129,7 @@ class Components:
 #     application = get_wsgi_application()
 #     from ai_profiles.models import BotProfile
 #     from chat_module.models import UserProfile
-#     from openai_client _chat_history
+#     from dialog_engine.openai_client import GPTClient
 #
 #     bot = BotProfile.objects.get(name="Carla")
 #     user_profile = UserProfile.objects.get(name="Vivek")

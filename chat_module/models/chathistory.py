@@ -58,8 +58,7 @@ class ChatHistory(models.Model):
     )
     user_summary = models.JSONField(blank=True, default=list)
     bot_summary = models.JSONField(blank=True, default=list)
-    user_summary_index = models.IntegerField(default=-1, null=True)
-    bot_summary_index = models.IntegerField(default=1, null=True)
+    summary_index = models.IntegerField(default=-1, null=True)
 
     REQUIRED_FIELDS = ["user", "bot", "history"]
 

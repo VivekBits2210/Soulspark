@@ -80,7 +80,5 @@ dmypy.json
 .pytype/
 cython_debug/
 /client_secret.json
-/chat_module/migrations/
-/ai_profiles/migrations/
 /dialog_engine/recipe.py
 /dialog_engine/secrets.py

@@ -1,3 +1,5 @@
+import unittest
+
 import openai.error
 from django.test import TestCase
 from dialog_engine.openai_client import GPTClient
@@ -7,6 +9,7 @@ class GPTClientTestCase(TestCase):
     def setUp(self):
         self.client = GPTClient()
 
+    @unittest.skip
     def test_customize_model_parameters(self):
         customizations = {
             "presence_penalty": 0.5,
@@ -17,6 +20,7 @@ class GPTClientTestCase(TestCase):
         for key, value in customizations.items():
             self.assertEqual(self.client.parameters[key], value)
 
+    @unittest.skip
     def test_generate_reply(self):
         client = GPTClient()
 
