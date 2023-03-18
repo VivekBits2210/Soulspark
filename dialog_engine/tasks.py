@@ -21,6 +21,7 @@ def parse_summary(summary):
 
 
 # TODO: Test case: Issues when we hit token limits before 10 messages? Possible?
+# TODO: Issue with a fast typer? What if multiple summarization calls are made? (need to prevent this from happening)
 @shared_task
 def summarizer(client, components, chat_history_record, keep_limit=10):
     messages, customizations = components.generate_summarization_prompt(keep_limit=keep_limit,

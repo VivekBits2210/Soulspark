@@ -13,7 +13,7 @@ class DialogEngine:
         self.client = GPTClient()
         self.components = Components(user_profile, self.bot, self.chat_history)
 
-    def run(self):
+    def run(self, summarizer_limit=3500):
         messages, customizations = self.components.generate_indicator_prompt()
         self.client.customize_model_parameters(customizations)
         indicator_message, indicator_tokens = self.client.generate_reply(messages)
@@ -32,7 +32,7 @@ class DialogEngine:
         self.client.customize_model_parameters(customizations)
         response, story_tokens = self.client.generate_reply(messages)
 
-        if story_tokens > 1500:
+        if story_tokens > summarizer_limit:
             summarizer.delay(self.client, self.components, self.chat_history_record)
 
         usage_record = GPTUsageRecord.objects.create(

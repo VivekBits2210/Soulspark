@@ -42,7 +42,7 @@ class TestSummarizer(TestCase):
         self.user, self.user_profile = create_user_and_profile()
         self.bot = create_bot()
 
-        # TODO: Create
+        # TODO: Fill
         self.valid_messages = []
         self.valid_bot_summary = []
         self.valid_user_summary = []
@@ -51,3 +51,24 @@ class TestSummarizer(TestCase):
         self.dialog_engine = DialogEngine(self.user_profile, self.chat_history_record)
 
         self.keep_limit = 10
+
+    def test_summarization_clean_run(self):
+        pass
+
+    def test_summarization_smaller_than_keep_limit(self):
+        pass
+
+    def test_resulting_summarization_for_large_queries(self):
+        pass
+
+    def test_print_to_show_redundancies_reduced(self):
+        pass
+
+    def test_print_to_show_no_previous_user_summary_does_not_cause_issues(self):
+        pass
+
+    def test_print_to_show_no_previous_bot_summary_does_not_cause_issues(self):
+        pass
+
+    def test_print_to_show_summary_style_is_maintained(self):
+        pass
