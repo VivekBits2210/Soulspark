@@ -16,12 +16,30 @@ class GPTClient:
             "frequency_penalty": 1.2,
             "temperature": 1.5,
         }
+        self.api_key_list = API_KEY_LIST
+        self.ALLOWED_PARAMETERS = {"model": str,
+                                   "temperature": float,
+                                   "top_p": float,
+                                   "max_tokens": int,
+                                   "presence_penalty": float,
+                                   "frequency_penalty": float,
+                                   "logit_bias": dict,
+                                   "user": str}
 
     def customize_model_parameters(self, customizations):
+        disallowed_keys = set(customizations) - set(self.ALLOWED_PARAMETERS)
+        if disallowed_keys:
+            raise ValidationError(f"Parameters {disallowed_keys} are not allowed.")
+
+        for key, value in customizations.items():
+            t = self.ALLOWED_PARAMETERS[key]
+            if not isinstance(value, t):
+                raise ValidationError(f"Value {value} for parameter {key} is of invalid type {type(value)}. "
+                                      f"Allowed type is {self.ALLOWED_PARAMETERS[key]}.")
         self.parameters.update(customizations)
 
     def generate_reply(self, messages, retries=3):
-        openai.api_key = random.choice(API_KEY_LIST)
+        openai.api_key = random.choice(self.api_key_list)
         exception_list = []
         for retry in range(retries):
             try:
@@ -35,7 +53,7 @@ class GPTClient:
 
         error_string = ""
         for retry_index, exception in enumerate(exception_list):
-            error_string += f"Retry {retry_index}: {repr(exception)}\n"
+            error_string += f"Retry {retry_index+1}: {repr(exception)}\n"
         raise ValidationError(error_string)
 
 # Test fragment
