@@ -72,5 +72,5 @@ $ python manage.py test chat_module.tests.test_urls
 
 Valid way to count lines of code    
 ```
-$cloc . --exclude-dir=images,python_venv,.idea,migrations -v --by-file
+$cloc ./soulspark-backend --exclude-dir=images,python_venv,.idea,migrations -v --by-file --exclude_ext=json
 ```

@@ -128,7 +128,6 @@ class Components:
 # if __name__ == "__main__":
 #     import sys
 #     import os
-#
 #     sys.path.insert(1, "../soulspark-backend")
 #     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "soulspark_backend.settings")
 #     from django.core.wsgi import get_wsgi_application
@@ -142,40 +141,4 @@ class Components:
 #     user_profile = UserProfile.objects.get(name="Vivek")
 #     client = GPTClient()
 #     components = Components(user_profile, bot, [])
-#
 #     messages, customizations = components.generate_story_prompt()
-#     client.customize_model_parameters(customizations)
-#     messages.extend([{"role": "user", "content": f"{user_profile.name}: Hey there"}])
-#     print(f"MESSAGES: {messages}")
-#     print(f"REQUEST: {messages[-1]['content']}")
-#     print(f"RESPONSE: {client.generate_reply(messages)}")
-#
-#     chat_history = [
-#         {"who": "Vivek", "message": "Talk to me"},
-#         {
-#             "who": "Vivek",
-#             "message": "Can you imagine actually saying something instead of generic shit.",
-#         },
-#     ]
-#
-#     components.chat_history = chat_history
-#     messages, customizations = components.generate_indicator_prompt()
-#     client.customize_model_parameters(customizations)
-#     print(f"MESSAGES: {messages}")
-#     print(f"RESPONSE: {client.generate_reply(messages)}")
-#
-#     chat_history = [
-#         {"who": "Vivek", "message": "Talk to me; I wanna know more about chess."},
-#         {"who": "Carla", "message": "Sure, we can talk about Magnus Carlsen"},
-#         {
-#             "who": "Vivek",
-#             "message": "Can you imagine actually saying something instead of generic shit.",
-#         },
-#         {"who": "Carla", "message": "Huh?"},
-#     ]
-#
-#     components.chat_history = chat_history
-#     messages, customizations = components.generate_summarization_prompt()
-#     client.customize_model_parameters(customizations)
-#     print(f"MESSAGES: {messages}")
-#     print(f"RESPONSE: {client.generate_reply(messages)}")

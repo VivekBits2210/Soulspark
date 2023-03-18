@@ -33,18 +33,24 @@ AUTH_APPS = [
 LOGGING = {
     'version': 1,
     # 'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            'format': '{asctime} {levelname} {filename}:{lineno} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console_handler': {
             'class': 'logging.StreamHandler',
+            'formatter': 'default',
         },
     },
     'loggers': {
-        '': {
+        'my_logger': {
             'level': 'INFO',
             'handlers': ['console_handler'],
         },
     },
-
 }
 
 SITE_ID = 1

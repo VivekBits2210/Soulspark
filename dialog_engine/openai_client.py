@@ -7,6 +7,7 @@ try:
     from dialog_engine.secrets import API_KEY_LIST
 except ModuleNotFoundError:
     API_KEY_LIST = ["fake-key-1", "fake-key-2"]
+logger = logging.getLogger('my_logger')
 
 
 class GPTClient:
@@ -40,12 +41,14 @@ class GPTClient:
         self.parameters.update(customizations)
 
     def generate_reply(self, messages, retries=3):
-        logging.info(f"Prompt: {messages}")
+        logger.info(f"\nPrompt: {messages}")
         openai.api_key = random.choice(self.api_key_list)
         exception_list = []
         for retry in range(retries):
             try:
+                logger.info(f"Waiting on OpenAI...")
                 response = openai.ChatCompletion.create(**self.parameters, messages=messages)
+                logger.info(f"OpenAI responded!")
                 return (
                     response["choices"][0]["message"]["content"],
                     response["usage"]["total_tokens"],
@@ -55,21 +58,5 @@ class GPTClient:
 
         error_string = ""
         for retry_index, exception in enumerate(exception_list):
-            error_string += f"Retry {retry_index+1}: {repr(exception)}\n"
+            error_string += f"Retry {retry_index + 1}: {repr(exception)}\n"
         raise ValidationError(error_string)
-
-# Test fragment
-# if __name__ == "__main__":
-#     client = GPTClient()
-#     response, _ = client.generate_reply(
-#         [
-#             {
-#                 "role": "system",
-#                 "content": "You are Nicole, a loving mom talking to her infant son, George. You do not respond with information.",
-#             },
-#             {"role": "user", "content": "Who won the world series in 2020?"},
-#             {"role": "assistant", "content": "Have you had dinner yet, love?"},
-#             {"role": "user", "content": "Where was it played?"},
-#         ]
-#     )
-#     print(response)

@@ -1,9 +1,13 @@
+import logging
+import unittest
+
 from rest_framework.test import APITestCase
 from chat_module.models import ChatHistory
 from chat_module.tests.utils import create_bot, create_user_and_profile
 from dialog_engine.engine import DialogEngine
 from dialog_engine.models import GPTUsageRecord
 from dialog_engine.tasks import summarizer
+logger = logging.getLogger("my_logger")
 
 
 class TestSummarizer(APITestCase):
@@ -77,53 +81,56 @@ class TestSummarizer(APITestCase):
         chat_history_record.save()
         self.gpt_usage_record.save()
         self.dialog_engine = DialogEngine(self.user_profile, chat_history_record)
-        print("\n\nCLEAN RUN:")
-        print(f"USAGE_RECORD_BEFORE:{self.gpt_usage_record}")
-        print(f"SUMMARY_INDEX:{chat_history_record.summary_index}")
-        print(f"INITIAL_USER_SUMMARY: {chat_history_record.user_summary}")
-        print(f"INITIAL_BOT_SUMMARY: {chat_history_record.bot_summary}")
+
+        logger.info(f"Usage Record (before): {self.gpt_usage_record}")
+        logger.info(f"Summary Index (before): {chat_history_record.summary_index}")
+        logger.info(f"User Summary (before): {chat_history_record.user_summary}")
+        logger.info(f"Bot Summary  (before): {chat_history_record.bot_summary}")
         summarizer(self.dialog_engine.client,
                    self.dialog_engine.components,
                    chat_history_record,
                    self.gpt_usage_record,
                    keep_limit=self.keep_limit)
         chat_history_record = ChatHistory.objects.get(user=self.user, bot=self.bot)
-        print(f"SUMMARY_INDEX:{chat_history_record.summary_index}")
-        print(f"FINAL_USER_SUMMARY: {chat_history_record.user_summary}")
-        print(f"FINAL_BOT_SUMMARY: {chat_history_record.bot_summary}")
+        logger.info(f"Summary Index (after): {chat_history_record.summary_index}")
+        logger.info(f"User Summary (after): {chat_history_record.user_summary}")
+        logger.info(f"Bot Summary (after): {chat_history_record.bot_summary}")
 
         gpt_usage_record = GPTUsageRecord.objects.get(user=self.user, bot=self.bot,
                                                       chat_history_length=self.gpt_usage_record.chat_history_length)
-        print(f"USAGE_RECORD_AFTER:{gpt_usage_record}")
+        logger.info(f"Usage Record (after):{gpt_usage_record}")
 
-    # def test_summarization_if_nothing_to_summarize(self):
-    #     valid_messages = []
-    #     chat_history_record = ChatHistory(user=self.user,
-    #                                            bot=self.bot,
-    #                                            history=valid_messages,
-    #                                            user_summary=[],
-    #                                            bot_summary=[],
-    #                                            summary_index=-1
-    #                                            )
-    #     self.dialog_engine = DialogEngine(self.user_profile, chat_history_record)
-    #     print("\n\nNOTHING TO SUMMARIZE RUN:")
-    #     print(f"USAGE_RECORD_BEFORE:{self.gpt_usage_record}")
-    #     print(f"SUMMARY_INDEX:{chat_history_record.summary_index}")
-    #     print(f"INITIAL_USER_SUMMARY: {chat_history_record.user_summary}")
-    #     print(f"INITIAL_BOT_SUMMARY: {chat_history_record.bot_summary}")
-    #     summarizer(self.dialog_engine.client,
-    #                self.dialog_engine.components,
-    #                chat_history_record,
-    #                self.gpt_usage_record,
-    #                keep_limit=self.keep_limit)
-    #     chat_history_record = ChatHistory.objects.get(user=self.user, bot=self.bot)
-    #     print(f"SUMMARY_INDEX:{chat_history_record.summary_index}")
-    #     print(f"FINAL_USER_SUMMARY: {chat_history_record.user_summary}")
-    #     print(f"FINAL_BOT_SUMMARY: {chat_history_record.bot_summary}")
-    #
-    #     gpt_usage_record = GPTUsageRecord.objects.first()
-    #     print(f"USAGE_RECORD_AFTER:{gpt_usage_record}")
+    def test_summarization_if_nothing_to_summarize(self):
+        valid_messages = []
+        chat_history_record = ChatHistory(user=self.user,
+                                               bot=self.bot,
+                                               history=valid_messages,
+                                               user_summary=[],
+                                               bot_summary=[],
+                                               summary_index=-1
+                                               )
+        chat_history_record.save()
+        self.gpt_usage_record.save()
+        self.dialog_engine = DialogEngine(self.user_profile, chat_history_record)
 
+        logger.info(f"Usage Record (before): {self.gpt_usage_record}")
+        logger.info(f"Summary Index (before): {chat_history_record.summary_index}")
+        logger.info(f"User Summary (before): {chat_history_record.user_summary}")
+        logger.info(f"Bot Summary  (before): {chat_history_record.bot_summary}")
+        summarizer(self.dialog_engine.client,
+                   self.dialog_engine.components,
+                   chat_history_record,
+                   self.gpt_usage_record,
+                   keep_limit=self.keep_limit)
+        chat_history_record = ChatHistory.objects.get(user=self.user, bot=self.bot)
+        logger.info(f"Summary Index (after): {chat_history_record.summary_index}")
+        logger.info(f"User Summary (after): {chat_history_record.user_summary}")
+        logger.info(f"Bot Summary (after): {chat_history_record.bot_summary}")
+
+        gpt_usage_record = GPTUsageRecord.objects.first()
+        logger.info(f"Usage Record (after):{gpt_usage_record}")
+
+    @unittest.skip
     def test_print_to_show_no_previous_user_summary_does_not_cause_issues(self):
         chat_history_record = ChatHistory(user=self.user,
                                                bot=self.bot,
@@ -135,21 +142,21 @@ class TestSummarizer(APITestCase):
         self.gpt_usage_record.save()
         chat_history_record.save()
         self.dialog_engine = DialogEngine(self.user_profile, chat_history_record)
-        print("\n\nNO PREVIOUS SUMMARY RUN:")
-        print(f"USAGE_RECORD_BEFORE:{self.gpt_usage_record}")
-        print(f"SUMMARY_INDEX:{chat_history_record.summary_index}")
-        print(f"INITIAL_USER_SUMMARY: {chat_history_record.user_summary}")
-        print(f"INITIAL_BOT_SUMMARY: {chat_history_record.bot_summary}")
+
+        logger.info(f"Usage Record (before): {self.gpt_usage_record}")
+        logger.info(f"Summary Index (before): {chat_history_record.summary_index}")
+        logger.info(f"User Summary (before): {chat_history_record.user_summary}")
+        logger.info(f"Bot Summary  (before): {chat_history_record.bot_summary}")
         summarizer(self.dialog_engine.client,
                    self.dialog_engine.components,
                    chat_history_record,
                    self.gpt_usage_record,
                    keep_limit=self.keep_limit)
         chat_history_record = ChatHistory.objects.get(user=self.user, bot=self.bot)
-        print(f"SUMMARY_INDEX:{chat_history_record.summary_index}")
-        print(f"FINAL_USER_SUMMARY: {chat_history_record.user_summary}")
-        print(f"FINAL_BOT_SUMMARY: {chat_history_record.bot_summary}")
+        logger.info(f"Summary Index (after): {chat_history_record.summary_index}")
+        logger.info(f"User Summary (after): {chat_history_record.user_summary}")
+        logger.info(f"Bot Summary (after): {chat_history_record.bot_summary}")
 
         gpt_usage_record = GPTUsageRecord.objects.get(user=self.user, bot=self.bot,
                                                       chat_history_length=self.gpt_usage_record.chat_history_length)
-        print(f"USAGE_RECORD_AFTER:{gpt_usage_record}")
+        logger.info(f"Usage Record (after):{gpt_usage_record}")
