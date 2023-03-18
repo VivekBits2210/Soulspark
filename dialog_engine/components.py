@@ -87,7 +87,10 @@ class Components:
     def parse_indicator_message(self, message_text):
         indicator_mapping = {}
         for indicator in message_text.split("|"):
-            name, value = indicator.split(":")
+            try:
+                name, value = indicator.split(":")
+            except ValueError:
+                continue
             numerator, denominator = value.split("/")
             indicator_mapping[name] = int(numerator) * 10 // int(denominator)
         for indicator in self.recipe.INDICATORS:
