@@ -28,6 +28,9 @@ def summarizer(client, components, chat_history_record, usage_record, keep_limit
     summarizer_tokens = 0
     messages, customizations = components.generate_summarization_prompt(keep_limit=keep_limit,
                                                                         summary_index=chat_history_record.summary_index)
+    if len(messages)==1:
+        return
+
     client.customize_model_parameters(customizations)
     summary, cost = client.generate_reply(messages)
     summarizer_tokens += cost

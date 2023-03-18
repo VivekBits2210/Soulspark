@@ -1,4 +1,3 @@
-import unittest
 from unittest.mock import MagicMock
 from django.test import TestCase
 
@@ -12,18 +11,16 @@ class ComponentTestcase(TestCase):
         self.bot = create_bot()
         self.chat_history = []
 
-    @unittest.skip
     def test_construct_conversation_from_chat_history(self):
-        components = Components(self.user_profile, self.bot, self.chat_history)
         chat_history = [
             {"who": "User", "message": "Hello"},
             {"who": "Bot", "message": "Hi there"},
         ]
-        components.chat_history = chat_history
+        components = Components(self.user_profile, self.bot, chat_history)
+        chat_conversation = components.construct_conversation_from_chat_history()
         expected_conversation = "User: Hello\nBot: Hi there\n"
-        self.assertEqual(components.chat_conversation, expected_conversation)
+        self.assertEqual(chat_conversation, expected_conversation)
 
-    @unittest.skip
     def test_generate_indicator_prompt(self):
         user_profile = {"name": "Alice"}
         bot = {"name": "Bob"}
@@ -42,7 +39,6 @@ class ComponentTestcase(TestCase):
         self.assertEqual(messages[1]["role"], "user")
         self.assertIsNone(messages[1]["content"])
 
-    @unittest.skip
     def test_generate_story_prompt(self):
         user_profile = {"name": "Alice"}
         bot = {"name": "Bob"}
@@ -53,20 +49,18 @@ class ComponentTestcase(TestCase):
             return_value=("story prompt", {})
         )
 
-        messages, customizations = components.generate_story_prompt()
+        messages, customizations = components.generate_story_prompt([], [])
 
-        self.assertEqual(len(messages), 1)
+        self.assertEqual(len(messages), 2)
         self.assertEqual(messages[0]["role"], "system")
         self.assertEqual(messages[0]["content"], "story prompt")
 
-    @unittest.skip
     def test_generate_summarization_prompt(self):
         components = Components(self.user_profile, self.bot, self.chat_history)
-        messages, customizations = components.generate_summarization_prompt()
+        messages, customizations = components.generate_summarization_prompt(keep_limit=5,summary_index=5)
         self.assertIsNotNone(messages)
         self.assertIsNotNone(customizations)
 
-    @unittest.skip
     def test_parse_indicator_message(self):
         components = Components(self.user_profile, self.bot, self.chat_history)
         message_text = "sadness:5/10|happiness:3/10|lighthearted:4/10|displeasure:2/10|anger:1/10|confusion:7/10|horny:6/10|disappointment:8/10|boredom:9/10"
@@ -84,7 +78,6 @@ class ComponentTestcase(TestCase):
         }
         self.assertEqual(indicator_mapping, expected_mapping)
 
-    @unittest.skip
     def test_find_region(self):
         components = Components(self.user_profile, self.bot, self.chat_history)
         indicator_vector = (5, 3, 4, 2, 1, 7, 6, 8, 9)

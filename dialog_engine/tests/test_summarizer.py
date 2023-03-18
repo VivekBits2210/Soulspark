@@ -74,6 +74,8 @@ class TestSummarizer(APITestCase):
                                                bot_summary=self.valid_bot_summary,
                                                summary_index=self.valid_summary_index
                                                )
+        chat_history_record.save()
+        self.gpt_usage_record.save()
         self.dialog_engine = DialogEngine(self.user_profile, chat_history_record)
         print("\n\nCLEAN RUN:")
         print(f"USAGE_RECORD_BEFORE:{self.gpt_usage_record}")
@@ -130,6 +132,8 @@ class TestSummarizer(APITestCase):
                                                bot_summary=[],
                                                summary_index=-1
                                                )
+        self.gpt_usage_record.save()
+        chat_history_record.save()
         self.dialog_engine = DialogEngine(self.user_profile, chat_history_record)
         print("\n\nNO PREVIOUS SUMMARY RUN:")
         print(f"USAGE_RECORD_BEFORE:{self.gpt_usage_record}")
