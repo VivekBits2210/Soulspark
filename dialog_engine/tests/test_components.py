@@ -2,14 +2,14 @@ import unittest
 from unittest.mock import MagicMock
 from django.test import TestCase
 
+from chat_module.tests.utils import create_bot, create_user_and_profile
 from dialog_engine.components import Components
 
 
-# TODO: Generate an actual bot profile and user profile object
 class ComponentTestcase(TestCase):
     def setUp(self):
-        self.user_profile = MagicMock()
-        self.bot = MagicMock()
+        self.user, self.user_profile = create_user_and_profile()
+        self.bot = create_bot()
         self.chat_history = []
 
     @unittest.skip

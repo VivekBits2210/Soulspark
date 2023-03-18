@@ -33,7 +33,7 @@ class DialogEngine:
         response, story_tokens = self.client.generate_reply(messages)
 
         if story_tokens > 1500:
-            summarizer.delay(self)
+            summarizer.delay(self.client, self.components, self.chat_history_record)
 
         usage_record = GPTUsageRecord.objects.create(
             user=self.user_profile.user,

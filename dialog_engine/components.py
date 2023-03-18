@@ -54,7 +54,7 @@ class Components:
             messages.append(
                 {
                     "role": "system",
-                    "content": f"Expected reply from {self.bot.name}: {hook}",
+                    "content": f"(Expected reply from {self.bot.name}: {hook})",
                 }
             )
         return messages, api_customizations
