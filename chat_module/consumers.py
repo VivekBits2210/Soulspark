@@ -6,30 +6,39 @@ from chat_module.models import UserProfile, ChatHistory
 from chat_module.tasks import get_response
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 # TODO: When storing bot messages from dialog engine, always store each sentence in a different message line.
 class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
-        get_response.delay(self.channel_name, text_data_json)
 
         username = text_data_json["username"]
         bot_id = text_data_json["bot_id"]
         text = text_data_json["text"]
+        timestamp = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
+
         packet = {
             "type": "chat_message",
-            "text": text,
+            "text": {"msg": text, "source": "user"},
             "username": username,
             "bot_id": bot_id,
-            "timestamp": text_data_json["timestamp"],
+            ##todo: timestamp implementation from frontend?
+            # "timestamp": text_data_json["timestamp"],
+            "timestamp": timestamp,
         }
+
         async_to_sync(self.channel_layer.send)(
             self.channel_name,
             packet,
         )
 
-        user_profile = UserProfile.objects.get(username=username)
+        get_response(self.channel_name, text_data_json)
+
+        user = User.objects.get(username=username)
+        user_profile = UserProfile.objects.get(user=user)
         bot = BotProfile.objects.get(bot_id=bot_id)
         chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
         chat_history_obj.history.append(packet)
