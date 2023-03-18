@@ -16,10 +16,10 @@ class GPTUsageRecord(models.Model):
     REQUIRED_FIELDS = [
         "user",
         "bot",
-        "indicator_cost",
-        "story_cost",
-        "total_cost",
-        "indicator_tuple",
+        "indicator_tokens",
+        "story_tokens",
+        "total_tokens",
+        "indicator_vector",
         "indicator_version",
         "chat_history_length",
     ]

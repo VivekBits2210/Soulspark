@@ -1,22 +1,24 @@
 import random
 
 is_recipe = False
+RecipeClass = None
 try:
     from dialog_engine.recipe import Recipe
-
+    RecipeClass = Recipe
     is_recipe = True
 except ModuleNotFoundError:
     from dialog_engine.recipe_mock import RecipeMock
+    RecipeClass = RecipeMock
 
 
 class Components:
-    def __init__(self, user_profile, bot, chat_history):
+    def __init__(self, user_profile, bot, chat_history, recipe_class=RecipeClass):
         self.user_profile = user_profile
         self.bot = bot
         self.chat_history = chat_history
         self.chat_conversation = self.construct_conversation_from_chat_history()
         self.recipe = (
-            Recipe(user_profile, bot) if is_recipe else RecipeMock(user_profile, bot)
+            recipe_class(user_profile, bot) if is_recipe else RecipeMock(user_profile, bot)
         )
 
     def construct_conversation_from_chat_history(self, history=None):
