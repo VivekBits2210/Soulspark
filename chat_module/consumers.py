@@ -25,8 +25,6 @@ class ChatConsumer(WebsocketConsumer):
             "text": {"msg": text, "source": "user"},
             "username": username,
             "bot_id": bot_id,
-            ##todo: timestamp implementation from frontend?
-            # "timestamp": text_data_json["timestamp"],
             "timestamp": timestamp,
         }
 
@@ -49,7 +47,6 @@ class ChatConsumer(WebsocketConsumer):
         chat_history_obj.save()
         user_profile.save()
 
-    # NOTE: The structure of 'event' is defined by the UI
     def chat_message(self, event):
         packet = json.dumps(
             {

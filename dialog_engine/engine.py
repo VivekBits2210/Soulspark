@@ -3,7 +3,9 @@ from dialog_engine.openai_client import GPTClient
 from dialog_engine.components import Components
 from dialog_engine.models import GPTUsageRecord
 from dialog_engine.tasks import summarizer
-logger = logging.getLogger('my_logger')
+
+logger = logging.getLogger("my_logger")
+
 
 class DialogEngine:
     def __init__(self, user_profile, chat_history_record):
@@ -35,7 +37,9 @@ class DialogEngine:
         logger.info(f"User Summary: {user_summary}")
         logger.info(f"Bot Summary: {bot_summary}")
 
-        messages, customizations = self.components.generate_story_prompt(user_summary, bot_summary, hook)
+        messages, customizations = self.components.generate_story_prompt(
+            user_summary, bot_summary, hook
+        )
         self.client.customize_model_parameters(customizations)
         response, story_tokens = self.client.generate_reply(messages)
         logger.info(f"Story Response: {response}")
@@ -52,8 +56,10 @@ class DialogEngine:
         logger.info(f"GPT Usage: {usage_record}")
 
         if story_tokens > summarizer_limit:
-            summarizer.delay(self.client, self.components, self.chat_history_record, usage_record)
+            summarizer.delay(
+                self.client, self.components, self.chat_history_record, usage_record
+            )
 
-        tokens = response.split(':', 1)
-        response_string = tokens[0] if len(tokens)==1 else tokens[1]
+        tokens = response.split(":", 1)
+        response_string = tokens[0] if len(tokens) == 1 else tokens[1]
         return response_string

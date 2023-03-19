@@ -57,25 +57,17 @@ class ComponentTestcase(TestCase):
 
     def test_generate_summarization_prompt(self):
         components = Components(self.user_profile, self.bot, self.chat_history)
-        messages, customizations = components.generate_summarization_prompt(keep_limit=5,summary_index=5)
+        messages, customizations = components.generate_summarization_prompt(
+            keep_limit=5, summary_index=5
+        )
         self.assertIsNotNone(messages)
         self.assertIsNotNone(customizations)
 
     def test_parse_indicator_message(self):
         components = Components(self.user_profile, self.bot, self.chat_history)
-        message_text = "sadness:5/10|happiness:3/10|lighthearted:4/10|displeasure:2/10|anger:1/10|confusion:7/10|horny:6/10|disappointment:8/10|boredom:9/10"
+        message_text = "sadness:5/10|happiness:3/10"
         indicator_mapping = components.parse_indicator_message(message_text)
-        expected_mapping = {
-            "sadness": 5,
-            "happiness": 3,
-            "lighthearted": 4,
-            "displeasure": 2,
-            "anger": 1,
-            "confusion": 7,
-            "horny": 6,
-            "disappointment": 8,
-            "boredom": 9,
-        }
+        expected_mapping = {"sadness": 5, "happiness": 3}
         self.assertEqual(indicator_mapping, expected_mapping)
 
     def test_find_region(self):

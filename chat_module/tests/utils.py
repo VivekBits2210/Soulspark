@@ -8,15 +8,17 @@ from chat_module.models import UserProfile
 
 
 def create_user_and_profile(
-        username="tester",
-        password="testpassword",
-        first_name="Name",
-        age=25,
-        gender="M",
-        gender_focus="F",
-        interests="java and python",
+    username="tester",
+    password="testpassword",
+    first_name="Name",
+    age=25,
+    gender="M",
+    gender_focus="F",
+    interests="java and python",
 ):
-    user = get_user_model().objects.create_user(username=username, first_name=first_name, password=password)
+    user = get_user_model().objects.create_user(
+        username=username, first_name=first_name, password=password
+    )
     profile = UserProfile.objects.create(
         user=user,
         age=age,
