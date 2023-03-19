@@ -108,4 +108,4 @@ class EngineTestCase(APITestCase):
         engine = DialogEngine(
             user_profile=self.user_profile, chat_history_record=chat_history_record
         )
-        logger.info(f"\n\nENGINE OUTPUT: {engine.run()}")
+        logger.info(f"Engine: {engine.run()}")
