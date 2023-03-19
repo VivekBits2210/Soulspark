@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
-from chat_module.models import UserProfile
+from user_profiles.models import UserProfile
 
 
 def get_gender_list(gender_focus):

@@ -141,7 +141,7 @@ class Components:
 #
 #     application = get_wsgi_application()
 #     from ai_profiles.models import BotProfile
-#     from chat_module.models import UserProfile
+#     from user_profiles.models import UserProfile
 #     from dialog_engine.openai_client import GPTClient
 #
 #     bot = BotProfile.objects.get(name="Carla")

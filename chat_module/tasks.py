@@ -7,7 +7,8 @@ from django.utils import timezone
 from channels.layers import get_channel_layer
 
 from ai_profiles.models import BotProfile
-from chat_module.models import ChatHistory, UserProfile
+from chat_module.models import ChatHistory
+from user_profiles.models import UserProfile
 
 channel_layer = get_channel_layer()
 

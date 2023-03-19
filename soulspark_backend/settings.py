@@ -18,6 +18,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 # Application definition
 MY_APPS = [
+    "user_profiles.apps.UserProfilesConfig",
     "ai_profiles.apps.AiProfilesConfig",
     "chat_module.apps.ChatModuleConfig",
     "dialog_engine.apps.DialogEngineConfig",
