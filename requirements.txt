@@ -17,3 +17,4 @@ black==23.1.0
 docutils==0.19
 textblob==0.17.1
 nltk~=3.8.1
+django-cors-headers

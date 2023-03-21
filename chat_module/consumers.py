@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 
 
 # TODO: When storing bot messages from dialog engine, always store each sentence in a different message line.
+# TODO: Make user profile, if user profile is not created
 class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
