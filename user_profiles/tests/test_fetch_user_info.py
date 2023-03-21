@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
-from chat_module.models import UserProfile
+from user_profiles.models import UserProfile
 import json
 
 

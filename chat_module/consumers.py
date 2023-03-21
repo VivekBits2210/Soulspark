@@ -2,7 +2,8 @@ import json
 
 from ai_profiles.models import BotProfile
 from chat_module.levels import calculate_level
-from chat_module.models import UserProfile, ChatHistory
+from user_profiles.models import UserProfile
+from chat_module.models import ChatHistory
 from chat_module.tasks import get_response
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
@@ -11,6 +12,7 @@ from django.contrib.auth.models import User
 
 
 # TODO: When storing bot messages from dialog engine, always store each sentence in a different message line.
+# TODO: Make user profile, if user profile is not created
 class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)

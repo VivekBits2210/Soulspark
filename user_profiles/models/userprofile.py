@@ -1,7 +1,7 @@
 from django.db import models
 from allauth import app_settings
 
-from chat_module.models.validators import (
+from user_profiles.models.validators import (
     gender_validation,
     gender_focus_validation,
     timezone_validation,

@@ -1,11 +1,10 @@
-import json
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
-from chat_module.models import UserProfile
+from user_profiles.models import UserProfile
 
 
 @login_required

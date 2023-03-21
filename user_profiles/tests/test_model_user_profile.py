@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from chat_module.models import UserProfile
+from user_profiles.models import UserProfile
 
 
 class UserProfileTestCase(TestCase):

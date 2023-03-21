@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from ai_profiles.models import BotProfile
-from chat_module.models import UserProfile
+from user_profiles.models import UserProfile
 
 
 def create_user_and_profile(

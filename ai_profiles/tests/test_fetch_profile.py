@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from ai_profiles.models import BotProfile
-from chat_module.models import UserProfile
+from user_profiles.models import UserProfile
 
 
 class BotProfileFetchViewTest(APITestCase):

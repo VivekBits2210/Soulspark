@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from django.forms.models import model_to_dict
 
-from chat_module.models import UserProfile
+from user_profiles.models import UserProfile
 
 
 @login_required

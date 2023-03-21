@@ -18,6 +18,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 # Application definition
 MY_APPS = [
+    "user_profiles.apps.UserProfilesConfig",
     "ai_profiles.apps.AiProfilesConfig",
     "chat_module.apps.ChatModuleConfig",
     "dialog_engine.apps.DialogEngineConfig",
@@ -30,28 +31,28 @@ AUTH_APPS = [
     "allauth.socialaccount.providers.google",
 ]
 
-LOGGING = {
-    "version": 1,
-    # 'disable_existing_loggers': False,
-    "formatters": {
-        "default": {
-            "format": "{asctime} {levelname} {filename}:{lineno} {message}",
-            "style": "{",
-        },
-    },
-    "handlers": {
-        "console_handler": {
-            "class": "logging.StreamHandler",
-            "formatter": "default",
-        },
-    },
-    "loggers": {
-        "my_logger": {
-            "level": "INFO",
-            "handlers": ["console_handler"],
-        },
-    },
-}
+# LOGGING = {
+#     "version": 1,
+#     # 'disable_existing_loggers': False,
+#     "formatters": {
+#         "default": {
+#             "format": "{asctime} {levelname} {filename}:{lineno} {message}",
+#             "style": "{",
+#         },
+#     },
+#     "handlers": {
+#         "console_handler": {
+#             "class": "logging.StreamHandler",
+#             "formatter": "default",
+#         },
+#     },
+#     "loggers": {
+#         "my_logger": {
+#             "level": "INFO",
+#             "handlers": ["console_handler"],
+#         },
+#     },
+# }
 
 SITE_ID = 1
 
@@ -111,6 +112,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -118,6 +120,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+CORS_ORIGIN_WHITELIST = [
+    '*'
 ]
 
 ROOT_URLCONF = "soulspark_backend.urls"

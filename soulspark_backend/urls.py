@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import include, path
-from soulspark_backend.views import fetch_user_info, fill_db, post_attribute
+from soulspark_backend.views import fill_db
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -17,9 +17,8 @@ schema_view = get_schema_view(
 )
 urlpatterns = [
     path("", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-    path("post-attribute", post_attribute.post_attribute, name="post_attribute"),
-    path("fetch-user-info", fetch_user_info.fetch_user_info, name="fetch_user_info"),
     path("fill-db", fill_db.fill_db, name="fill-db"),
+    path("user-profiles/", include("user_profiles.urls")),
     path("ai-profiles/", include("ai_profiles.urls")),
     path("chat-module/", include("chat_module.urls")),
     path("accounts/", include("allauth.urls")),
