@@ -7,7 +7,7 @@ from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory, DeletedChatHistory
 
 
-@login_required
+# @login_required
 @api_view(["POST"])
 def unmatch(request):
     user = request.user
