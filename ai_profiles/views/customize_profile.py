@@ -10,7 +10,7 @@ from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory
 
 
-@login_required()
+# @login_required()
 @api_view(["POST"])
 def customize_profile(request):
     request_dict = request.data

@@ -8,7 +8,7 @@ from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory
 
 
-@login_required
+# @login_required
 @api_view(["GET"])
 def fetch_chat_history(request):
     user = request.user

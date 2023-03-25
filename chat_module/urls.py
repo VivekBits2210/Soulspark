@@ -10,5 +10,5 @@ urlpatterns = [
         name="fetch_chat_history",
     ),
     path("unmatch", unmatch.unmatch, name="unmatch"),
-    path("", login_required(index.ChatView.as_view()), name="chat_view"),
+    path("", index.ChatView.as_view(), name="chat_view"),
 ]

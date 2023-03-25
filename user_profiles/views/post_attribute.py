@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 from user_profiles.models import UserProfile
 
 
-@login_required
+# @login_required
 @api_view(["POST"])
 def post_attribute(request):
     user = request.user

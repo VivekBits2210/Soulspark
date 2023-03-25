@@ -10,7 +10,7 @@ from django.forms.models import model_to_dict
 from user_profiles.models import UserProfile
 
 
-@login_required
+# @login_required
 @api_view(["GET"])
 def fetch_user_info(request):
     user = request.user
