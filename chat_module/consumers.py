@@ -24,7 +24,9 @@ class ChatConsumer(WebsocketConsumer):
 
         packet = {
             "type": "chat_message",
-            "text": {"msg": text, "source": "user"},
+            # "text": {"msg": text, "source": "user"},
+            "who": "user",
+            "message": text,
             "username": username,
             "bot_id": bot_id,
             "timestamp": timestamp,
@@ -34,8 +36,6 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name,
             packet,
         )
-
-        get_response(self.channel_name, text_data_json)
 
         user = User.objects.get(username=username)
         user_profile = UserProfile.objects.get(user=user)
@@ -49,11 +49,15 @@ class ChatConsumer(WebsocketConsumer):
         chat_history_obj.save()
         user_profile.save()
 
+        get_response(self.channel_name, text_data_json)
+
     def chat_message(self, event):
         packet = json.dumps(
             {
                 "type": "chat_message",
-                "text": event["text"],
+                # "text": event["text"],
+                "who": event["who"],
+                "message": event["message"],
                 "username": event["username"],
                 "bot_id": event["bot_id"],
                 "timestamp": event["timestamp"],
