@@ -19,7 +19,7 @@ class ChatConsumerTestCase(TestCase):
         self.communication.scope["user"] = self.user.username
         self.communication.scope["url_route"] = {"kwargs": {}}
         self.communication.scope["subprotocols"] = ["test"]
-        
+        self.communication.connect()
 
     def test_receive(self):
         async_to_sync(self.communication.connect)()
