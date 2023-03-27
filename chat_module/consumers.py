@@ -25,10 +25,9 @@ class ChatConsumer(WebsocketConsumer):
         packet = {
             "type": "chat_message",
             # "text": {"msg": text, "source": "user"},
-            "who": "user",
+            "source": "user",
+            "who": username,
             "message": text,
-            "username": username,
-            "bot_id": bot_id,
             "timestamp": timestamp,
         }
 
@@ -38,10 +37,28 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         user = User.objects.get(username=username)
-        user_profile = UserProfile.objects.get(user=user)
+
+        try:
+            user_profile = UserProfile.objects.get(user=user)
+        except (KeyError, UserProfile.DoesNotExist):
+            user_profile = UserProfile.objects.create(user=user)
+
         bot = BotProfile.objects.get(bot_id=bot_id)
-        chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
-        chat_history_obj.history.append(packet)
+
+        try:
+            chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
+        except (KeyError, ChatHistory.DoesNotExist):
+            chat_history_obj = ChatHistory.objects.create(
+                user=user_profile.user, bot=bot, history=[]
+            )
+
+        chat_history_obj.history.append(
+            {
+                "who": packet["who"],
+                "message": packet["message"],
+                "timestamp": packet["timestamp"],
+            }
+        )
         characters_sent = sum(1 for c in text if c.isalpha())
         chat_history_obj.input_chars += characters_sent
         user_profile.experience += characters_sent
@@ -58,8 +75,7 @@ class ChatConsumer(WebsocketConsumer):
                 # "text": event["text"],
                 "who": event["who"],
                 "message": event["message"],
-                "username": event["username"],
-                "bot_id": event["bot_id"],
+                "source": event["source"],
                 "timestamp": event["timestamp"],
             }
         )

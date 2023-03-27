@@ -24,25 +24,30 @@ def get_response(channel_name, input_data):
 
     # response = canned_response
     user = User.objects.get(username=username)
+
     try:
         user_profile = UserProfile.objects.get(user=user)
-    except:
-        #redirect to userprofile creation?
-        pass
+    except (KeyError, UserProfile.DoesNotExist):
+        user_profile = UserProfile.objects.create(user=user)
+
     bot = BotProfile.objects.get(bot_id=bot_id)
-    chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
+    try:
+        chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
+    except (KeyError, ChatHistory.DoesNotExist):
+        chat_history_obj = ChatHistory.objects.create(
+            user=user_profile.user, bot=bot, history=[]
+        )
 
     response = DialogEngine(user_profile, chat_history_obj)
     response = response.run()
-    print(response)
+
     timestamp = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
     packet = {
         "type": "chat_message",
         # "text": {"msg": response, "source": "bot"},
-        "who": "bot",
+        "source": "bot",
+        "who": bot_id,
         "message": response,
-        "username": username,
-        "bot_id": bot_id,
         "timestamp": timestamp,
     }
     async_to_sync(channel_layer.send)(
@@ -50,5 +55,11 @@ def get_response(channel_name, input_data):
         packet,
     )
 
-    chat_history_obj.history.append(packet)
+    chat_history_obj.history.append(
+        {
+            "who": packet["who"],
+            "message": packet["message"],
+            "timestamp": packet["timestamp"],
+        }
+    )
     chat_history_obj.save()
