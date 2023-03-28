@@ -5,11 +5,21 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
+from user_profiles.models import User
+from user_profiles.utils import decrypt_email
 
 
 @api_view(["GET"])
 def fetch_profile_admin(request):
-    user = request.user
+    encrypted_email = request.GET.get('email')
+    email = decrypt_email(encrypted_email)
+
+    try:
+        user = User.objects.get(pk=email)
+    except User.DoesNotExist:
+        error_message = {'error': f'User {encrypted_email} not found'}
+        return JsonResponse(error_message, status=status.HTTP_404_NOT_FOUND)
+
     n = request.GET.get("n")
     bot_id = request.GET.get("bot_id")
     no_image = request.GET.get("no_image")

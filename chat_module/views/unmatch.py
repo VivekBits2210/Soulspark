@@ -8,9 +8,21 @@ from chat_module.models import ChatHistory, DeletedChatHistory
 
 
 # @login_required
+from user_profiles.models import User
+from user_profiles.utils import decrypt_email
+
+
 @api_view(["POST"])
 def unmatch(request):
-    user = request.user
+    encrypted_email = request.GET.get('email')
+    email = decrypt_email(encrypted_email)
+
+    try:
+        user = User.objects.get(pk=email)
+    except User.DoesNotExist:
+        error_message = {'error': f'User {encrypted_email} not found'}
+        return JsonResponse(error_message, status=status.HTTP_404_NOT_FOUND)
+
     request_dict = request.data
     if "bot_id" not in request_dict:
         return JsonResponse(

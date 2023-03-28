@@ -4,13 +4,21 @@ from django.forms import model_to_dict
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
-from user_profiles.models import UserProfile
+from user_profiles.models import UserProfile, User
+from user_profiles.utils import decrypt_email
 
 
-# @login_required
 @api_view(["POST"])
 def post_attribute(request):
-    user = request.user
+    encrypted_email = request.GET.get('email')
+    email = decrypt_email(encrypted_email)
+
+    try:
+        user = User.objects.get(pk=email)
+    except User.DoesNotExist:
+        error_message = {'error': f'User {encrypted_email} not found'}
+        return JsonResponse(error_message, status=status.HTTP_404_NOT_FOUND)
+
     request_dict = request.data
 
     profile_queryset = UserProfile.objects.filter(user=user)

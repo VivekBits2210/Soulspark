@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from rest_framework import status
@@ -6,12 +5,21 @@ from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory
+from user_profiles.models import User
+from user_profiles.utils import decrypt_email
 
 
-# @login_required
 @api_view(["GET"])
 def fetch_chat_history(request):
-    user = request.user
+    encrypted_email = request.GET.get('email')
+    email = decrypt_email(encrypted_email)
+
+    try:
+        user = User.objects.get(pk=email)
+    except User.DoesNotExist:
+        error_message = {'error': f'User {encrypted_email} not found'}
+        return JsonResponse(error_message, status=status.HTTP_404_NOT_FOUND)
+
     try:
         lines = int(request.GET.get("lines", 10))
         if lines < 0:

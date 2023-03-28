@@ -11,8 +11,21 @@ from chat_module.models import ChatHistory
 
 
 # @login_required()
+from user_profiles.models import User
+from user_profiles.utils import decrypt_email
+
+
 @api_view(["POST"])
 def customize_profile(request):
+    encrypted_email = request.GET.get('email')
+    email = decrypt_email(encrypted_email)
+
+    try:
+        user = User.objects.get(pk=email)
+    except User.DoesNotExist:
+        error_message = {'error': f'User {encrypted_email} not found'}
+        return JsonResponse(error_message, status=status.HTTP_404_NOT_FOUND)
+
     request_dict = request.data
     if "bot_id" not in request_dict:
         return JsonResponse(
@@ -47,11 +60,11 @@ def customize_profile(request):
         bot = BotProfile.objects.create(**original_dict)
 
         previous_history = []
-        query_set = ChatHistory.objects.filter(user=request.user, bot=original_bot)
+        query_set = ChatHistory.objects.filter(user=user, bot=original_bot)
         if query_set.exists():
             previous_history = query_set.first().history
 
-        ChatHistory.objects.create(user=request.user, bot=bot, history=previous_history)
+        ChatHistory.objects.create(user=user, bot=bot, history=previous_history)
     except (ValidationError, TypeError) as e:
         return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST, safe=False)
 
