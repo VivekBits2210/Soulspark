@@ -28,16 +28,6 @@ Domain name: "localhost:8000"
 Display name: "localhost"
 ```
 
-In the "Social Application" table, add the entry below:
-```
-Provider: Google (drop-down)
-Name: SSO
-Client ID: 485503899387-03u1pvv94g1k01tf9rhv7nno51tbfmls.apps.googleusercontent.com
-Client Secret: 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
-Key: (blank)
-Selected hosts: localhost:8000 (select this)
-```
-
 After logging out of /admin,
 ```
 -> REST: /accounts/login
