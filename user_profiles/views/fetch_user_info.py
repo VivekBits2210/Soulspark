@@ -1,23 +1,25 @@
-from allauth.account.models import EmailAddress
-from allauth.socialaccount.models import SocialAccount
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.forms.models import model_to_dict
 
-from user_profiles.models import UserProfile
+from user_profiles.models import UserProfile, User
+from user_profiles.utils import decrypt_email
 
 
-# @login_required
 @api_view(["GET"])
 def fetch_user_info(request):
-    user = request.user
-    email = EmailAddress.objects.filter(user=user).first()
-    social_account = SocialAccount.objects.filter(user=user).first()
-    profile_queryset = UserProfile.objects.filter(user=user)
+    encrypted_email = request.GET.get('email')
+    email = decrypt_email(encrypted_email)
 
+    try:
+        user = User.objects.get(pk=email)
+    except User.DoesNotExist:
+        error_message = {'error': f'User {encrypted_email} not found'}
+        return JsonResponse(error_message, status=status.HTTP_404_NOT_FOUND)
+
+    profile_queryset = UserProfile.objects.filter(user=user)
     if not profile_queryset.exists():
         try:
             profile = UserProfile.objects.create(user=user)
@@ -27,6 +29,4 @@ def fetch_user_info(request):
         profile = profile_queryset.first()
 
     user_profile = model_to_dict(profile)
-    user_profile["uid"] = social_account.uid if social_account else None
-    user_profile["email"] = email.email if email else None
     return JsonResponse(user_profile, safe=False, status=status.HTTP_200_OK)
