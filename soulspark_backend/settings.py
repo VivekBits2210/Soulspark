@@ -126,6 +126,8 @@ CORS_ORIGIN_WHITELIST = [
     '*'
 ]
 
+CSRF_TRUSTED_ORIGINS = ['https://api-soulspark.com']
+
 ROOT_URLCONF = "soulspark_backend.urls"
 
 TEMPLATES = [
