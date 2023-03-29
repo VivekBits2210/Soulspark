@@ -112,7 +112,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -122,9 +122,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    '*'
-]
+CORS_ORIGIN_WHITELIST = ["*"]
+
+CSRF_TRUSTED_ORIGINS = ['https://api-soulspark.com']
 
 CSRF_TRUSTED_ORIGINS = ['https://api-soulspark.com']
 

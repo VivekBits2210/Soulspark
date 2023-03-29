@@ -21,8 +21,9 @@ def get_gender_list(gender_focus):
 
 @api_view(["GET"])
 def fetch_profile(request):
-    #TODO: Undo these changes
+    # TODO: Undo these changes
     from django.contrib.auth import get_user_model
+
     user = get_user_model().objects.first()
     n = request.GET.get("n")
     bot_id = request.GET.get("bot_id")

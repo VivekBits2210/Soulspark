@@ -48,21 +48,21 @@
 
   chatSocket.onmessage = function (e) {
     var data = JSON.parse(e.data);
-    var message = data["text"];
+    var message = data;
     messages.push(message);
 
     var str = '<ul class="space-y-2">';
     messages.forEach(function (msg) {
       str += `<li class="flex ${
-        msg.source == "bot" ? "justify-start" : "justify-end"
+        msg.who == "bot" ? "justify-start" : "justify-end"
       }">
       <div class="relative max-w-xl px-4 py-2 rounded-lg shadow-md
         ${
-          msg.source == "bot"
+          msg.who == "bot"
             ? "text-gray-700 bg-white border border-gray-200"
             : "bg-blue-600 text-white"
         }">
-        <span className="block font-normal">${msg.msg}</span></div></li>`;
+        <span className="block font-normal">${msg.message}</span></div></li>`;
     });
     str += "</ul>";
     document.querySelector("#chat-log").innerHTML = str;
