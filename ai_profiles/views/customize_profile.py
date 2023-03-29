@@ -1,18 +1,21 @@
-from copy import deepcopy
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
-
 from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory
+from user_profiles.utils import fetch_user_or_error
 
 
-# @login_required()
 @api_view(["POST"])
 def customize_profile(request):
+    user_or_error = fetch_user_or_error(request)
+    if isinstance(user_or_error, JsonResponse):
+        error_response = user_or_error
+        return error_response
+    user = user_or_error
+
     request_dict = request.data
     if "bot_id" not in request_dict:
         return JsonResponse(
@@ -47,11 +50,11 @@ def customize_profile(request):
         bot = BotProfile.objects.create(**original_dict)
 
         previous_history = []
-        query_set = ChatHistory.objects.filter(user=request.user, bot=original_bot)
+        query_set = ChatHistory.objects.filter(user=user, bot=original_bot)
         if query_set.exists():
             previous_history = query_set.first().history
 
-        ChatHistory.objects.create(user=request.user, bot=bot, history=previous_history)
+        ChatHistory.objects.create(user=user, bot=bot, history=previous_history)
     except (ValidationError, TypeError) as e:
         return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST, safe=False)
 

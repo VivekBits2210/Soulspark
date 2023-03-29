@@ -1,16 +1,20 @@
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory, DeletedChatHistory
+from user_profiles.utils import fetch_user_or_error
 
 
-# @login_required
 @api_view(["POST"])
 def unmatch(request):
-    user = request.user
+    user_or_error = fetch_user_or_error(request)
+    if isinstance(user_or_error, JsonResponse):
+        error_response = user_or_error
+        return error_response
+    user = user_or_error
+
     request_dict = request.data
     if "bot_id" not in request_dict:
         return JsonResponse(

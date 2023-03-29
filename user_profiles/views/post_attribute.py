@@ -5,12 +5,17 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from user_profiles.models import UserProfile
+from user_profiles.utils import fetch_user_or_error
 
 
-# @login_required
 @api_view(["POST"])
 def post_attribute(request):
-    user = request.user
+    user_or_error = fetch_user_or_error(request)
+    if isinstance(user_or_error, JsonResponse):
+        error_response = user_or_error
+        return error_response
+    user = user_or_error
+
     request_dict = request.data
 
     profile_queryset = UserProfile.objects.filter(user=user)

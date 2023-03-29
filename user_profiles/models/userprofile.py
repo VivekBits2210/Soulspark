@@ -1,6 +1,6 @@
 from django.db import models
-from allauth import app_settings
 
+from user_profiles.models.user import User
 from user_profiles.models.validators import (
     gender_validation,
     gender_focus_validation,
@@ -63,21 +63,21 @@ class UserProfile(models.Model):
     """
 
     user = models.OneToOneField(
-        app_settings.USER_MODEL, on_delete=models.CASCADE, primary_key=True
+        User, on_delete=models.CASCADE, primary_key=True, default=None
     )
     name = models.TextField(blank=True, default="")
     age = models.PositiveIntegerField(
         null=True, blank=True, validators=[age_validation]
     )
     gender = models.CharField(
-        max_length=10,
+        max_length=1,
         choices=[("M", "Male"), ("F", "Female")],
         null=True,
         blank=True,
         validators=[gender_validation],
     )
     gender_focus = models.CharField(
-        max_length=10,
+        max_length=1,
         choices=[("M", "Male"), ("F", "Female"), ("E", "Everyone")],
         default="E",
         validators=[gender_focus_validation],
@@ -95,8 +95,6 @@ class UserProfile(models.Model):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     summary = models.TextField(blank=True, default="")
-
-    REQUIRED_FIELDS = ["username"]
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -122,9 +120,6 @@ class UserProfile(models.Model):
             f". {pronoun} enjoys {self.interests}." if self.interests != "" else "."
         )
         return summary
-
-    def get_name(self):
-        return f"{self.user.first_name} {self.user.last_name}"
 
     def get_gender_string(self):
         if self.gender == "M":
