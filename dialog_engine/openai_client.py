@@ -4,11 +4,7 @@ import openai
 from django.core.exceptions import ValidationError
 
 try:
-<<<<<<< HEAD
     from .secrets import API_KEY_LIST
-=======
-    from secrets import API_KEY_LIST
->>>>>>> main
 except ModuleNotFoundError:
     API_KEY_LIST = ["fake-key-1", "fake-key-2"]
 logger = logging.getLogger("my_logger")
