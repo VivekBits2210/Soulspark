@@ -24,17 +24,14 @@ def fetch_profile(request):
     # TODO: Undo these changes
     from django.contrib.auth import get_user_model
 
-    user = get_user_model().objects.first()
     n = request.GET.get("n")
     bot_id = request.GET.get("bot_id")
     no_image = request.GET.get("no_image")
     image_only = request.GET.get("image_only")
+    gender_focus = request.GET.get("gender_focus")
 
-    profile_queryset = UserProfile.objects.filter(user=user)
-    if not profile_queryset.exists():
-        profile = UserProfile.objects.create(user=user)
-    else:
-        profile = profile_queryset.first()
+    if not gender_focus:
+        gender_focus = 'E'
 
     if n:
         try:
@@ -45,7 +42,7 @@ def fetch_profile(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        gender_list = get_gender_list(profile.gender_focus)
+        gender_list = get_gender_list(gender_focus)
         query_set = BotProfile.objects.filter(
             searchable=True, gender__in=gender_list
         ).order_by("?")[:n]

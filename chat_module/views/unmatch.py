@@ -1,27 +1,19 @@
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory, DeletedChatHistory
-
-
-# @login_required
-from user_profiles.models import User
-from user_profiles.utils import decrypt_email
+from user_profiles.utils import fetch_user_or_error
 
 
 @api_view(["POST"])
 def unmatch(request):
-    encrypted_email = request.GET.get('email')
-    email = decrypt_email(encrypted_email)
-
-    try:
-        user = User.objects.get(pk=email)
-    except User.DoesNotExist:
-        error_message = {'error': f'User {encrypted_email} not found'}
-        return JsonResponse(error_message, status=status.HTTP_404_NOT_FOUND)
+    user_or_error = fetch_user_or_error(request)
+    if isinstance(user_or_error, JsonResponse):
+        error_response = user_or_error
+        return error_response
+    user = user_or_error
 
     request_dict = request.data
     if "bot_id" not in request_dict:
