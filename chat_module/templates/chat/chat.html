@@ -86,7 +86,7 @@
     chatSocket.send(
       JSON.stringify({
         text: message,
-        username: "{{ request.user.username }}",
+        email: "{{ request.GET.email }}",
         bot_id: "{{ request.GET.bot_id }}"
       })
     );

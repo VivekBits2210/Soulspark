@@ -96,8 +96,6 @@ class UserProfile(models.Model):
     is_staff = models.BooleanField(default=False)
     summary = models.TextField(blank=True, default="")
 
-    REQUIRED_FIELDS = ["username"]
-
     def save(self, *args, **kwargs):
         self.full_clean()
         self.name = self.user.first_name
@@ -122,9 +120,6 @@ class UserProfile(models.Model):
             f". {pronoun} enjoys {self.interests}." if self.interests != "" else "."
         )
         return summary
-
-    def get_name(self):
-        return f"{self.user.first_name} {self.user.last_name}"
 
     def get_gender_string(self):
         if self.gender == "M":
