@@ -8,7 +8,8 @@ from user_profiles.models import User
 
 
 def decrypt_email(ciphertext, key=SALT):
-    ciphertext = ciphertext.encode('utf-8')
+    key = key.encode('utf-8') if isinstance(key, str) else key
+    ciphertext = bytes.fromhex(ciphertext)
     iv = ciphertext[:AES.block_size]
     ciphertext = ciphertext[AES.block_size:]
     cipher = AES.new(key, AES.MODE_CBC, iv)
@@ -16,15 +17,19 @@ def decrypt_email(ciphertext, key=SALT):
     plaintext = unpad(padded_plaintext, AES.block_size).decode('utf-8')
     return plaintext
 
+
 def fetch_user_or_error(request):
     encrypted_email = request.GET.get('email')
     if not encrypted_email:
-        return JsonResponse({'error': 'email parameter missing'}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'error': 'email parameter missing'}, safe=False, status=status.HTTP_400_BAD_REQUEST)
 
-    email = decrypt_email(encrypted_email)
+    try:
+        email = decrypt_email(encrypted_email)
+    except ValueError as e:
+        return JsonResponse({'error': repr(e)}, safe=False, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         return User.objects.get(pk=email)
     except User.DoesNotExist:
-        error_message = {'error': f'User {encrypted_email} not found'}
-        return JsonResponse(error_message, status=status.HTTP_404_NOT_FOUND)
+        error_message = {'error': f'User with email {email} not found'} #TODO: Do not return email
+        return JsonResponse(error_message, safe=False, status=status.HTTP_400_BAD_REQUEST)

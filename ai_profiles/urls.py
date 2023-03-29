@@ -2,7 +2,6 @@ from django.urls import path
 from ai_profiles.views import (
     customize_profile,
     create_profile_admin,
-    fetch_profile_admin,
     fetch_profile,
     index,
 )
