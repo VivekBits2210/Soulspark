@@ -1,6 +1,6 @@
 from Crypto.Cipher import AES
 from base64 import b64decode
-from secrets import SALT
+from mysecrets import SALT
 import hashlib
 
 
