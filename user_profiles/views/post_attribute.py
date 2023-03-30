@@ -20,7 +20,7 @@ def post_attribute(request):
         try:
             profile = UserProfile.objects.create(user=user)
         except ValidationError as e:
-            return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)
     else:
         profile = profile_queryset.first()
 
@@ -44,6 +44,6 @@ def post_attribute(request):
             setattr(profile, key, request_dict[key])
         profile.save()
     except ValidationError as e:
-        return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     return JsonResponse(model_to_dict(profile), status=status.HTTP_200_OK)
