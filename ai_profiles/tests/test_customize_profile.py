@@ -7,6 +7,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory
+from user_profiles.models import User
+from user_profiles.utils import encrypt_email
 
 
 class BotProfileCustomizeProfileTest(APITestCase):
@@ -32,6 +34,7 @@ class BotProfileCustomizeProfileTest(APITestCase):
             ),
         }
         self.bot_profile = BotProfile.objects.create(**self.first_valid_bot_info)
+        self.user = User.objects.create(first_name="John", last_name="Doe", email="email@email.com")
 
         self.modified_data = {
             "bot_id": self.bot_profile.bot_id,
@@ -40,6 +43,7 @@ class BotProfileCustomizeProfileTest(APITestCase):
             "age": 25,
             "profession": "Designer",
             "favorites": {"color": "black"},
+            "email": encrypt_email(self.user.email).hex(),
         }
 
         self.response = self.client.post(
