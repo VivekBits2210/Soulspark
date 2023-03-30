@@ -19,17 +19,20 @@ def decrypt_email(ciphertext, key=SALT):
 
 
 def fetch_user_or_error(request):
-    encrypted_email = request.GET.get('email')
+    try:
+        encrypted_email = request.GET.get('email') if request.method == 'GET' else request.data['email']
+    except KeyError:
+        return JsonResponse({'error': 'email parameter missing'}, status=status.HTTP_400_BAD_REQUEST)
     if not encrypted_email:
-        return JsonResponse({'error': 'email parameter missing'}, safe=False, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'error': 'email parameter missing'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         email = decrypt_email(encrypted_email)
     except ValueError as e:
-        return JsonResponse({'error': repr(e)}, safe=False, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'error': repr(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         return User.objects.get(pk=email)
     except User.DoesNotExist:
-        error_message = {'error': f'User with email {email} not found'} #TODO: Do not return email
-        return JsonResponse(error_message, safe=False, status=status.HTTP_400_BAD_REQUEST)
+        error_message = {'error': f'User with email {email} not found'}  # TODO: Do not return email
+        return JsonResponse(error_message, status=status.HTTP_400_BAD_REQUEST)

@@ -15,8 +15,6 @@ def post_attribute(request):
         return error_response
     user = user_or_error
 
-    request_dict = request.data
-
     profile_queryset = UserProfile.objects.filter(user=user)
     if not profile_queryset.exists():
         try:
@@ -28,6 +26,8 @@ def post_attribute(request):
 
     profile_fields = set([f.name for f in UserProfile._meta.get_fields() if f.concrete])
 
+    request_dict = request.data
+    del request_dict['email']
     incorrect_attributes = [
         key for key in request_dict.keys() if key not in profile_fields
     ]

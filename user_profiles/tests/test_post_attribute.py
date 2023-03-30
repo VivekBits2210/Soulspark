@@ -3,19 +3,23 @@ from django.urls import reverse
 from user_profiles.models import UserProfile, User
 import json
 
+from user_profiles.tests.helpers import encrypt_email
+
 
 class PostAttributeTestCase(TestCase):
     def setUp(self):
         self.client = Client()
+        self.email = "email@email.com"
         self.user = User.objects.create(
-            email="email@email.com", first_name="Joe", last_name="Mama"
+            email=self.email, first_name="Joe", last_name="Mama"
         )
         self.profile = UserProfile.objects.create(
             user=self.user, age=25, gender="M", experience=100
         )
+        self.encrypted_email_hex = encrypt_email(self.user.email).hex()
 
     def test_post_age_attribute(self):
-        data = {"age": 30}
+        data = {"age": 30, "email": self.encrypted_email_hex}
         response = self.client.post(
             reverse("post_attribute"),
             data=json.dumps(data),
@@ -26,7 +30,7 @@ class PostAttributeTestCase(TestCase):
         self.assertEqual(self.profile.age, 30)
 
     def test_post_gender_attribute(self):
-        data = {"gender": "F"}
+        data = {"gender": "F",  "email": self.encrypted_email_hex}
         response = self.client.post(
             reverse("post_attribute"),
             data=json.dumps(data),
@@ -37,7 +41,7 @@ class PostAttributeTestCase(TestCase):
         self.assertEqual(self.profile.gender, "F")
 
     def test_post_exp_attribute(self):
-        data = {"experience": 2500}
+        data = {"experience": 2500, "email": self.encrypted_email_hex}
         response = self.client.post(
             reverse("post_attribute"),
             data=json.dumps(data),
@@ -48,7 +52,7 @@ class PostAttributeTestCase(TestCase):
         self.assertEqual(self.profile.experience, 2500)
 
     def test_post_incorrect_attribute_key(self):
-        data = {"invalid_key": "value"}
+        data = {"invalid_key": "value", "email": self.encrypted_email_hex}
         response = self.client.post(
             reverse("post_attribute"),
             data=json.dumps(data),
@@ -63,7 +67,7 @@ class PostAttributeTestCase(TestCase):
         )
 
     def test_post_multiple_valid_attributes(self):
-        data = {"experience": 2500, "gender": "F"}
+        data = {"experience": 2500, "gender": "F", "email": self.encrypted_email_hex}
         response = self.client.post(
             reverse("post_attribute"),
             data=json.dumps(data),
@@ -75,7 +79,7 @@ class PostAttributeTestCase(TestCase):
         self.assertEqual(self.profile.experience, 2500)
 
     def test_post_multiple_attributes_some_invalid(self):
-        data = {"experience": 2500, "gender": "F", "invalid_key": "invalid_value"}
+        data = {"experience": 2500, "gender": "F", "invalid_key": "invalid_value", "email": self.encrypted_email_hex}
         response = self.client.post(
             reverse("post_attribute"),
             data=json.dumps(data),
