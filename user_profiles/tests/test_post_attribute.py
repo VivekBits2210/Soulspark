@@ -1,9 +1,8 @@
+import json
 from django.test import TestCase, Client
 from django.urls import reverse
 from user_profiles.models import UserProfile, User
-import json
-
-from user_profiles.tests.helpers import encrypt_email
+from user_profiles.utils import encrypt_email
 
 
 class PostAttributeTestCase(TestCase):

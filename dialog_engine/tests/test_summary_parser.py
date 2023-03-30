@@ -6,9 +6,7 @@ from dialog_engine.tasks import parse_summary
 
 class TestParseSummary(APITestCase):
     def setUp(self):
-        self.user, self.user_profile = create_user_and_profile(
-            username="unique_username"
-        )
+        self.user, self.encrypted_email, self.user_profile = create_user_and_profile()
         self.bot = create_bot()
         self.raw_summary = (
             "Vivek summary:\n"

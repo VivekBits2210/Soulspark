@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 import json
 
-from user_profiles.tests.helpers import encrypt_email
+from user_profiles.utils import encrypt_email
 from user_profiles.models import User
 
 

@@ -7,7 +7,7 @@ from dialog_engine.components import Components
 
 class ComponentTestcase(TestCase):
     def setUp(self):
-        self.user, self.user_profile = create_user_and_profile()
+        self.user, self.encrypted_email, self.user_profile = create_user_and_profile()
         self.bot = create_bot()
         self.chat_history = []
 
