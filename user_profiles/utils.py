@@ -7,6 +7,15 @@ from rest_framework import status
 from mysecrets import SALT
 from user_profiles.models import User
 
+def encrypt_email(email, key=SALT):
+    key = key.encode('utf-8')
+    iv = get_random_bytes(AES.block_size)
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    padded_email = pad(email.encode('utf-8'), AES.block_size)
+    ciphertext = cipher.encrypt(padded_email)
+    encrypted_email = iv + ciphertext
+    return encrypted_email
+
 
 def decrypt_email(ciphertext, key=SALT):
     key = key.encode('utf-8') if isinstance(key, str) else key
@@ -39,11 +48,3 @@ def fetch_user_or_error(request):
         return JsonResponse(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
-def encrypt_email(email, key=SALT):
-    key = key.encode('utf-8')
-    iv = get_random_bytes(AES.block_size)
-    cipher = AES.new(key, AES.MODE_CBC, iv)
-    padded_email = pad(email.encode('utf-8'), AES.block_size)
-    ciphertext = cipher.encrypt(padded_email)
-    encrypted_email = iv + ciphertext
-    return encrypted_email
