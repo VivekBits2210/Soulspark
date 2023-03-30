@@ -3,7 +3,9 @@ from django.core.validators import validate_email
 
 
 class User(models.Model):
-    email = models.EmailField(primary_key=True, unique=True, validators=[validate_email])
+    email = models.EmailField(
+        primary_key=True, unique=True, validators=[validate_email]
+    )
     first_name = models.TextField(default="")
     last_name = models.TextField(default="")
 

@@ -50,7 +50,7 @@ def unmatch(request):
                 history=chat_history_obj.history,
             )
         except ValidationError as e:
-            return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     # delete all chat history objects for the user and bot
     chat_history_queryset.delete()

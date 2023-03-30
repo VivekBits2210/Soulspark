@@ -54,7 +54,9 @@ def fetch_chat_history(request):
             try:
                 ChatHistory.objects.create(user=user, bot=bot, history=history)
             except ValidationError as e:
-                return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse(
+                    {"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST
+                )
     else:
         history_object = chat_history_queryset.first()
         bot_id = history_object.bot_id

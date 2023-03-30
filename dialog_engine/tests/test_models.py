@@ -5,7 +5,7 @@ from dialog_engine.models import GPTUsageRecord
 
 class GPTUsageRecordModelTestCase(TestCase):
     def setUp(self):
-        self.user, self.user_profile = create_user_and_profile()
+        self.user, self.encrypted_email, self.user_profile = create_user_and_profile()
         self.bot = create_bot()
         self.gpt_usage_record_data = {
             "user": self.user,
@@ -44,7 +44,7 @@ class GPTUsageRecordModelTestCase(TestCase):
     def test_str_representation(self):
         gpt_usage_record = GPTUsageRecord.objects.create(**self.gpt_usage_record_data)
         expected_str = (
-            f"GPTUsageRecord({self.user.username}, {self.bot.name}, indicator_tokens={10}, "
+            f"GPTUsageRecord({self.user.email}, {self.bot.name}, indicator_tokens={10}, "
             f"story_tokens={20}, summarizer_tokens={0}, "
             f"indicator_vector=0.1,0.2,0.3, indicator_version={1.0}, "
             f"chat_history_length={50})"

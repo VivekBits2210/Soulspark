@@ -1,15 +1,17 @@
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
 from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory
+from user_profiles.models import User
 
 
 class ChatHistoryTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="tester", password="password")
+        self.user = User.objects.create(
+            email="email@email.com", first_name="Michael", last_name="Jackson"
+        )
         self.bot = BotProfile.objects.create(
             name="John",
             gender="M",

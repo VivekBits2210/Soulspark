@@ -21,7 +21,7 @@ def fetch_user_info(request):
         try:
             profile = UserProfile.objects.create(user=user)
         except ValidationError as e:
-            return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)
     else:
         profile = profile_queryset.first()
 

@@ -1,13 +1,10 @@
 import base64
-
-from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 from django.http import JsonResponse, HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
-from user_profiles.models import UserProfile
 
 
 def get_gender_list(gender_focus):
@@ -31,7 +28,7 @@ def fetch_profile(request):
     gender_focus = request.GET.get("gender_focus")
 
     if not gender_focus:
-        gender_focus = 'E'
+        gender_focus = "E"
 
     if n:
         try:

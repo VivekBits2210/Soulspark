@@ -10,10 +10,9 @@ class UnmatchTestCase(APITestCase):
     def setUp(self):
         self.url = reverse("unmatch")
         self.bot = create_bot()
-        self.user, self.user_profile = create_user_and_profile()
+        self.user, self.encrypted_email, self.user_profile = create_user_and_profile()
 
         self.client = Client()
-        self.client.force_login(user=self.user)
 
         self.valid_history = [
             {"message": "hi", "from": "user"},
@@ -21,7 +20,9 @@ class UnmatchTestCase(APITestCase):
         ]
 
     def test_unmatch_works_without_history(self):
-        response = self.client.post(self.url, data={"bot_id": self.bot.bot_id})
+        response = self.client.post(
+            self.url, data={"bot_id": self.bot.bot_id, "email": self.encrypted_email}
+        )
         self.assertEqual(response.status_code, 200)
 
         query_set = ChatHistory.objects.filter(user=self.user, bot=self.bot)
@@ -31,7 +32,9 @@ class UnmatchTestCase(APITestCase):
         ChatHistory.objects.create(
             user=self.user, bot=self.bot, history=self.valid_history
         )
-        response = self.client.post(self.url, data={"bot_id": self.bot.bot_id})
+        response = self.client.post(
+            self.url, data={"bot_id": self.bot.bot_id, "email": self.encrypted_email}
+        )
         self.assertEqual(response.status_code, 200)
 
         deleted_query_set = DeletedChatHistory.objects.filter(
@@ -50,8 +53,11 @@ class UnmatchTestCase(APITestCase):
         ChatHistory.objects.create(
             user=self.user, bot=self.bot, history=self.valid_history
         )
-        response = self.client.post(self.url, data={"bot_id": self.bot.bot_id})
+        response = self.client.post(
+            self.url, data={"bot_id": self.bot.bot_id, "email": self.encrypted_email}
+        )
         self.assertEqual(response.status_code, 200)
+
         self.assertFalse(
             ChatHistory.objects.filter(user=self.user, bot=self.bot).exists()
         )
@@ -62,7 +68,9 @@ class UnmatchTestCase(APITestCase):
         ChatHistory.objects.create(
             user=self.user, bot=self.bot, history=self.valid_history
         )
-        response = self.client.post(self.url, data={"bot_id": self.bot.bot_id})
+        response = self.client.post(
+            self.url, data={"bot_id": self.bot.bot_id, "email": self.encrypted_email}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertFalse(
             ChatHistory.objects.filter(user=self.user, bot=self.bot).exists()
@@ -76,9 +84,13 @@ class UnmatchTestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_unmatch_non_integer_bot_id(self):
-        response = self.client.post(self.url, data={"bot_id": "testbot"})
+        response = self.client.post(
+            self.url, data={"bot_id": "testbot", "email": self.encrypted_email}
+        )
         self.assertEqual(response.status_code, 400)
 
     def test_unmatch_non_existent_bot_id(self):
-        response = self.client.post(self.url, data={"bot_id": 999})
+        response = self.client.post(
+            self.url, data={"bot_id": 999, "email": self.encrypted_email}
+        )
         self.assertEqual(response.status_code, 404)

@@ -1,24 +1,23 @@
-import os
-
-from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from ai_profiles.models import BotProfile
-from user_profiles.models import UserProfile
+from user_profiles.models import User, UserProfile
+from user_profiles.utils import encrypt_email
 
 
 def create_user_and_profile(
-    username="tester",
-    password="testpassword",
-    first_name="Name",
+    email="email@email.com",
+    first_name="Agent",
+    last_name="Smith",
     age=25,
     gender="M",
     gender_focus="F",
     interests="java and python",
 ):
-    user = get_user_model().objects.create_user(
-        username=username, first_name=first_name, password=password
-    )
+    user = User.objects.create(email=email, first_name=first_name, last_name=last_name)
+
+    encrypted_email = encrypt_email(email).hex()
+
     profile = UserProfile.objects.create(
         user=user,
         age=age,
@@ -26,7 +25,7 @@ def create_user_and_profile(
         gender_focus=gender_focus,
         interests=interests,
     )
-    return user, profile
+    return user, encrypted_email, profile
 
 
 def create_bot(name="John"):
