@@ -1,22 +1,20 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.contrib.auth import get_user_model
-from user_profiles.models import UserProfile
+from user_profiles.models import UserProfile, User
 import json
 
 
 class PostAttributeTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = get_user_model().objects.create_user(
-            username="testuser", password="password123"
+        self.user = User.objects.create(
+            email="email@email.com", first_name="Joe", last_name="Mama"
         )
         self.profile = UserProfile.objects.create(
             user=self.user, age=25, gender="M", experience=100
         )
 
     def test_post_age_attribute(self):
-        self.client.force_login(self.user)
         data = {"age": 30}
         response = self.client.post(
             reverse("post_attribute"),
@@ -28,7 +26,6 @@ class PostAttributeTestCase(TestCase):
         self.assertEqual(self.profile.age, 30)
 
     def test_post_gender_attribute(self):
-        self.client.force_login(self.user)
         data = {"gender": "F"}
         response = self.client.post(
             reverse("post_attribute"),
@@ -40,7 +37,6 @@ class PostAttributeTestCase(TestCase):
         self.assertEqual(self.profile.gender, "F")
 
     def test_post_exp_attribute(self):
-        self.client.force_login(self.user)
         data = {"experience": 2500}
         response = self.client.post(
             reverse("post_attribute"),
@@ -52,7 +48,6 @@ class PostAttributeTestCase(TestCase):
         self.assertEqual(self.profile.experience, 2500)
 
     def test_post_incorrect_attribute_key(self):
-        self.client.force_login(self.user)
         data = {"invalid_key": "value"}
         response = self.client.post(
             reverse("post_attribute"),
@@ -68,7 +63,6 @@ class PostAttributeTestCase(TestCase):
         )
 
     def test_post_multiple_valid_attributes(self):
-        self.client.force_login(self.user)
         data = {"experience": 2500, "gender": "F"}
         response = self.client.post(
             reverse("post_attribute"),
@@ -81,7 +75,6 @@ class PostAttributeTestCase(TestCase):
         self.assertEqual(self.profile.experience, 2500)
 
     def test_post_multiple_attributes_some_invalid(self):
-        self.client.force_login(self.user)
         data = {"experience": 2500, "gender": "F", "invalid_key": "invalid_value"}
         response = self.client.post(
             reverse("post_attribute"),

@@ -1,6 +1,5 @@
 import json
 import os
-from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from django.urls import reverse
@@ -13,9 +12,7 @@ from chat_module.models import ChatHistory
 class BotProfileCustomizeProfileTest(APITestCase):
     def setUp(self):
         self.url = reverse("customize_profile")
-        self.user = User.objects.create_user(username="tester", password="password")
         self.client = Client()
-        self.client.force_login(user=self.user)
 
         image_path = os.path.join("static", "trial.jpg")
         with open(image_path, "rb") as f:

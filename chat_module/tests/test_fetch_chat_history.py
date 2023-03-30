@@ -14,7 +14,6 @@ class FetchChatHistoryTestCase(APITestCase):
         self.user, self.user_profile = create_user_and_profile()
 
         self.client = Client()
-        self.client.force_login(user=self.user)
 
         self.valid_history = [
             {"message": "hi", "from": "user"},

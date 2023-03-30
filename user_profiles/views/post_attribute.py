@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.forms import model_to_dict
 from django.http import JsonResponse

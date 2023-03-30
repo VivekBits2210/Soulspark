@@ -1,16 +1,14 @@
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from user_profiles.models import UserProfile
+from user_profiles.models import User, UserProfile
 
 
 class UserProfileTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="tester",
+        self.user = User.objects.create(
+            email="email@email.com",
             first_name="King",
             last_name="Jaineel",
-            password="password",
         )
 
         self.maximal_data = {

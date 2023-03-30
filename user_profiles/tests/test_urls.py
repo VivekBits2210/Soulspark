@@ -1,6 +1,7 @@
-from django.contrib.auth.models import User
+
 from django.test import TestCase
 from django.urls import reverse
+from user_profiles.models import User
 
 
 class MainUrlsTestCase(TestCase):
@@ -13,7 +14,6 @@ class MainUrlsTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_post_attribute_api_call_cannot_be_get(self):
-        user = User.objects.create_user(username="tester", password="password")
-        self.client.force_login(user=user)
+        user = User.objects.create(email="email@email.com", first_name="Ezio", last_name="Auditore")
         response = self.client.get(reverse("post_attribute"))
         self.assertEqual(response.status_code, 405)

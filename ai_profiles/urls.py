@@ -1,18 +1,12 @@
 from django.urls import path
 from ai_profiles.views import (
     customize_profile,
-    create_profile_admin,
     fetch_profile,
     index,
 )
 
 urlpatterns = [
     path("", index.index, name="ai_profiles_index"),
-    path(
-        "create-profile-admin",
-        create_profile_admin.create_profile_admin,
-        name="create_profile_admin",
-    ),
     path(
         "customize-profile",
         customize_profile.customize_profile,
