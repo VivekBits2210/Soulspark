@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
 
+
 def get_gender_list(gender_focus):
     if gender_focus == "M":
         return ["M"]
@@ -27,7 +28,7 @@ def fetch_profile(request):
     gender_focus = request.GET.get("gender_focus")
 
     if not gender_focus:
-        gender_focus = 'E'
+        gender_focus = "E"
 
     if n:
         try:

@@ -29,7 +29,7 @@ class PostAttributeTestCase(TestCase):
         self.assertEqual(self.profile.age, 30)
 
     def test_post_gender_attribute(self):
-        data = {"gender": "F",  "email": self.encrypted_email_hex}
+        data = {"gender": "F", "email": self.encrypted_email_hex}
         response = self.client.post(
             reverse("post_attribute"),
             data=json.dumps(data),
@@ -78,7 +78,12 @@ class PostAttributeTestCase(TestCase):
         self.assertEqual(self.profile.experience, 2500)
 
     def test_post_multiple_attributes_some_invalid(self):
-        data = {"experience": 2500, "gender": "F", "invalid_key": "invalid_value", "email": self.encrypted_email_hex}
+        data = {
+            "experience": 2500,
+            "gender": "F",
+            "invalid_key": "invalid_value",
+            "email": self.encrypted_email_hex,
+        }
         response = self.client.post(
             reverse("post_attribute"),
             data=json.dumps(data),

@@ -36,7 +36,9 @@ class BotProfileFetchViewTest(APITestCase):
             ),
         }
 
-        self.user = User.objects.create(first_name="Billy", last_name="Joel", email="email@email.com")
+        self.user = User.objects.create(
+            first_name="Billy", last_name="Joel", email="email@email.com"
+        )
         self.encrypted_email = encrypt_email(self.user.email).hex()
         self.bot_profile = BotProfile.objects.create(**self.first_valid_bot_info)
 
@@ -151,7 +153,12 @@ class BotProfileFetchViewTest(APITestCase):
 
     def test_fetch_profile_with_bit_id_without_image(self):
         response = self.client.get(
-            self.url, {"bot_id": self.bot_profile.bot_id, "no_image": True, "email": self.encrypted_email}
+            self.url,
+            {
+                "bot_id": self.bot_profile.bot_id,
+                "no_image": True,
+                "email": self.encrypted_email,
+            },
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response_json = response.json()
@@ -162,18 +169,30 @@ class BotProfileFetchViewTest(APITestCase):
 
     def test_fetch_profile_image_only_view(self):
         response = self.client.get(
-            self.url, {"bot_id": self.bot_profile.bot_id, "image_only": True, "email": self.encrypted_email})
+            self.url,
+            {
+                "bot_id": self.bot_profile.bot_id,
+                "image_only": True,
+                "email": self.encrypted_email,
+            },
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("image/jpeg", response["Content-Type"])
 
     def test_fetch_profile_invalid_bot_id(self):
-        response = self.client.get(self.url, {"bot_id": -1, "email": self.encrypted_email})
+        response = self.client.get(
+            self.url, {"bot_id": -1, "email": self.encrypted_email}
+        )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_fetch_profile_non_integer_bot_id(self):
-        response = self.client.get(self.url, {"bot_id": "invalid", "email": self.encrypted_email})
+        response = self.client.get(
+            self.url, {"bot_id": "invalid", "email": self.encrypted_email}
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_fetch_profile_non_integer_n(self):
-        response = self.client.get(self.url, {"n": "invalid", "email": self.encrypted_email})
+        response = self.client.get(
+            self.url, {"n": "invalid", "email": self.encrypted_email}
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

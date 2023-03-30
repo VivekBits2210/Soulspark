@@ -14,9 +14,7 @@ def create_user_and_profile(
     gender_focus="F",
     interests="java and python",
 ):
-    user = User.objects.create(
-        email=email, first_name=first_name, last_name=last_name
-    )
+    user = User.objects.create(email=email, first_name=first_name, last_name=last_name)
 
     encrypted_email = encrypt_email(email).hex()
 

@@ -34,7 +34,9 @@ class BotProfileCustomizeProfileTest(APITestCase):
             ),
         }
         self.bot_profile = BotProfile.objects.create(**self.first_valid_bot_info)
-        self.user = User.objects.create(first_name="John", last_name="Doe", email="email@email.com")
+        self.user = User.objects.create(
+            first_name="John", last_name="Doe", email="email@email.com"
+        )
 
         self.modified_data = {
             "bot_id": self.bot_profile.bot_id,

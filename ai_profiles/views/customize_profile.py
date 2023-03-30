@@ -17,7 +17,7 @@ def customize_profile(request):
     user = user_or_error
 
     request_dict = request.data
-    del request_dict['email']
+    del request_dict["email"]
 
     if "bot_id" not in request_dict:
         return JsonResponse(

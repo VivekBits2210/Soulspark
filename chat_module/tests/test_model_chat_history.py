@@ -9,7 +9,9 @@ from user_profiles.models import User
 
 class ChatHistoryTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create(email="email@email.com", first_name="Michael", last_name="Jackson")
+        self.user = User.objects.create(
+            email="email@email.com", first_name="Michael", last_name="Jackson"
+        )
         self.bot = BotProfile.objects.create(
             name="John",
             gender="M",

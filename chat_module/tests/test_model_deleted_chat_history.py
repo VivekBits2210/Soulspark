@@ -7,7 +7,9 @@ from user_profiles.models import User
 
 class ChatHistoryTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create(email="email@email.com", first_name="Elon", last_name="Musk")
+        self.user = User.objects.create(
+            email="email@email.com", first_name="Elon", last_name="Musk"
+        )
         self.bot = create_bot()
         self.maximal_data = {
             "user": self.user,

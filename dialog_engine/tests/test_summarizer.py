@@ -13,7 +13,9 @@ logger = logging.getLogger("my_logger")
 
 class TestSummarizer(APITestCase):
     def setUp(self):
-        self.user, self.encrypted_email, self.user_profile = create_user_and_profile(first_name="Vivek")
+        self.user, self.encrypted_email, self.user_profile = create_user_and_profile(
+            first_name="Vivek"
+        )
         self.bot = create_bot(name="Carla")
         self.valid_messages = [
             {"who": "Vivek", "message": "What should we talk about"},
