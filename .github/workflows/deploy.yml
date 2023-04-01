@@ -28,6 +28,6 @@ jobs:
             python -m pip install -r requirements.txt 
             tmux kill-session -t celery
             tmux kill-session -t beat
-            tmux new-session -d -s celery 'celery -A soulspark_backend.celery_app worker --loglevel=info --autoreload'
+            tmux new-session -d -s celery 'celery -A soulspark_backend.celery_app worker --loglevel=info'
             tmux new-session -d -s beat 'celery -A soulspark_backend.celery_app beat'
           '
