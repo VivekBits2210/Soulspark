@@ -158,7 +158,6 @@ CELERY_BEAT_SCHEDULE = {
     'add-every-30-seconds': {
         'task': 'soulspark_backend.celery_app.debug_task',
         'schedule': 5.0,
-        'args': ('Test Text!!!!',),
         'options': {
             'expires': 2.5,
         },
