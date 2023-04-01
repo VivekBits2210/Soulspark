@@ -92,23 +92,23 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 INSTALLED_APPS = (
-    [
-        "daphne",
-        "django.contrib.admin",
-        "django.contrib.auth",
-        "django.contrib.contenttypes",
-        "django.contrib.sessions",
-        "django.contrib.messages",
-        "django.contrib.sites",
-        "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
-        "django.contrib.admindocs",
-        "drf_yasg",
-        "theme",
-        # third-party apps
-        "tailwind",
-    ]
-    + MY_APPS
-    + AUTH_APPS
+        [
+            "daphne",
+            "django.contrib.admin",
+            "django.contrib.auth",
+            "django.contrib.contenttypes",
+            "django.contrib.sessions",
+            "django.contrib.messages",
+            "django.contrib.sites",
+            "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
+            "django.contrib.admindocs",
+            "drf_yasg",
+            "theme",
+            # third-party apps
+            "tailwind",
+        ]
+        + MY_APPS
+        + AUTH_APPS
 )
 
 MIDDLEWARE = [
@@ -150,10 +150,9 @@ WSGI_APPLICATION = "soulspark_backend.wsgi.application"
 
 ASGI_APPLICATION = "soulspark_backend.asgi.application"
 
-# TODO: Setup celery and fill these
-CELERY_BROKER_URL = ""
-CELERY_RESULT_BACKEND = ""
-
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
+CELERY_TIMEZONE = "America/New_York"
 
 ## For redis
 # CHANNEL_LAYERS = {
@@ -217,5 +216,5 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
 TAILWIND_APP_NAME = "theme"
+

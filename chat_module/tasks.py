@@ -1,15 +1,14 @@
 # TODO: Integrate Celery
-from celery import shared_task
 
 from asgiref.sync import async_to_sync
-from django.utils import timezone
+from celery import shared_task
 from channels.layers import get_channel_layer
+from django.utils import timezone
 
 from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory
-from user_profiles.models import UserProfile, User
-
 from dialog_engine.engine import DialogEngine
+from user_profiles.models import UserProfile, User
 
 channel_layer = get_channel_layer()
 
@@ -62,3 +61,8 @@ def get_response(channel_name, input_data):
         }
     )
     chat_history_obj.save()
+
+
+@shared_task
+def test_celery(data):
+    print(data)
