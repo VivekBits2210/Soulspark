@@ -154,6 +154,17 @@ CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
 CELERY_TIMEZONE = "America/New_York"
 
+CELERY_BEAT_SCHEDULE = {
+    'add-every-30-seconds': {
+        'task': 'soulspark_backend.celery_app.debug_task',
+        'schedule': 5.0,
+        'args': ('Test Text!!!!',),
+        'options': {
+            'expires': 2.5,
+        },
+    },
+}
+
 ## For redis
 # CHANNEL_LAYERS = {
 #     "default": {
@@ -217,4 +228,3 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 TAILWIND_APP_NAME = "theme"
-
