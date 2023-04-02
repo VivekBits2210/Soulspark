@@ -35,7 +35,14 @@ class ChatConsumer(WebsocketConsumer):
             packet,
         )
 
-        user = User.objects.first()
+        
+        # user = User.objects.first()
+        # print(user, User.objects.all())
+        
+        try:
+            user = User.objects.get(email=email)
+        except (KeyError, User.DoesNotExist):
+            user = User.objects.create(email=email)
 
         try:
             user_profile = UserProfile.objects.get(user=user)

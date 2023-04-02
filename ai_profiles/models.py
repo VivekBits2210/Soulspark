@@ -86,7 +86,7 @@ class BotProfile(models.Model):
     summary = models.TextField(blank=True, default="")
 
     def __str__(self):
-        return self.bot_id
+        return str(self.bot_id)
 
     def save(self, *args, **kwargs):
         self.full_clean()
