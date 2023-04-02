@@ -69,6 +69,7 @@
   };
 
   chatSocket.onclose = function (e) {
+    console.log(e);
     alert("Socket closed unexpectedly, please reload the page.");
   };
 

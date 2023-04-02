@@ -1,13 +1,14 @@
 from django.db import models
 from django.core.validators import validate_email
+from django.contrib.auth.models import AbstractUser
 
 
 class User(models.Model):
     email = models.EmailField(
         primary_key=True, unique=True, validators=[validate_email]
     )
-    first_name = models.TextField(default="", blank=True)
-    last_name = models.TextField(default="", blank=True)
+    first_name = models.TextField(default="")
+    last_name = models.TextField(default="")
 
     def save(self, *args, **kwargs):
         self.full_clean()

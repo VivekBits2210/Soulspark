@@ -41,7 +41,9 @@ class ChatConsumer(WebsocketConsumer):
         try:
             user = User.objects.get(email=email)
         except (KeyError, User.DoesNotExist):
-            user = User.objects.create(email=email)
+            user = User.objects.create(
+                email=email, first_name="test_user_fn", last_name="test_user_ln"
+            )
 
         try:
             user_profile = UserProfile.objects.get(user=user)
