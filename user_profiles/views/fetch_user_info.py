@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from django.forms.models import model_to_dict
 
-from user_profiles.models import UserProfile, User
-from user_profiles.utils import decrypt_email, fetch_user_or_error
+from user_profiles.models import UserProfile
+from user_profiles.utils import fetch_user_or_error
 
 
 @api_view(["GET"])

@@ -61,60 +61,6 @@ def validate_image_extension(value):
 
 
 class BotProfile(models.Model):
-    """
-    BotProfile Model
-    =================
-
-    This model represents a bot profile.
-
-    Attributes
-    ----------
-    bot_id : AutoField
-        The ID of the bot.
-    name : CharField
-        The name of the bot.
-    gender : CharField
-        The gender of the bot, represented as "M" (male) or "F" (female).
-    age : IntegerField
-        The age of the bot.
-    bio : CharField
-        The biography of the bot.
-    profession : TextField
-        The profession of the bot.
-    interests : CharField
-        The hobbies of the bot, represented as a string (e.g. "running and music").
-    favorites : JSONField
-        The favorites of the bot, represented as a dictionary.
-    physical_attributes : JSONField
-        The physical attributes of the bot, represented as a dictionary.
-    profile_image : ImageField
-        The profile image of the bot.
-    searchable : BooleanField
-        Indicates whether the bot is searchable. Customized bot profiles are not searchable as they are specific to a user.
-        The fetch_profile endpoint can only fetch searchable profiles. In order to fetch customized bot profile, use fetch_chat_history
-        without the bot_id parameter.
-
-    Methods
-    -------
-    save(self, args, kwargs)
-        Cleans the model instance and saves it to the database. This function runs validators before saving any data to the database.
-
-    Notes
-    -----
-    This model requires the following imports:
-
-    - ``from os import path``
-    - ``from django.core.validators import RegexValidator``
-    - ``from django.db import models``
-    - ``from django.core.exceptions import ValidationError``
-
-    This model uses the following validators:
-
-    - ``validate_age``: Validates that the age is between 18 and 60.
-    - ``validate_name``: Validates that the name contains only alphabets and only one word.
-    - ``validate_image_extension``: Validates that the image has a valid extension (.jpg, .jpeg, or .png).
-    """
-
     bot_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, validators=[validate_name])
     gender = models.CharField(
@@ -138,6 +84,9 @@ class BotProfile(models.Model):
     )
     searchable = models.BooleanField(default=True)
     summary = models.TextField(blank=True, default="")
+
+    def __str__(self):
+        return self.bot_id
 
     def save(self, *args, **kwargs):
         self.full_clean()
