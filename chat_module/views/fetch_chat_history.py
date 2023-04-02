@@ -52,7 +52,9 @@ def fetch_chat_history(request):
         history = []
         if bot_id:
             try:
-                history_object = ChatHistory.objects.create(user=user, bot=bot, history=history)
+                history_object = ChatHistory.objects.create(
+                    user=user, bot=bot, history=history
+                )
             except ValidationError as e:
                 return JsonResponse(
                     {"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST
@@ -65,5 +67,6 @@ def fetch_chat_history(request):
     level = history_object.level if history_object else None
 
     return JsonResponse(
-        {"bot_id": bot_id, "history": history, "level": level}, status=status.HTTP_200_OK
+        {"bot_id": bot_id, "history": history, "level": level},
+        status=status.HTTP_200_OK,
     )

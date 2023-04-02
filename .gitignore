@@ -83,3 +83,5 @@ cython_debug/
 /dialog_engine/recipe.py
 /dialog_engine/secrets.py
 mysecrets.py
+secrets.py
+.DS_Store

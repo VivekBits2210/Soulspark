@@ -13,6 +13,7 @@ def fetch_selected_profiles(request):
         error_response = user_or_error
         return error_response
     user = user_or_error
-    bot_id_list = list(ChatHistory.objects.filter(user=user).values_list('bot', flat=True))
-    return JsonResponse({'bot_id_list': bot_id_list},
-                        status=status.HTTP_200_OK)
+    bot_id_list = list(
+        ChatHistory.objects.filter(user=user).values_list("bot", flat=True)
+    )
+    return JsonResponse({"bot_id_list": bot_id_list}, status=status.HTTP_200_OK)
