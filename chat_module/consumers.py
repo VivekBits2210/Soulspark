@@ -35,9 +35,6 @@ class ChatConsumer(WebsocketConsumer):
             packet,
         )
 
-        # user = User.objects.first()
-        # print(user, User.objects.all())
-
         try:
             user = User.objects.get(email=email)
         except (KeyError, User.DoesNotExist):
