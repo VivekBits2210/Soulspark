@@ -92,23 +92,23 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 INSTALLED_APPS = (
-        [
-            "daphne",
-            "django.contrib.admin",
-            "django.contrib.auth",
-            "django.contrib.contenttypes",
-            "django.contrib.sessions",
-            "django.contrib.messages",
-            "django.contrib.sites",
-            "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
-            "django.contrib.admindocs",
-            "drf_yasg",
-            "theme",
-            # third-party apps
-            "tailwind",
-        ]
-        + MY_APPS
-        + AUTH_APPS
+    [
+        "daphne",
+        "django.contrib.admin",
+        "django.contrib.auth",
+        "django.contrib.contenttypes",
+        "django.contrib.sessions",
+        "django.contrib.messages",
+        "django.contrib.sites",
+        "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
+        "django.contrib.admindocs",
+        "drf_yasg",
+        "theme",
+        # third-party apps
+        "tailwind",
+    ]
+    + MY_APPS
+    + AUTH_APPS
 )
 
 MIDDLEWARE = [
@@ -155,11 +155,11 @@ CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
 CELERY_TIMEZONE = "America/New_York"
 
 CELERY_BEAT_SCHEDULE = {
-    'add-every-30-seconds': {
-        'task': 'soulspark_backend.celery_app.debug_task',
-        'schedule': 5.0,
-        'options': {
-            'expires': 2.5,
+    "add-every-30-seconds": {
+        "task": "soulspark_backend.celery_app.debug_task",
+        "schedule": 5.0,
+        "options": {
+            "expires": 2.5,
         },
     },
 }
