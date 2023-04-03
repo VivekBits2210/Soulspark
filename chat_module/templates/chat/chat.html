@@ -36,9 +36,11 @@
 {% block scripts %}
 <script>
   var wss_protocol = window.location.protocol == "https:" ? "wss://" : "ws://";
-  var chatSocket = new WebSocket(
-    wss_protocol + window.location.host + "/ws/chat/"
-  );
+  console.log("protocol variable",wss_protocol);
+  console.log("location host",window.location.host);
+  var socket_url = wss_protocol + window.location.host + "/ws/chat/";
+  console.log("socket url", socket_url);
+  var chatSocket = new WebSocket(socket_url);
   var messages = [];
 
   chatSocket.onopen = function (e) {
