@@ -30,7 +30,7 @@ jobs:
             tmux kill-session -t 0
             tmux kill-session -t celery
             tmux kill-session -t beat
-            tmux new-session -d -s 0 'cd soulspark && source env/bin/activate && python manage.py runserver 0.0.0.0:8080'
+            tmux new-session -d -s 0 'python manage.py runserver 0.0.0.0:8080'
             tmux new-session -d -s celery 'celery -A soulspark_backend.celery_app worker --loglevel=info'
             tmux new-session -d -s beat 'celery -A soulspark_backend.celery_app beat'
           '
