@@ -11,7 +11,7 @@ jobs:
       - name: Deploy in EC2
         env:
           PRIVATE_KEY: ${{ secrets.AWS_KEY  }}
-          HOSTNAME: 100.25.31.90
+          HOSTNAME: ${{ secrets.IP_ADDRESS }}
           USER_NAME: ubuntu
 
         run: |
