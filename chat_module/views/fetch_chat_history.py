@@ -29,52 +29,54 @@ def fetch_chat_history(request):
         lines = 10
 
     bot_id = request.GET.get("bot_id")
-    bot = None
-    if bot_id:
-        try:
-            bot_id = int(bot_id)
-        except ValueError:
-            return JsonResponse(
-                {"error": f"Bot ID {bot_id} is not an integer."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        bot_queryset = BotProfile.objects.filter(bot_id=bot_id)
-        if not bot_queryset.exists():
-            return JsonResponse(
-                {"error": f"bot {bot_id} does not exist."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-        bot = bot_queryset.first()
-        if lines == 0:
-            if matched():
-                ChatHistory.objects.create(user=user, bot=bot, history=[])
-                return JsonResponse(
-                    {"bot_id": bot_id, "history": []}, status=status.HTTP_200_OK
-                )
-            else:
-                return JsonResponse(
-                    {"bot_id": None, "history": []}, status=status.HTTP_200_OK
-                )
-        chat_history_queryset = ChatHistory.objects.filter(user=user, bot=bot)
-    else:
-        chat_history_queryset = ChatHistory.objects.filter(user=user)
+    if not bot_id:
+        return JsonResponse(
+            {"error": f"bot ID is required"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
+    try:
+        bot_id = int(bot_id)
+    except ValueError:
+        return JsonResponse(
+            {"error": f"Bot ID {bot_id} is not an integer."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    bot_queryset = BotProfile.objects.filter(bot_id=bot_id)
+    if not bot_queryset.exists():
+        return JsonResponse(
+            {"error": f"bot {bot_id} does not exist."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    bot = bot_queryset.first()
+    if lines == 0:
+        if matched():
+            chat_history_queryset = ChatHistory.objects.filter(user=user)
+            if len(chat_history_queryset) == 3:
+                return JsonResponse(
+                    {"error": "Already matched with 3"}, status=status.HTTP_200_OK
+                )
+
+            ChatHistory.objects.create(user=user, bot=bot, history=[])
+            return JsonResponse(
+                {"bot_id": bot_id, "history": []}, status=status.HTTP_200_OK
+            )
+        else:
+            return JsonResponse(
+                {"bot_id": None, "history": []}, status=status.HTTP_200_OK
+            )
+
+    chat_history_queryset = ChatHistory.objects.filter(user=user, bot=bot)
     if not chat_history_queryset.exists():
-        history = []
-        if bot_id:
-            try:
-                history_object = ChatHistory.objects.create(
-                    user=user, bot=bot, history=history
-                )
-            except ValidationError as e:
-                return JsonResponse(
-                    {"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST
-                )
-    else:
-        history_object = chat_history_queryset.first()
-        bot_id = history_object.bot_id
+        return JsonResponse(
+            {"error": f"Bot {bot} does not have chat history with this user."}, status=status.HTTP_400_BAD_REQUEST
+        )
 
-    history = history[-lines:]
+    history_object = chat_history_queryset.first()
+    bot_id = history_object.bot_id
+    history = history_object.history[-lines:]
     level = history_object.level if history_object else None
 
     return JsonResponse(
