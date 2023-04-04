@@ -1,6 +1,5 @@
-import base64
 from django.forms.models import model_to_dict
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 
