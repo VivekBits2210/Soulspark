@@ -1,3 +1,4 @@
+import random
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from rest_framework import status
@@ -6,6 +7,10 @@ from rest_framework.decorators import api_view
 from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory
 from user_profiles.utils import fetch_user_or_error
+
+
+def matched():
+    return random.random() <= 0.3
 
 
 @api_view(["GET"])
@@ -40,11 +45,17 @@ def fetch_chat_history(request):
                 status=status.HTTP_404_NOT_FOUND,
             )
         bot = bot_queryset.first()
-        chat_history_queryset = ChatHistory.objects.filter(user=user, bot=bot)
         if lines == 0:
-            return JsonResponse(
-                {"bot_id": bot_id, "history": []}, status=status.HTTP_200_OK
-            )
+            if matched():
+                ChatHistory.objects.create(user=user, bot=bot, history=[])
+                return JsonResponse(
+                    {"bot_id": bot_id, "history": []}, status=status.HTTP_200_OK
+                )
+            else:
+                return JsonResponse(
+                    {"bot_id": None, "history": []}, status=status.HTTP_200_OK
+                )
+        chat_history_queryset = ChatHistory.objects.filter(user=user, bot=bot)
     else:
         chat_history_queryset = ChatHistory.objects.filter(user=user)
 
