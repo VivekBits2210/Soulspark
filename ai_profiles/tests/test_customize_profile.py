@@ -29,9 +29,6 @@ class BotProfileCustomizeProfileTest(APITestCase):
             "interests": "reading and cricket",
             "physical_attributes": {"hair": "black"},
             "favorites": {"color": "blue", "food": "pizza"},
-            "profile_image": SimpleUploadedFile(
-                "test_image.jpg", self.image_content, content_type="image/jpeg"
-            ),
         }
         self.bot_profile = BotProfile.objects.create(**self.first_valid_bot_info)
         self.user = User.objects.create(

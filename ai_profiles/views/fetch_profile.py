@@ -18,13 +18,9 @@ def get_gender_list(gender_focus):
 
 @api_view(["GET"])
 def fetch_profile(request):
-    # TODO: Undo these changes
-    from django.contrib.auth import get_user_model
-
     n = request.GET.get("n")
     bot_id = request.GET.get("bot_id")
     no_image = request.GET.get("no_image")
-    image_only = request.GET.get("image_only")
     gender_focus = request.GET.get("gender_focus")
 
     if not gender_focus:
@@ -46,13 +42,6 @@ def fetch_profile(request):
         output_list = []
         for profile in query_set:
             output_dict = model_to_dict(profile)
-            if no_image:
-                del output_dict["profile_image"]
-            else:
-                image_data = profile.profile_image.read()
-                encoded_image = base64.b64encode(image_data).decode("utf-8")
-                output_dict = model_to_dict(profile)
-                output_dict["profile_image"] = encoded_image
             output_list.append(output_dict)
 
         return JsonResponse(output_list, status=status.HTTP_200_OK, safe=False)
@@ -77,22 +66,5 @@ def fetch_profile(request):
     else:
         profile = BotProfile.objects.order_by("?").first()
 
-    if no_image:
-        output_dict = model_to_dict(profile)
-        del output_dict["profile_image"]
-        return JsonResponse(output_dict, status=status.HTTP_200_OK)
-
-    image_data = profile.profile_image.read()
-    if image_only:
-        response = HttpResponse(
-            image_data, content_type="image/jpeg", status=status.HTTP_200_OK
-        )
-        response[
-            "Content-Disposition"
-        ] = f'attachment; filename="{profile.profile_image.name}"'
-        return response
-
-    encoded_image = base64.b64encode(image_data).decode("utf-8")
     output_dict = model_to_dict(profile)
-    output_dict["profile_image"] = encoded_image
     return JsonResponse(output_dict, status=status.HTTP_200_OK)

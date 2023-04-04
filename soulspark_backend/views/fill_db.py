@@ -1,21 +1,13 @@
 import os
 
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
-from user_profiles.models import UserProfile
 
 
 @api_view(["GET"])
 def fill_db(request):
-    image_content = []
-    for file in ["trial","trial1","Nicole","Sheanguang"]:
-        image_path = os.path.join("static", f"{file}.jpg")
-        with open(image_path, "rb") as f:
-            image_content.append(f.read())
-
     profile1_data = {
         "name": "Nicole",
         "gender": "F",
@@ -24,9 +16,6 @@ def fill_db(request):
         "favorites": {"color": "red", "food": "pizza"},
         "physical_attributes": {"eyes": "blue"},
         "profession": "Air hostess",
-        "profile_image": SimpleUploadedFile(
-            "Nicole.jpg", image_content[0], content_type="image/jpeg"
-        ),
         "bio": "Lorem ipsum",
     }
     profile2_data = {
@@ -42,9 +31,6 @@ def fill_db(request):
             "figure": "slim",
         },
         "profession": "Secretary",
-        "profile_image": SimpleUploadedFile(
-            "Carla.jpg", image_content[1], content_type="image/jpeg"
-        ),
         "bio": "Lorem ipsum",
     }
     profile3_data = {
@@ -60,9 +46,6 @@ def fill_db(request):
             "figure": "slim",
         },
         "profession": "Waitress",
-        "profile_image": SimpleUploadedFile(
-            "Nicole.jpg", image_content[2], content_type="image/jpeg"
-        ),
         "bio": "Bio for Nicole",
     }
     profile4_data = {
@@ -78,9 +61,6 @@ def fill_db(request):
             "figure": "slim",
         },
         "profession": "Secretary",
-        "profile_image": SimpleUploadedFile(
-            "Carla.jpg", image_content[3], content_type="image/jpeg"
-        ),
         "bio": "Lorem ipsum",
     }
 
