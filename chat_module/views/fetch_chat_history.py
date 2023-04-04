@@ -53,6 +53,12 @@ def fetch_chat_history(request):
     bot = bot_queryset.first()
     if lines == 0:
         if matched():
+            chat_history_queryset = ChatHistory.objects.filter(user=user)
+            if len(chat_history_queryset) == 3:
+                return JsonResponse(
+                    {"error": "Already matched with 3"}, status=status.HTTP_200_OK
+                )
+
             ChatHistory.objects.create(user=user, bot=bot, history=[])
             return JsonResponse(
                 {"bot_id": bot_id, "history": []}, status=status.HTTP_200_OK
