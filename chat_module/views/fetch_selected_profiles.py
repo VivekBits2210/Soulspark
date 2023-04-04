@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
-
 from chat_module.models import ChatHistory
 from user_profiles.utils import fetch_user_or_error
 
@@ -13,7 +12,11 @@ def fetch_selected_profiles(request):
         error_response = user_or_error
         return error_response
     user = user_or_error
-    bot_id_list = list(
-        ChatHistory.objects.filter(user=user).values_list("bot", flat=True)
+    bot_data_list = (
+        ChatHistory.objects.filter(user=user)
+            .values("bot__bot_id", "bot__name", "level")
+            .distinct()
+            .order_by("-level")
     )
-    return JsonResponse({"bot_id_list": bot_id_list}, status=status.HTTP_200_OK)
+    response_data = [{"name": bot_data["bot__name"], "bot_id": bot_data["bot__bot_id"]} for bot_data in bot_data_list]
+    return JsonResponse({"data": response_data}, status=status.HTTP_200_OK)
