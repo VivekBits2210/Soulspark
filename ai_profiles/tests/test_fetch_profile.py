@@ -31,9 +31,6 @@ class BotProfileFetchViewTest(APITestCase):
             "interests": "reading and cricket",
             "physical_attributes": {"hair": "black"},
             "favorites": {"color": "blue", "food": "pizza"},
-            "profile_image": SimpleUploadedFile(
-                "test_image.jpg", self.image_content, content_type="image/jpeg"
-            ),
         }
 
         self.user = User.objects.create(
@@ -50,10 +47,7 @@ class BotProfileFetchViewTest(APITestCase):
             "profession": "Engineer",
             "interests": "jogging and music",
             "physical_attributes": {"hair": "black"},
-            "favorites": {"color": "blue", "food": "pizza"},
-            "profile_image": SimpleUploadedFile(
-                "test_serializer.jpg", self.image_content, content_type="image/jpeg"
-            ),
+            "favorites": {"color": "blue", "food": "pizza"}
         }
 
     def test_fetch_profile_view_works(self):
@@ -163,21 +157,7 @@ class BotProfileFetchViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response_json = response.json()
         self.assertIsInstance(response_json, dict)
-        self.assertNotIn("profile_image", response_json.keys())
-        response_json["profile_image"] = "mock"
         self.assertListEqual(sorted(response_json.keys()), sorted(response_json.keys()))
-
-    def test_fetch_profile_image_only_view(self):
-        response = self.client.get(
-            self.url,
-            {
-                "bot_id": self.bot_profile.bot_id,
-                "image_only": True,
-                "email": self.encrypted_email,
-            },
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("image/jpeg", response["Content-Type"])
 
     def test_fetch_profile_invalid_bot_id(self):
         response = self.client.get(

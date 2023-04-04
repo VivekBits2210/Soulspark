@@ -21,9 +21,6 @@ class ChatHistoryTestCase(TestCase):
             interests="music and running",
             favorites={"color": "blue", "food": "pizza"},
             physical_attributes={"hair": "black"},
-            profile_image=SimpleUploadedFile(
-                "test.jpg", b"file_content", content_type="image/jpeg"
-            ),
         )
 
         self.maximal_data = {

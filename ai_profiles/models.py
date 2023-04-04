@@ -79,9 +79,6 @@ class BotProfile(models.Model):
     physical_attributes = models.JSONField(
         validators=[validate_dict], blank=True, default=dict
     )
-    profile_image = models.ImageField(
-        upload_to="images/", validators=[validate_image_extension]
-    )
     searchable = models.BooleanField(default=True)
     summary = models.TextField(blank=True, default="")
 

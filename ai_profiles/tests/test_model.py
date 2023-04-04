@@ -1,7 +1,6 @@
 import os
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from django.core.files.uploadedfile import SimpleUploadedFile
 from ai_profiles.models import BotProfile
 
 
@@ -15,10 +14,7 @@ class BotProfileTestCase(TestCase):
             profession="AI assistant",
             interests="reading and music",
             favorites={"color": "blue", "food": "pizza"},
-            physical_attributes={"hair": "black"},
-            profile_image=SimpleUploadedFile(
-                "test.jpg", b"file_content", content_type="image/jpeg"
-            ),
+            physical_attributes={"hair": "black"}
         )
 
     def test_create_bot_profile(self):
@@ -34,10 +30,7 @@ class BotProfileTestCase(TestCase):
             "profession": "Engineer",
             "interests": "reading and cricket",
             "physical_attributes": {"hair": "black"},
-            "favorites": {"color": "blue", "food": "pizza"},
-            "profile_image": SimpleUploadedFile(
-                "test_serializer.jpg", image_content, content_type="image/jpeg"
-            ),
+            "favorites": {"color": "blue", "food": "pizza"}
         }
         bot_profile = BotProfile.objects.create(**valid_data)
 
@@ -62,10 +55,7 @@ class BotProfileTestCase(TestCase):
                 profession="Assistant",
                 interests="travelling",
                 physical_attributes={"hair": "black"},
-                favorites={"color": "red", "food": "sushi"},
-                profile_image=SimpleUploadedFile(
-                    "test.jpg", b"file_content", content_type="image/jpeg"
-                ),
+                favorites={"color": "red", "food": "sushi"}
             )
 
     def test_id(self):
@@ -81,10 +71,7 @@ class BotProfileTestCase(TestCase):
                 profession="Assistant",
                 interests="cricket and running",
                 favorites={"color": "red", "food": "sushi"},
-                physical_attributes={"hair": "black"},
-                profile_image=SimpleUploadedFile(
-                    "./static/a.jpg", b"file_content", content_type="image/jpeg"
-                ),
+                physical_attributes={"hair": "black"}
             )
 
     def test_invalid_name(self):
@@ -97,27 +84,5 @@ class BotProfileTestCase(TestCase):
                 profession="Assistant",
                 interests="running",
                 favorites={"color": "red", "food": "sushi"},
-                physical_attributes={"hair": "black"},
-                profile_image=SimpleUploadedFile(
-                    "test.jpg", b"file_content", content_type="image/jpeg"
-                ),
+                physical_attributes={"hair": "black"}
             )
-
-    def test_invalid_image(self):
-        with self.assertRaises(ValidationError):
-            bot_profile = BotProfile.objects.create(
-                name="Bot 2",
-                gender="M",
-                age=30,
-                bio="I am another chatbot.",
-                profession="Assistant",
-                interests="running",
-                favorites={"color": "red", "food": "sushi"},
-                physical_attributes={"hair": "black"},
-                profile_image=SimpleUploadedFile(
-                    "a.txt", b"file_content", content_type="text/plain"
-                ).content_type,
-            )
-
-    def test_save_method_upload_to(self):
-        self.assertTrue(os.path.exists(self.bot_profile.profile_image.path))
