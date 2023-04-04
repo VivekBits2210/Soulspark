@@ -4,6 +4,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
+from user_profiles.models import UserProfile
+from user_profiles.utils import fetch_user_or_error
 
 
 def get_gender_list(gender_focus):
@@ -19,11 +21,17 @@ def get_gender_list(gender_focus):
 def fetch_profile(request):
     n = request.GET.get("n")
     bot_id = request.GET.get("bot_id")
-    no_image = request.GET.get("no_image")
+    email = request.GET.get("email")
     gender_focus = request.GET.get("gender_focus")
 
     if not gender_focus:
         gender_focus = "E"
+    if email:
+        user_or_error = fetch_user_or_error(request)
+        if isinstance(user_or_error, JsonResponse):
+            error_response = user_or_error
+            return error_response
+        gender_focus = UserProfile.objects.get(user=user_or_error).gender_focus
 
     if n:
         try:
