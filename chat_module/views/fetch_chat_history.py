@@ -64,9 +64,9 @@ def fetch_chat_history(request):
                 )
 
             chat_history_object = ChatHistory.objects.create(user=user, bot=bot, history=[])
-            level = chat_history_object.level
+            # level = chat_history_object.level
             return JsonResponse(
-                {"bot_id": bot_id, "history": [], "level": level}, status=status.HTTP_200_OK
+                {"bot_id": bot_id, "history": []}, status=status.HTTP_200_OK #"level": level
             )
         else:
             return JsonResponse(
@@ -82,9 +82,9 @@ def fetch_chat_history(request):
     history_object = chat_history_queryset.first()
     bot_id = history_object.bot_id
     history = history_object.history[-lines:]
-    level = history_object.level if history_object else None
+    # level = history_object.level if history_object else None
 
     return JsonResponse(
-        {"bot_id": bot_id, "history": history, "level": level},
+        {"bot_id": bot_id, "history": history}, # "level": level},
         status=status.HTTP_200_OK,
     )
