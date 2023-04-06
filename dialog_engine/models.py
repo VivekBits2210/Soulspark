@@ -23,9 +23,6 @@ class GPTUsageRecord(models.Model):
         "chat_history_length",
     ]
 
-    class Meta:
-        unique_together = ("user", "bot", "chat_history_length")
-
     def __str__(self):
         return (
             f"GPTUsageRecord({self.user.email}, {self.bot.name}, indicator_tokens={self.indicator_tokens}, "
