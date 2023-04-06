@@ -59,6 +59,11 @@ def fetch_chat_history(request):
                     {"error": "Already matched with 3"}, status=status.HTTP_400_BAD_REQUEST
                 )
 
+            if len(ChatHistory.objects.filter(user=user, bot=bot)) > 0:
+                return JsonResponse(
+                    {"error": "Already matched"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
             chat_history_object = ChatHistory.objects.create(user=user, bot=bot, history=[])
             level = chat_history_object.level
             return JsonResponse(
