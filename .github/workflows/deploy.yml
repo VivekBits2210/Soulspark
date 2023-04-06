@@ -27,10 +27,10 @@ jobs:
             source env/bin/activate
             python -m pip install -r requirements.txt 
             python manage.py migrate
-            tmux kill-session -t 0
+            tmux kill-session -t django
             tmux kill-session -t celery
             tmux kill-session -t beat
-            tmux new-session -d -s 0 'python manage.py runserver 0.0.0.0:8080'
+            tmux new-session -d -s django 'python manage.py runserver 0.0.0.0:8080'
             tmux new-session -d -s celery 'celery -A soulspark_backend.celery_app worker --loglevel=info'
             tmux new-session -d -s beat 'celery -A soulspark_backend.celery_app beat'
             tmux new-session -d -s flower 'celery -A soulspark_backend.celery_app flower --address=0.0.0.0 --port=8081'
