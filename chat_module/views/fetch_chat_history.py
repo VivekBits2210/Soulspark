@@ -10,7 +10,7 @@ from user_profiles.utils import fetch_user_or_error
 
 
 def matched():
-    return random.random() <= 0.3
+    return random.random() <= 1
 
 
 @api_view(["GET"])
