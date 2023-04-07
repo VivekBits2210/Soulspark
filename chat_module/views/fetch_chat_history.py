@@ -66,7 +66,7 @@ def fetch_chat_history(request):
             chat_history_object = ChatHistory.objects.create(user=user, bot=bot, history=[])
             # level = chat_history_object.level
             return JsonResponse(
-                {"bot_id": bot_id, "history": []}, status=status.HTTP_200_OK #"level": level
+                {"bot_id": bot_id, "name": bot.name, "history": []}, status=status.HTTP_200_OK #"level": level
             )
         else:
             return JsonResponse(
