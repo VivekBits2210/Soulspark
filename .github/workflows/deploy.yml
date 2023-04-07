@@ -28,13 +28,7 @@ jobs:
             python -m pip install -r requirements.txt 
             python manage.py migrate
             tmux kill-session -t django
-            tmux kill-session -t celery
-            tmux kill-session -t beat
-            tmux kill-session -t flower
             tmux kill-session -t daphne
             tmux new-session -d -s django 'python manage.py runserver 0.0.0.0:8080'
-            tmux new-session -d -s celery 'celery -A soulspark_backend.celery_app worker --loglevel=info'
-            tmux new-session -d -s beat 'celery -A soulspark_backend.celery_app beat'
-            tmux new-session -d -s flower 'celery -A soulspark_backend.celery_app flower --address=0.0.0.0 --port=8081'
             tmux new-session -d -s daphne 'daphne -b 0.0.0.0 -p 8004 soulspark_backend.asgi:application'
           '
