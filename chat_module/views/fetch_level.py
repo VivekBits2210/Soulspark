@@ -1,5 +1,3 @@
-import random
-from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -9,24 +7,13 @@ from chat_module.models import ChatHistory
 from user_profiles.utils import fetch_user_or_error
 
 
-def matched():
-    return random.random() <= 1
-
-
 @api_view(["GET"])
-def fetch_chat_history(request):
+def fetch_level(request):
     user_or_error = fetch_user_or_error(request)
     if isinstance(user_or_error, JsonResponse):
         error_response = user_or_error
         return error_response
     user = user_or_error
-
-    try:
-        lines = int(request.GET.get("lines", 10))
-        if lines < 0:
-            lines = 10
-    except ValueError:
-        lines = 10
 
     bot_id = request.GET.get("bot_id")
     if not bot_id:
@@ -51,40 +38,14 @@ def fetch_chat_history(request):
         )
 
     bot = bot_queryset.first()
-    if lines == 0:
-        chat_history_queryset = ChatHistory.objects.filter(user=user)
-        if len(chat_history_queryset) == 3:
-            return JsonResponse(
-                {"error": "Already matched with 3"}, status=status.HTTP_400_BAD_REQUEST
-            )
-        if matched():
-            if len(ChatHistory.objects.filter(user=user, bot=bot)) > 0:
-                return JsonResponse(
-                    {"error": "Already matched"}, status=status.HTTP_400_BAD_REQUEST
-                )
-
-            chat_history_object = ChatHistory.objects.create(user=user, bot=bot, history=[])
-            # level = chat_history_object.level
-            return JsonResponse(
-                {"bot_id": bot_id, "history": []}, status=status.HTTP_200_OK #"level": level
-            )
-        else:
-            return JsonResponse(
-                {"bot_id": None, "history": []}, status=status.HTTP_200_OK
-            )
-
     chat_history_queryset = ChatHistory.objects.filter(user=user, bot=bot)
     if not chat_history_queryset.exists():
         return JsonResponse(
             {"error": f"Bot {bot} does not have chat history with this user."}, status=status.HTTP_400_BAD_REQUEST
         )
 
-    history_object = chat_history_queryset.first()
-    bot_id = history_object.bot_id
-    history = history_object.history[-lines:]
-    # level = history_object.level if history_object else None
-
+    level = chat_history_queryset.first().level
     return JsonResponse(
-        {"bot_id": bot_id, "history": history}, # "level": level},
+        {"level": level},
         status=status.HTTP_200_OK,
     )
