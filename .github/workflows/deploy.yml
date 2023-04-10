@@ -18,7 +18,8 @@ jobs:
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           cat private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-
+            tmux kill-session -t django
+            tmux kill-session -t daphne
             cd ./soulspark &&
             git fetch origin --prune &&
             git checkout main &&
@@ -26,10 +27,7 @@ jobs:
             git pull origin main 
             source env/bin/activate
             python -m pip install -r requirements.txt
-            python manage.py makemigrations
             python manage.py migrate
-            tmux kill-session -t django
-            tmux kill-session -t daphne
             tmux new-session -d -s django 'python manage.py runserver 0.0.0.0:8080'
             tmux new-session -d -s daphne 'daphne -b 0.0.0.0 -p 8004 soulspark_backend.asgi:application'
           '
