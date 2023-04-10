@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from ai_profiles.models import BotProfile
 from chat_module.models import ChatHistory
 from user_profiles.utils import fetch_user_or_error
 

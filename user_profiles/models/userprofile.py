@@ -44,6 +44,8 @@ class UserProfile(models.Model):
     )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    music_enabled = models.BooleanField(default=True)
+    sounds_enabled = models.BooleanField(default=True)
     summary = models.TextField(blank=True, default="")
 
     def save(self, *args, **kwargs):
