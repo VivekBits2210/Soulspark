@@ -12,7 +12,7 @@ def matched():
     return random.random() <= 1
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 def delete_all_chat_history(request):
     user_or_error = fetch_user_or_error(request)
     if isinstance(user_or_error, JsonResponse):
