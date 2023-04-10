@@ -4,11 +4,11 @@ from chat_module.views import (
     fetch_chat_history,
     unmatch,
     fetch_selected_profiles,
-    fetch_level
+    fetch_level,
+    delete_all_chat_history
 )
 
 urlpatterns = [
-    # path("", index.index, name="chat_module_index"),
     path(
         "fetch-selected-profiles",
         fetch_selected_profiles.fetch_selected_profiles,
@@ -25,5 +25,6 @@ urlpatterns = [
         name="fetch_level",
     ),
     path("unmatch", unmatch.unmatch, name="unmatch"),
+    path("delete-all-chat-history", delete_all_chat_history.delete_all_chat_history),
     path("", index.ChatView.as_view(), name="chat_view"),
 ]
