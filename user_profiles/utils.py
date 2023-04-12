@@ -11,14 +11,14 @@ from dotenv import dotenv_values
 SALT = dotenv_values(".env")['SALT']
 
 
-def encrypt_email(data, key):
+def encrypt_email(data, key=SALT):
     key = bytes.fromhex(key)
     cipher = AES.new(key, AES.MODE_ECB)
     encrypted_data = cipher.encrypt(pad(data.encode('utf-8'), AES.block_size))
     return base64.b64encode(encrypted_data).decode('utf-8')
 
 
-def decrypt_email(encrypted_data, key):
+def decrypt_email(encrypted_data, key=SALT):
     key = bytes.fromhex(key)
     cipher = AES.new(key, AES.MODE_ECB)
     encrypted_data = base64.b64decode(encrypted_data)
