@@ -1,3 +1,4 @@
+import base64
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import unpad, pad
@@ -23,7 +24,7 @@ def encrypt_email(email, key=SALT):
 
 def decrypt_email(ciphertext, key=SALT):
     key = key.encode("utf-8") if isinstance(key, str) else key
-    ciphertext = bytes.fromhex(ciphertext)
+    ciphertext = base64.b64decode(ciphertext)
     iv = ciphertext[: AES.block_size]
     ciphertext = ciphertext[AES.block_size:]
     cipher = AES.new(key, AES.MODE_CBC, iv)
