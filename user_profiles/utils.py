@@ -4,8 +4,11 @@ from Crypto.Util.Padding import unpad, pad
 from django.http import JsonResponse
 from rest_framework import status
 
-from mysecrets import SALT
+# from mysecrets import SALT
 from user_profiles.models import User
+from dotenv import dotenv_values
+
+SALT = dotenv_values(".env")['SALT']
 
 
 def encrypt_email(email, key=SALT):
@@ -22,7 +25,7 @@ def decrypt_email(ciphertext, key=SALT):
     key = key.encode("utf-8") if isinstance(key, str) else key
     ciphertext = bytes.fromhex(ciphertext)
     iv = ciphertext[: AES.block_size]
-    ciphertext = ciphertext[AES.block_size :]
+    ciphertext = ciphertext[AES.block_size:]
     cipher = AES.new(key, AES.MODE_CBC, iv)
     padded_plaintext = cipher.decrypt(ciphertext)
     plaintext = unpad(padded_plaintext, AES.block_size).decode("utf-8")
