@@ -64,11 +64,24 @@ def fill_db(request):
         "bio": "Lorem ipsum",
     }
 
+    profile5_data = {
+        "name": "Ivan",
+        "gender": "M",
+        "age": 25,
+        "interests": "baking and studying",
+        "favorites": {"color": "scarlet", "food": "chicken biryani"},
+        "physical_attributes": {
+        },
+        "profession": "PhD student",
+        "bio": "I am Ivan",
+    }
+
     # Create the two BotProfile instances using the data
     BotProfile.objects.all().delete()
     BotProfile(**profile1_data).save()
     BotProfile(**profile2_data).save()
     BotProfile(**profile3_data).save()
     BotProfile(**profile4_data).save()
+    BotProfile(**profile5_data).save()
 
     return JsonResponse({"status": "ok"})
