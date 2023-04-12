@@ -28,6 +28,6 @@ jobs:
             source env/bin/activate
             python -m pip install -r requirements.txt
             python manage.py migrate
-            tmux new-session -d -s django 'python manage.py runserver 0.0.0.0:8080'
+            tmux new-session -d -s django 'gunicorn soulspark_backend.wsgi -b 0.0.0.0:8080'
             tmux new-session -d -s daphne 'daphne -b 0.0.0.0 -p 8004 soulspark_backend.asgi:application'
           '
