@@ -22,15 +22,20 @@ def encrypt_email(email, key=SALT):
     return encrypted_email
 
 
-def decrypt_email(ciphertext, key=SALT):
-    key = key.encode("utf-8") if isinstance(key, str) else key
-    ciphertext = base64.b64decode(ciphertext)
-    iv = ciphertext[: AES.block_size]
-    ciphertext = ciphertext[AES.block_size:]
-    cipher = AES.new(key, AES.MODE_CBC, iv)
-    padded_plaintext = cipher.decrypt(ciphertext)
-    plaintext = unpad(padded_plaintext, AES.block_size).decode("utf-8")
-    return plaintext
+def decrypt_email(email, key=SALT):
+    key = key.encode("utf-8")
+    encrypted_data = base64.b64decode(email)
+    cipher = AES.new(key, AES.MODE_ECB)
+    decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
+    return decrypted_data.decode('utf-8')
+    # key = key.encode("utf-8") if isinstance(key, str) else key
+    # ciphertext = base64.b64decode(ciphertext)
+    # iv = ciphertext[: AES.block_size]
+    # ciphertext = ciphertext[AES.block_size:]
+    # cipher = AES.new(key, AES.MODE_CBC, iv)
+    # padded_plaintext = cipher.decrypt(ciphertext)
+    # plaintext = unpad(padded_plaintext, AES.block_size).decode("utf-8")
+    # return plaintext
 
 
 def fetch_user_or_error(request):
