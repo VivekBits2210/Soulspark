@@ -1,5 +1,6 @@
 from pathlib import Path
-from mysecrets import DJANGO_SECRET_KEY
+from dotenv import dotenv_values
+env_config = dotenv_values(".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = DJANGO_SECRET_KEY
+SECRET_KEY = env_config['DJANGO_SECRET_KEY']
 
 DEBUG = False
 
@@ -17,7 +18,7 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "api-soulspark.com"]
 ACCOUNT_EMAIL_REQUIRED = True
 
 # Start of prod settings
-SECURE_SSL_REDIRECT = True
+# SECURE_SSL_REDIRECT = True
 
 SESSION_COOKIE_SECURE = True
 
@@ -39,28 +40,28 @@ AUTH_APPS = [
     "allauth.socialaccount.providers.google",
 ]
 
-# LOGGING = {
-#     "version": 1,
-#     # 'disable_existing_loggers': False,
-#     "formatters": {
-#         "default": {
-#             "format": "{asctime} {levelname} {filename}:{lineno} {message}",
-#             "style": "{",
-#         },
-#     },
-#     "handlers": {
-#         "console_handler": {
-#             "class": "logging.StreamHandler",
-#             "formatter": "default",
-#         },
-#     },
-#     "loggers": {
-#         "my_logger": {
-#             "level": "INFO",
-#             "handlers": ["console_handler"],
-#         },
-#     },
-# }
+LOGGING = {
+    "version": 1,
+    'disable_existing_loggers': False,
+    "formatters": {
+        "default": {
+            "format": "{asctime} {levelname} {filename}:{lineno} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console_handler": {
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+        },
+    },
+    "loggers": {
+        "my_logger": {
+            "level": "INFO",
+            "handlers": ["console_handler"],
+        },
+    },
+}
 
 SITE_ID = 1
 

@@ -2,9 +2,10 @@ import logging
 import random
 import openai
 from django.core.exceptions import ValidationError
-
+from dotenv import dotenv_values
 try:
-    from mysecrets import API_KEY_LIST
+    API_KEY_LIST = eval(dotenv_values(".env")['API_KEY_LIST'])
+    # from mysecrets import API_KEY_LIST
 except ModuleNotFoundError:
     API_KEY_LIST = ["fake-key-1", "fake-key-2"]
 logger = logging.getLogger("my_logger")

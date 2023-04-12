@@ -21,3 +21,4 @@ django-cors-headers==3.14.0
 pycryptodome==3.17
 Redis==4.5.4
 channels-redis==4.1.0
+python-dotenv==1.0.0
