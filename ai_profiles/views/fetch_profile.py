@@ -6,7 +6,9 @@ from rest_framework.decorators import api_view
 from ai_profiles.models import BotProfile
 from user_profiles.models import UserProfile
 from user_profiles.utils import fetch_user_or_error
+import logging
 
+logger = logging.getLogger("my_logger")
 
 def get_gender_list(gender_focus):
     if gender_focus == "M":
@@ -19,6 +21,7 @@ def get_gender_list(gender_focus):
 
 @api_view(["GET"])
 def fetch_profile(request):
+    logger.info("Logging line from fetch_profile")
     n = request.GET.get("n")
     bot_id = request.GET.get("bot_id")
     email = request.GET.get("email")
