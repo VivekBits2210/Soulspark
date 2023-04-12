@@ -1,6 +1,5 @@
 import base64
 from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import unpad, pad
 from django.http import JsonResponse
 from rest_framework import status
@@ -13,16 +12,16 @@ SALT = dotenv_values(".env")['SALT']
 
 
 def encrypt_email(data, key):
-    key = key.encode("utf-8")
+    key = bytes.fromhex(key)
     cipher = AES.new(key, AES.MODE_ECB)
     encrypted_data = cipher.encrypt(pad(data.encode('utf-8'), AES.block_size))
     return base64.b64encode(encrypted_data).decode('utf-8')
 
 
-def decrypt_email(email, key):
-    key = key.encode("utf-8")
-    encrypted_data = base64.b64decode(email)
+def decrypt_email(encrypted_data, key):
+    key = bytes.fromhex(key)
     cipher = AES.new(key, AES.MODE_ECB)
+    encrypted_data = base64.b64decode(encrypted_data)
     decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
     return decrypted_data.decode('utf-8')
 
