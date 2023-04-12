@@ -20,6 +20,8 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
             tmux kill-session -t django
             tmux kill-session -t daphne
+            sudo kill -9 $(sudo lsof -t -i:8080)
+            sudo kill -9 $(sudo lsof -t -i:8004)
             cd ./soulspark &&
             git fetch origin --prune &&
             git checkout main &&
