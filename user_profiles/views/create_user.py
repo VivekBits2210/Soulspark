@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from user_profiles.models import User
+from user_profiles.models import User, UserProfile
 from user_profiles.serializers import UserSerializer
 from user_profiles.utils import decrypt_email
 
@@ -33,6 +33,7 @@ def create_user(request):
         if not serializer.is_valid():
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
+        UserProfile.objects.create(user=serializer.instance)
     except Exception as e:
         return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)
     return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)

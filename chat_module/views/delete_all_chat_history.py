@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from chat_module.models import ChatHistory
+from chat_module.models import ChatHistory, DeletedChatHistory
 from user_profiles.utils import fetch_user_or_error
 
 
@@ -20,6 +20,15 @@ def delete_all_chat_history(request):
     user = user_or_error
 
     chat_history_queryset = ChatHistory.objects.filter(user=user)
+    for chat_history_obj in chat_history_queryset:
+        DeletedChatHistory.objects.create(
+            email=chat_history_obj.user.email,
+            bot_name=chat_history_obj.bot.name,
+            history=chat_history_obj.history,
+            input_chars=chat_history_obj.input_chars,
+            level=chat_history_obj.level
+        )
+
     chat_history_queryset.delete()
 
     return JsonResponse(
