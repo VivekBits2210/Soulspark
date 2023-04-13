@@ -6,8 +6,8 @@ from user_profiles.models import User
 
 
 class DeletedChatHistory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    bot = models.ForeignKey(BotProfile, on_delete=models.CASCADE)
+    email = models.CharField(max_length=200, default="email@email.com")
+    bot_name = models.CharField(max_length=50, default="default_bot_name")
     history = models.JSONField(blank=True)
     input_chars = models.IntegerField(default=0)
     level = models.DecimalField(
