@@ -33,7 +33,7 @@ def create_user(request):
         if not serializer.is_valid():
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
-        UserProfile.objects.create(user=serializer.instance)
+        UserProfile.objects.create(user=serializer.instance, gender_focus="E")
     except Exception as e:
         return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)
     return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
