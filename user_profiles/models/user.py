@@ -8,6 +8,7 @@ class User(models.Model):
     )
     first_name = models.TextField(default="")
     last_name = models.TextField(default="")
+    picture = models.TextField(default="")
 
     def save(self, *args, **kwargs):
         self.full_clean()

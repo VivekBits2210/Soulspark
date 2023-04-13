@@ -26,4 +26,6 @@ def fetch_user_info(request):
         profile = profile_queryset.first()
 
     user_profile = model_to_dict(profile)
+    user_profile['email'] = user.email
+    user_profile['picture'] = user.picture
     return JsonResponse(user_profile, safe=False, status=status.HTTP_200_OK)

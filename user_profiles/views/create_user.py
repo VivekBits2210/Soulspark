@@ -28,7 +28,8 @@ def create_user(request):
         serializer = UserSerializer(data={
             "email":decrypted_email,
             "first_name": request_dict["first_name"],
-            "last_name": request_dict["last_name"]
+            "last_name": request_dict["last_name"],
+            "picture": request_dict["picture"],
         })
         if not serializer.is_valid():
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
