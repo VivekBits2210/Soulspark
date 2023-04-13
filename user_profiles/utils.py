@@ -18,7 +18,7 @@ def encrypt_email(data, key=SALT):
     return base64.b64encode(encrypted_data).decode('utf-8')
 
 
-def decrypt_email(encrypted_data, key):
+def decrypt_email(encrypted_data, key=SALT):
     key = bytes.fromhex(key)
     encrypted_data = bytes.fromhex(encrypted_data)
     cipher = AES.new(key, AES.MODE_ECB)
