@@ -18,7 +18,7 @@ def post_attribute(request):
     profile_queryset = UserProfile.objects.filter(user=user)
     if not profile_queryset.exists():
         try:
-            profile = UserProfile.objects.create(user=user)
+            profile = UserProfile.objects.create(user=user, gender_focus='E')
         except ValidationError as e:
             return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)
     else:
@@ -27,7 +27,9 @@ def post_attribute(request):
     profile_fields = set([f.name for f in UserProfile._meta.get_fields() if f.concrete])
 
     request_dict = request.data
+    request_dict._mutable = True
     del request_dict["email"]
+
     incorrect_attributes = [
         key for key in request_dict.keys() if key not in profile_fields
     ]
@@ -42,6 +44,9 @@ def post_attribute(request):
     try:
         for key in request_dict.keys():
             setattr(profile, key, request_dict[key])
+            if key == "name":
+                user.first_name = request_dict["name"]
+                user.save()
         profile.save()
     except ValidationError as e:
         return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)
