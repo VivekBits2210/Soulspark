@@ -17,39 +17,39 @@ class DialogEngine:
         self.components = Components(user_profile, self.bot, self.chat_history)
 
     def run(self, summarizer_limit=3500):
-        messages, customizations = self.components.generate_indicator_prompt()
-        self.client.customize_model_parameters(customizations)
-        logger.info(f"\nIndicator Inputs: {messages}")
-        indicator_message, indicator_tokens = self.client.generate_reply(messages)
-        logger.info(f"Indicator Response: {indicator_message}")
-        indicator_dict = self.components.parse_indicator_message(indicator_message)
-        logger.info(f"Indicator Dict: {indicator_dict}")
-        indicator_vector = tuple(
-            indicator_dict[key] for key in sorted(indicator_dict.keys())
-        )
-
-        hook = self.components.fetch_template(
-            self.components.find_region(indicator_vector)
-        )
-        logger.info(f"Hook: {hook}")
+        # messages, customizations = self.components.generate_indicator_prompt()
+        # self.client.customize_model_parameters(customizations)
+        # logger.info(f"\nIndicator Inputs: {messages}")
+        # indicator_message, indicator_tokens = self.client.generate_reply(messages)
+        # logger.info(f"Indicator Response: {indicator_message}")
+        # indicator_dict = self.components.parse_indicator_message(indicator_message)
+        # logger.info(f"Indicator Dict: {indicator_dict}")
+        # indicator_vector = tuple(
+        #     indicator_dict[key] for key in sorted(indicator_dict.keys())
+        # )
+        #
+        # hook = self.components.fetch_template(
+        #     self.components.find_region(indicator_vector)
+        # )
+        # logger.info(f"Hook: {hook}")
         user_summary = self.chat_history_record.user_summary
         bot_summary = self.chat_history_record.bot_summary
         logger.info(f"User Summary: {user_summary}")
         logger.info(f"Bot Summary: {bot_summary}")
 
         messages, customizations = self.components.generate_story_prompt(
-            user_summary, bot_summary, hook
+            user_summary, bot_summary
         )
         self.client.customize_model_parameters(customizations)
         response, story_tokens = self.client.generate_reply(messages)
         logger.info(f"Story Response: {response}")
 
         usage_record = GPTUsageRecord.objects.create(
-            user=self.user_profile.user,
-            bot=self.bot,
-            indicator_tokens=indicator_tokens,
+            email=self.user_profile.user.email,
+            bot_name=self.bot.name,
+            indicator_tokens=0,
             story_tokens=story_tokens,
-            indicator_vector=indicator_vector,
+            indicator_vector="[]",
             indicator_version="v1",
             chat_history_length=len(self.chat_history),
         )
