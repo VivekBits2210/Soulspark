@@ -21,14 +21,7 @@ def unmatch(request):
             {"error": f"No bot_profile_id given"}, status=status.HTTP_400_BAD_REQUEST
         )
 
-    try:
-        bot_profile_id = int(request_dict["bot_profile_id"])
-    except ValueError:
-        return JsonResponse(
-            {"error": f"Bot ID {request_dict['bot_profile_id']} is not an integer."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
+    bot_profile_id = request_dict["bot_profile_id"]
     bot_queryset = BotProfile.objects.filter(bot_profile_id=bot_profile_id)
     if not bot_queryset.exists():
         return JsonResponse(
