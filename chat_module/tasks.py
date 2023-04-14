@@ -20,7 +20,7 @@ def get_response(channel_name, user, user_profile, bot, chat_history_obj):
     packet = {
         "type": "chat_message",
         "source": "bot",
-        "who": bot.bot_id,
+        "who": bot.bot_profile_id,
         "message": response,
         "timestamp": timestamp,
     }

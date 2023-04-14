@@ -20,24 +20,16 @@ def customize_profile(request):
     # request_dict._mutable = True
     del request_dict["email"]
 
-    if "bot_id" not in request_dict:
+    if "bot_profile_id" not in request_dict:
         return JsonResponse(
-            {"error": f"No bot_id given"}, status=status.HTTP_400_BAD_REQUEST
+            {"error": f"No bot_profile_id given"}, status=status.HTTP_400_BAD_REQUEST
         )
 
-    bot_id = request_dict["bot_id"]
-    try:
-        bot_id = int(bot_id)
-    except ValueError:
-        return JsonResponse(
-            {"error": f"Bot ID {bot_id} is not an integer."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    bot_queryset = BotProfile.objects.filter(bot_id=bot_id)
+    bot_profile_id = request_dict["bot_profile_id"]
+    bot_queryset = BotProfile.objects.filter(bot_profile_id=bot_profile_id)
     if not bot_queryset.exists():
         return JsonResponse(
-            {"error": f"bot {bot_id} does not exist."},
+            {"error": f"bot {bot_profile_id} does not exist."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -45,7 +37,7 @@ def customize_profile(request):
     original_bot = bot_queryset.first()
     original_dict = model_to_dict(original_bot)
     original_dict.update(request_dict)
-    del original_dict["bot_id"]
+    del original_dict["bot_profile_id"]
     original_dict["searchable"] = False
 
     # Create bot and a corresponding chat history entry with user
@@ -61,4 +53,4 @@ def customize_profile(request):
     except (ValidationError, TypeError) as e:
         return JsonResponse(repr(e), status=status.HTTP_400_BAD_REQUEST, safe=False)
 
-    return JsonResponse({"bot_id": bot.bot_id}, status=status.HTTP_200_OK)
+    return JsonResponse({"bot_profile_id": bot.bot_profile_id}, status=status.HTTP_200_OK)

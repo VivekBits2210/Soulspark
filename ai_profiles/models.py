@@ -62,6 +62,7 @@ def validate_image_extension(value):
 
 class BotProfile(models.Model):
     bot_id = models.AutoField(primary_key=True)
+    bot_profile_id = models.CharField(max_length=50, validators=[validate_name], unique=True)
     name = models.CharField(max_length=50, validators=[validate_name])
     gender = models.CharField(
         max_length=1,
@@ -83,7 +84,7 @@ class BotProfile(models.Model):
     summary = models.TextField(blank=True, default="")
 
     def __str__(self):
-        return str(self.bot_id)
+        return str(self.bot_profile_id)
 
     def save(self, *args, **kwargs):
         self.full_clean()

@@ -24,7 +24,7 @@ def get_gender_list(gender_focus):
 def fetch_profile(request):
     logger.info("Logging line from fetch_profile")
     n = request.GET.get("n")
-    bot_id = request.GET.get("bot_id")
+    bot_profile_id = request.GET.get("bot_profile_id")
 
     user_or_error = fetch_user_or_error(request)
     if isinstance(user_or_error, JsonResponse):
@@ -54,20 +54,12 @@ def fetch_profile(request):
 
         return JsonResponse(output_list, status=status.HTTP_200_OK, safe=False)
 
-    # If the 'bot_id' parameter is provided, filter by bot_id
-    if bot_id:
-        try:
-            bot_id = int(bot_id)
-        except ValueError:
-            return JsonResponse(
-                {"error": f"Bot ID {bot_id} is not an integer."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        query_set = BotProfile.objects.filter(bot_id=bot_id)
+    # If the 'bot_profile_id' parameter is provided, filter by bot_profile_id
+    if bot_profile_id:
+        query_set = BotProfile.objects.filter(bot_profile_id=bot_profile_id)
         if not query_set.exists():
             return JsonResponse(
-                {"error": f"No profile found for bot_id '{bot_id}'"},
+                {"error": f"No profile found for bot_profile_id '{bot_profile_id}'"},
                 status=status.HTTP_404_NOT_FOUND,
             )
         profile = query_set.first()

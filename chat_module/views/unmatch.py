@@ -16,23 +16,23 @@ def unmatch(request):
     user = user_or_error
 
     request_dict = request.data
-    if "bot_id" not in request_dict:
+    if "bot_profile_id" not in request_dict:
         return JsonResponse(
-            {"error": f"No bot_id given"}, status=status.HTTP_400_BAD_REQUEST
+            {"error": f"No bot_profile_id given"}, status=status.HTTP_400_BAD_REQUEST
         )
 
     try:
-        bot_id = int(request_dict["bot_id"])
+        bot_profile_id = int(request_dict["bot_profile_id"])
     except ValueError:
         return JsonResponse(
-            {"error": f"Bot ID {request_dict['bot_id']} is not an integer."},
+            {"error": f"Bot ID {request_dict['bot_profile_id']} is not an integer."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    bot_queryset = BotProfile.objects.filter(bot_id=bot_id)
+    bot_queryset = BotProfile.objects.filter(bot_profile_id=bot_profile_id)
     if not bot_queryset.exists():
         return JsonResponse(
-            {"error": f"Bot {bot_id} does not exist."},
+            {"error": f"Bot {bot_profile_id} does not exist."},
             status=status.HTTP_404_NOT_FOUND,
         )
 
@@ -59,7 +59,7 @@ def unmatch(request):
 
     return JsonResponse(
         {
-            "message": f"All chat history for bot {bot_id} and user {user} moved to DeletedChatHistory"
+            "message": f"All chat history for bot {bot_profile_id} and user {user} moved to DeletedChatHistory"
         },
         status=status.HTTP_200_OK,
     )

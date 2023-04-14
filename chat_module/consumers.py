@@ -27,8 +27,8 @@ class ChatConsumer(WebsocketConsumer):
 
         user_profile = UserProfile.objects.get(user=user)
 
-        bot_id = text_data_json["bot_id"]
-        bot = BotProfile.objects.get(bot_id=bot_id)
+        bot_profile_id = text_data_json["bot_profile_id"]
+        bot = BotProfile.objects.get(bot_profile_id=bot_profile_id)
 
         chat_history_obj = ChatHistory.objects.get(user=user, bot=bot)
 
