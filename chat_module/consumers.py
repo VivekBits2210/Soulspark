@@ -12,18 +12,27 @@ from user_profiles.models import User
 
 
 # TODO: When storing bot messages from dialog engine, always store each sentence in a different message line.
+from user_profiles.utils import decrypt_email
+
+
 class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
 
-        email = text_data_json["email"]
+        email = decrypt_email(text_data_json["email"])
+        user = User.objects.get(email=email)
+        user_profile = UserProfile.objects.get(user=user)
+
         bot_id = text_data_json["bot_id"]
+        bot = BotProfile.objects.get(bot_id=bot_id)
+
+        chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
+
         text = text_data_json["text"]
         timestamp = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
 
         packet = {
             "type": "chat_message",
-            # "text": {"msg": text, "source": "user"},
             "source": "user",
             "who": email,
             "message": text,
@@ -35,34 +44,12 @@ class ChatConsumer(WebsocketConsumer):
             packet,
         )
 
-        try:
-            user = User.objects.get(email=email)
-        except (KeyError, User.DoesNotExist):
-            user = User.objects.create(
-                email=email, first_name="test_user_fn", last_name="test_user_ln"
-            )
-
-        try:
-            user_profile = UserProfile.objects.get(user=user)
-        except (KeyError, UserProfile.DoesNotExist):
-            user_profile = UserProfile.objects.create(user=user)
-
-        bot = BotProfile.objects.get(bot_id=bot_id)
-
-        try:
-            chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
-        except (KeyError, ChatHistory.DoesNotExist):
-            chat_history_obj = ChatHistory.objects.create(
-                user=user_profile.user, bot=bot, history=[]
-            )
-
-        chat_history_obj.history.append(
-            {
+        chat_history_obj.history.append({
                 "who": packet["who"],
                 "message": packet["message"],
-                "timestamp": packet["timestamp"],
-            }
-        )
+                "timestamp": packet["timestamp"]
+        })
+
         characters_sent = sum(1 for c in text if c.isalpha())
         chat_history_obj.input_chars += characters_sent
         user_profile.experience += characters_sent
@@ -70,7 +57,7 @@ class ChatConsumer(WebsocketConsumer):
         chat_history_obj.save()
         user_profile.save()
 
-        get_response(self.channel_name, text_data_json)
+        get_response(self.channel_name, user, user_profile, bot, chat_history_obj)
 
     def chat_message(self, event):
         packet = json.dumps(
