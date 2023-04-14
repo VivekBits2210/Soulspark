@@ -5,6 +5,9 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from user_profiles.models import UserProfile
 from user_profiles.utils import fetch_user_or_error
+import logging
+
+logger = logging.getLogger("my_logger")
 
 
 @api_view(["POST"])
@@ -27,8 +30,9 @@ def post_attribute(request):
     profile_fields = set([f.name for f in UserProfile._meta.get_fields() if f.concrete])
 
     request_dict = request.data
-    request_dict._mutable = True
+    # request_dict._mutable = True
     del request_dict["email"]
+    logger.info("Request Dict", request_dict)
 
     incorrect_attributes = [
         key for key in request_dict.keys() if key not in profile_fields
