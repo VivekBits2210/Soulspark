@@ -75,7 +75,7 @@ def fetch_chat_history(request):
         )
 
     history_object = chat_history_queryset.first()
-    bot_profile_id = history_object.bot_profile_id
+    bot_profile_id = history_object.bot.bot_profile_id
     history = history_object.history[-lines:]
     level = history_object.level if history_object else None
 
