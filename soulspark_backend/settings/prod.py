@@ -1,5 +1,6 @@
 from pathlib import Path
 from dotenv import dotenv_values
+
 env_config = dotenv_values(".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -9,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env_config['DJANGO_SECRET_KEY']
+SECRET_KEY = env_config["DJANGO_SECRET_KEY"]
 
 DEBUG = True
 
@@ -42,7 +43,7 @@ AUTH_APPS = [
 
 LOGGING = {
     "version": 1,
-    'disable_existing_loggers': False,
+    "disable_existing_loggers": False,
     "formatters": {
         "default": {
             "format": "{asctime} {levelname} {filename}:{lineno} {message}",
@@ -101,23 +102,23 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 INSTALLED_APPS = (
-        [
-            "daphne",
-            "django.contrib.admin",
-            "django.contrib.auth",
-            "django.contrib.contenttypes",
-            "django.contrib.sessions",
-            "django.contrib.messages",
-            "django.contrib.sites",
-            "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
-            "django.contrib.admindocs",
-            "drf_yasg",
-            "theme",
-            # third-party apps
-            "tailwind",
-        ]
-        + MY_APPS
-        + AUTH_APPS
+    [
+        "daphne",
+        "django.contrib.admin",
+        "django.contrib.auth",
+        "django.contrib.contenttypes",
+        "django.contrib.sessions",
+        "django.contrib.messages",
+        "django.contrib.sites",
+        "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
+        "django.contrib.admindocs",
+        "drf_yasg",
+        "theme",
+        # third-party apps
+        "tailwind",
+    ]
+    + MY_APPS
+    + AUTH_APPS
 )
 
 MIDDLEWARE = [
@@ -176,9 +177,9 @@ CELERY_BEAT_SCHEDULE = {
 ## For redis
 CHANNEL_LAYERS = {
     "default": {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [("127.0.0.1", 6379)],
         },
     },
 }

@@ -4,9 +4,12 @@ from django.test import RequestFactory
 
 from user_profiles.models import User
 from user_profiles.utils import encrypt_email, decrypt_email, fetch_user_or_error
+
 # from mysecrets import SALT
 from dotenv import dotenv_values
-SALT = dotenv_values(".env")['SALT']
+
+SALT = dotenv_values(".env")["SALT"]
+
 
 class UtilsTestCase(TestCase):
     def setUp(self):

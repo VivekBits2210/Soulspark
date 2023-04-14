@@ -26,7 +26,7 @@ def delete_all_chat_history(request):
             bot_name=chat_history_obj.bot.name,
             history=chat_history_obj.history,
             input_chars=chat_history_obj.input_chars,
-            level=chat_history_obj.level
+            level=chat_history_obj.level,
         )
 
     chat_history_queryset.delete()

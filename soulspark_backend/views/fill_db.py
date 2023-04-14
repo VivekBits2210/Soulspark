@@ -70,8 +70,7 @@ def fill_db(request):
         "age": 25,
         "interests": "baking and studying",
         "favorites": {"color": "scarlet", "food": "chicken biryani"},
-        "physical_attributes": {
-        },
+        "physical_attributes": {},
         "profession": "PhD student",
         "bio": "I am Ivan",
     }

@@ -21,7 +21,7 @@ def post_attribute(request):
     profile_queryset = UserProfile.objects.filter(user=user)
     if not profile_queryset.exists():
         try:
-            profile = UserProfile.objects.create(user=user, gender_focus='E')
+            profile = UserProfile.objects.create(user=user, gender_focus="E")
         except ValidationError as e:
             return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)
     else:

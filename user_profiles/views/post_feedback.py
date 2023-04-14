@@ -9,7 +9,7 @@ from user_profiles.utils import fetch_user_or_error
 @api_view(["POST"])
 def post_feedback(request):
     request_dict = request.data
-    if 'feedback' not in request_dict:
+    if "feedback" not in request_dict:
         return JsonResponse(
             {"error": "feedback key not found"}, status=status.HTTP_400_BAD_REQUEST
         )
@@ -19,7 +19,7 @@ def post_feedback(request):
         error_response = user_or_error
         return error_response
     user = user_or_error
-    UserFeedback.objects.create(user=user, feedback=request_dict['feedback'])
+    UserFeedback.objects.create(user=user, feedback=request_dict["feedback"])
 
     return JsonResponse(
         {"message": f"Feedback stored"},

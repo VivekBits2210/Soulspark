@@ -41,7 +41,8 @@ def fetch_level(request):
     chat_history_queryset = ChatHistory.objects.filter(user=user, bot=bot)
     if not chat_history_queryset.exists():
         return JsonResponse(
-            {"error": f"Bot {bot} does not have chat history with this user."}, status=status.HTTP_400_BAD_REQUEST
+            {"error": f"Bot {bot} does not have chat history with this user."},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     level = chat_history_queryset.first().level

@@ -14,7 +14,7 @@ class BotProfileTestCase(TestCase):
             profession="AI assistant",
             interests="reading and music",
             favorites={"color": "blue", "food": "pizza"},
-            physical_attributes={"hair": "black"}
+            physical_attributes={"hair": "black"},
         )
 
     def test_create_bot_profile(self):
@@ -30,7 +30,7 @@ class BotProfileTestCase(TestCase):
             "profession": "Engineer",
             "interests": "reading and cricket",
             "physical_attributes": {"hair": "black"},
-            "favorites": {"color": "blue", "food": "pizza"}
+            "favorites": {"color": "blue", "food": "pizza"},
         }
         bot_profile = BotProfile.objects.create(**valid_data)
 
@@ -55,7 +55,7 @@ class BotProfileTestCase(TestCase):
                 profession="Assistant",
                 interests="travelling",
                 physical_attributes={"hair": "black"},
-                favorites={"color": "red", "food": "sushi"}
+                favorites={"color": "red", "food": "sushi"},
             )
 
     def test_id(self):
@@ -71,7 +71,7 @@ class BotProfileTestCase(TestCase):
                 profession="Assistant",
                 interests="cricket and running",
                 favorites={"color": "red", "food": "sushi"},
-                physical_attributes={"hair": "black"}
+                physical_attributes={"hair": "black"},
             )
 
     def test_invalid_name(self):
@@ -84,5 +84,5 @@ class BotProfileTestCase(TestCase):
                 profession="Assistant",
                 interests="running",
                 favorites={"color": "red", "food": "sushi"},
-                physical_attributes={"hair": "black"}
+                physical_attributes={"hair": "black"},
             )

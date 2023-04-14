@@ -62,10 +62,13 @@ def fetch_chat_history(request):
                     {"error": "Already matched"}, status=status.HTTP_400_BAD_REQUEST
                 )
 
-            chat_history_object = ChatHistory.objects.create(user=user, bot=bot, history=[])
+            chat_history_object = ChatHistory.objects.create(
+                user=user, bot=bot, history=[]
+            )
             # level = chat_history_object.level
             return JsonResponse(
-                {"bot_id": bot_id, "name": bot.name, "history": []}, status=status.HTTP_200_OK #"level": level
+                {"bot_id": bot_id, "name": bot.name, "history": []},
+                status=status.HTTP_200_OK,  # "level": level
             )
         else:
             return JsonResponse(
@@ -75,7 +78,8 @@ def fetch_chat_history(request):
     chat_history_queryset = ChatHistory.objects.filter(user=user, bot=bot)
     if not chat_history_queryset.exists():
         return JsonResponse(
-            {"error": f"Bot {bot} does not have chat history with this user."}, status=status.HTTP_400_BAD_REQUEST
+            {"error": f"Bot {bot} does not have chat history with this user."},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     history_object = chat_history_queryset.first()

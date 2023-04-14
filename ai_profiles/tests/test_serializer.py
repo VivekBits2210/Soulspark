@@ -22,7 +22,7 @@ class BotProfileSerializerTestCase(APITestCase):
             "profession": "Engineer",
             "interests": "chess and cricket",
             "physical_attributes": {"hair": "black"},
-            "favorites": {"color": "blue", "food": "pizza"}
+            "favorites": {"color": "blue", "food": "pizza"},
         }
 
     def test_create_valid_bot_profile(self):

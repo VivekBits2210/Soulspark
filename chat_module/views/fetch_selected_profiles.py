@@ -14,9 +14,12 @@ def fetch_selected_profiles(request):
     user = user_or_error
     bot_data_list = (
         ChatHistory.objects.filter(user=user)
-            .values("bot__bot_id", "bot__name", "level")
-            .distinct()
-            .order_by("-level")
+        .values("bot__bot_id", "bot__name", "level")
+        .distinct()
+        .order_by("-level")
     )
-    response_data = [{"name": bot_data["bot__name"], "bot_id": bot_data["bot__bot_id"]} for bot_data in bot_data_list]
+    response_data = [
+        {"name": bot_data["bot__name"], "bot_id": bot_data["bot__bot_id"]}
+        for bot_data in bot_data_list
+    ]
     return JsonResponse({"data": response_data}, status=status.HTTP_200_OK)
