@@ -16,7 +16,10 @@ def create_user(request):
     try:
         decrypted_email = decrypt_email(request_dict["email"])
         if User.objects.filter(email=decrypted_email):
-            return JsonResponse(model_to_dict(User.objects.get(email=decrypted_email)), status=status.HTTP_200_OK)
+            return JsonResponse(
+                model_to_dict(User.objects.get(email=decrypted_email)),
+                status=status.HTTP_200_OK,
+            )
     except KeyError:
         return JsonResponse(
             {"error": "email parameter missing"}, status=status.HTTP_400_BAD_REQUEST
@@ -25,12 +28,14 @@ def create_user(request):
         return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        serializer = UserSerializer(data={
-            "email":decrypted_email,
-            "first_name": request_dict["first_name"],
-            "last_name": request_dict["last_name"],
-            "picture": request_dict["picture"],
-        })
+        serializer = UserSerializer(
+            data={
+                "email": decrypted_email,
+                "first_name": request_dict["first_name"],
+                "last_name": request_dict["last_name"],
+                "picture": request_dict["picture"],
+            }
+        )
         if not serializer.is_valid():
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         serializer.save()

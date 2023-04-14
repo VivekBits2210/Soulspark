@@ -5,7 +5,7 @@ from chat_module.views import (
     unmatch,
     fetch_selected_profiles,
     fetch_level,
-    delete_all_chat_history
+    delete_all_chat_history,
 )
 
 urlpatterns = [

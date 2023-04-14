@@ -47,7 +47,7 @@ class BotProfileFetchViewTest(APITestCase):
             "profession": "Engineer",
             "interests": "jogging and music",
             "physical_attributes": {"hair": "black"},
-            "favorites": {"color": "blue", "food": "pizza"}
+            "favorites": {"color": "blue", "food": "pizza"},
         }
 
     def test_fetch_profile_view_works(self):

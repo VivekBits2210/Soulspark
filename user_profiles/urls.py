@@ -1,5 +1,11 @@
 from django.urls import path
-from user_profiles.views import fetch_user_info, post_attribute, create_user, delete_user, post_feedback
+from user_profiles.views import (
+    fetch_user_info,
+    post_attribute,
+    create_user,
+    delete_user,
+    post_feedback,
+)
 
 urlpatterns = [
     path("create-user", create_user.create_user, name="create_user"),

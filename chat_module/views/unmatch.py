@@ -49,7 +49,7 @@ def unmatch(request):
                 bot_name=chat_history_obj.bot.name,
                 history=chat_history_obj.history,
                 input_chars=chat_history_obj.input_chars,
-                level=chat_history_obj.level
+                level=chat_history_obj.level,
             )
         except ValidationError as e:
             return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)

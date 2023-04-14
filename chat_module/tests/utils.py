@@ -37,6 +37,6 @@ def create_bot(name="John"):
         profession="AI assistant",
         interests="jogging and music",
         favorites={"color": "blue", "food": "pizza"},
-        physical_attributes={"hair": "black"}
+        physical_attributes={"hair": "black"},
     )
     return bot

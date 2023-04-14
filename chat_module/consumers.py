@@ -51,11 +51,13 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         logger.info("Now appending user message to chat history")
-        chat_history_obj.history.append({
-            "who": packet["who"],
-            "message": packet["message"],
-            "timestamp": packet["timestamp"]
-        })
+        chat_history_obj.history.append(
+            {
+                "who": packet["who"],
+                "message": packet["message"],
+                "timestamp": packet["timestamp"],
+            }
+        )
 
         characters_sent = sum(1 for c in text if c.isalpha())
         chat_history_obj.input_chars += characters_sent

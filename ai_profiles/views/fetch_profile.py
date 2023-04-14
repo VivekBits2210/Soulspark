@@ -10,6 +10,7 @@ import logging
 
 logger = logging.getLogger("my_logger")
 
+
 def get_gender_list(gender_focus):
     if gender_focus == "M":
         return ["M"]
