@@ -1,86 +1,39 @@
-import os
-
+import json
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.decorators import api_view
 
 from ai_profiles.models import BotProfile
+from user_profiles.utils import decrypt_email
 
 
 @api_view(["GET"])
 def fill_db(request):
-    profile1_data = {
-        "name": "Nicole",
-        "gender": "F",
-        "age": 18,
-        "interests": "reading and running",
-        "favorites": {"color": "red", "food": "pizza"},
-        "physical_attributes": {"eyes": "blue"},
-        "profession": "Air hostess",
-        "bio": "Lorem ipsum",
-    }
-    profile2_data = {
-        "name": "Carla",
-        "gender": "F",
-        "age": 25,
-        "interests": "hiking and jogging",
-        "favorites": {"color": "blue", "food": "sushi"},
-        "physical_attributes": {
-            "eyes": "blue",
-            "hair": "blonde",
-            "skin": "fair",
-            "figure": "slim",
-        },
-        "profession": "Secretary",
-        "bio": "Lorem ipsum",
-    }
-    profile3_data = {
-        "name": "Aurelia",
-        "gender": "F",
-        "age": 19,
-        "interests": "hiking and jogging",
-        "favorites": {"color": "blue", "food": "sushi"},
-        "physical_attributes": {
-            "eyes": "blue",
-            "hair": "blonde",
-            "skin": "fair",
-            "figure": "slim",
-        },
-        "profession": "Waitress",
-        "bio": "Bio for Nicole",
-    }
-    profile4_data = {
-        "name": "Shenguang",
-        "gender": "F",
-        "age": 24,
-        "interests": "hiking and jogging",
-        "favorites": {"color": "blue", "food": "sushi"},
-        "physical_attributes": {
-            "eyes": "blue",
-            "hair": "blonde",
-            "skin": "fair",
-            "figure": "slim",
-        },
-        "profession": "Secretary",
-        "bio": "Lorem ipsum",
-    }
+    try:
+        encrypted_email = (
+            request.GET.get("email")
+        )
+    except KeyError:
+        return JsonResponse(
+            {"error": "email parameter missing"}, status=status.HTTP_400_BAD_REQUEST
+        )
+    if not encrypted_email:
+        return JsonResponse(
+            {"error": "email parameter missing"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
-    profile5_data = {
-        "name": "Ivan",
-        "gender": "M",
-        "age": 25,
-        "interests": "baking and studying",
-        "favorites": {"color": "scarlet", "food": "chicken biryani"},
-        "physical_attributes": {},
-        "profession": "PhD student",
-        "bio": "I am Ivan",
-    }
+    try:
+        email = decrypt_email(encrypted_email)
+    except ValueError as e:
+        return JsonResponse({"error": repr(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    if email != "arbitraryemail@email.com":
+        return JsonResponse({"error": "Unauthorized access"}, status=status.HTTP_400_BAD_REQUEST)
 
     # Create the two BotProfile instances using the data
     BotProfile.objects.all().delete()
-    BotProfile(**profile1_data).save()
-    BotProfile(**profile2_data).save()
-    BotProfile(**profile3_data).save()
-    BotProfile(**profile4_data).save()
-    BotProfile(**profile5_data).save()
+    profiles = json.loads("profiles.json")
+    for profile in profiles:
+        BotProfile(**profile).save()
 
-    return JsonResponse({"status": "ok"})
+    return JsonResponse({"profiles": len(BotProfile.objects)})
