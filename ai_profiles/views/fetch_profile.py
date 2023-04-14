@@ -25,17 +25,14 @@ def fetch_profile(request):
     logger.info("Logging line from fetch_profile")
     n = request.GET.get("n")
     bot_id = request.GET.get("bot_id")
-    email = request.GET.get("email")
-    gender_focus = request.GET.get("gender_focus")
 
+    user_or_error = fetch_user_or_error(request)
+    if isinstance(user_or_error, JsonResponse):
+        error_response = user_or_error
+        return error_response
+    gender_focus = UserProfile.objects.get(user=user_or_error).gender_focus
     if not gender_focus:
         gender_focus = "E"
-    if email:
-        user_or_error = fetch_user_or_error(request)
-        if isinstance(user_or_error, JsonResponse):
-            error_response = user_or_error
-            return error_response
-        gender_focus = UserProfile.objects.get(user=user_or_error).gender_focus
 
     if n:
         try:
