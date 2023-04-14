@@ -13,37 +13,15 @@ from user_profiles.models import UserProfile, User
 channel_layer = get_channel_layer()
 
 
-def get_response(channel_name, input_data):
-    email = input_data["email"]
-    bot_id = input_data["bot_id"]
-
-    # canned_response = "This is a canned bot response."
-
-    # response = canned_response
-    user = User.objects.get(email=email)
-
-    try:
-        user_profile = UserProfile.objects.get(user=user)
-    except (KeyError, UserProfile.DoesNotExist):
-        user_profile = UserProfile.objects.create(user=user)
-
-    bot = BotProfile.objects.get(bot_id=bot_id)
-    try:
-        chat_history_obj = ChatHistory.objects.get(user=user_profile.user, bot=bot)
-    except (KeyError, ChatHistory.DoesNotExist):
-        chat_history_obj = ChatHistory.objects.create(
-            user=user_profile.user, bot=bot, history=[]
-        )
-
+def get_response(channel_name, user, user_profile, bot, chat_history_obj):
     response = DialogEngine(user_profile, chat_history_obj)
     response = response.run()
 
     timestamp = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
     packet = {
         "type": "chat_message",
-        # "text": {"msg": response, "source": "bot"},
         "source": "bot",
-        "who": bot_id,
+        "who": bot.bot_id,
         "message": response,
         "timestamp": timestamp,
     }
