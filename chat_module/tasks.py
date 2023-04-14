@@ -13,7 +13,6 @@ from user_profiles.models import UserProfile, User
 channel_layer = get_channel_layer()
 
 
-# TODO: Integrate with the Dialog Engine
 def get_response(channel_name, input_data):
     email = input_data["email"]
     bot_id = input_data["bot_id"]
