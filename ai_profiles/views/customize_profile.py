@@ -17,7 +17,7 @@ def customize_profile(request):
     user = user_or_error
 
     request_dict = request.data
-    request_dict._mutable = True
+    # request_dict._mutable = True
     del request_dict["email"]
 
     if "bot_id" not in request_dict:
