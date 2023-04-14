@@ -27,25 +27,25 @@ def fetch_chat_history(request):
     except ValueError:
         lines = 10
 
-    bot_id = request.GET.get("bot_id")
-    if not bot_id:
+    bot_profile_id = request.GET.get("bot_profile_id")
+    if not bot_profile_id:
         return JsonResponse(
             {"error": f"bot ID is required"},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
     try:
-        bot_id = int(bot_id)
+        bot_profile_id = int(bot_profile_id)
     except ValueError:
         return JsonResponse(
-            {"error": f"Bot ID {bot_id} is not an integer."},
+            {"error": f"Bot ID {bot_profile_id} is not an integer."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    bot_queryset = BotProfile.objects.filter(bot_id=bot_id)
+    bot_queryset = BotProfile.objects.filter(bot_profile_id=bot_profile_id)
     if not bot_queryset.exists():
         return JsonResponse(
-            {"error": f"bot {bot_id} does not exist."},
+            {"error": f"bot {bot_profile_id} does not exist."},
             status=status.HTTP_404_NOT_FOUND,
         )
 
@@ -67,12 +67,12 @@ def fetch_chat_history(request):
             )
             # level = chat_history_object.level
             return JsonResponse(
-                {"bot_id": bot_id, "name": bot.name, "history": []},
+                {"bot_profile_id": bot_profile_id, "name": bot.name, "history": []},
                 status=status.HTTP_200_OK,  # "level": level
             )
         else:
             return JsonResponse(
-                {"bot_id": None, "history": []}, status=status.HTTP_200_OK
+                {"bot_profile_id": None, "history": []}, status=status.HTTP_200_OK
             )
 
     chat_history_queryset = ChatHistory.objects.filter(user=user, bot=bot)
@@ -83,11 +83,11 @@ def fetch_chat_history(request):
         )
 
     history_object = chat_history_queryset.first()
-    bot_id = history_object.bot_id
+    bot_profile_id = history_object.bot_profile_id
     history = history_object.history[-lines:]
     level = history_object.level if history_object else None
 
     return JsonResponse(
-        {"bot_id": bot_id, "history": history, "level": level},
+        {"bot_profile_id": bot_profile_id, "history": history, "level": level},
         status=status.HTTP_200_OK,
     )

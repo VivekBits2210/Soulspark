@@ -15,25 +15,25 @@ def fetch_level(request):
         return error_response
     user = user_or_error
 
-    bot_id = request.GET.get("bot_id")
-    if not bot_id:
+    bot_profile_id = request.GET.get("bot_profile_id")
+    if not bot_profile_id:
         return JsonResponse(
             {"error": f"bot ID is required"},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
     try:
-        bot_id = int(bot_id)
+        bot_profile_id = int(bot_profile_id)
     except ValueError:
         return JsonResponse(
-            {"error": f"Bot ID {bot_id} is not an integer."},
+            {"error": f"Bot ID {bot_profile_id} is not an integer."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    bot_queryset = BotProfile.objects.filter(bot_id=bot_id)
+    bot_queryset = BotProfile.objects.filter(bot_profile_id=bot_profile_id)
     if not bot_queryset.exists():
         return JsonResponse(
-            {"error": f"bot {bot_id} does not exist."},
+            {"error": f"bot {bot_profile_id} does not exist."},
             status=status.HTTP_404_NOT_FOUND,
         )
 
