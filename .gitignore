@@ -85,3 +85,4 @@ cython_debug/
 mysecrets.py
 secrets.py
 .DS_Store
+/soulspark_backend/profiles.json
