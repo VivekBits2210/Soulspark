@@ -5,17 +5,15 @@ from celery import shared_task
 from channels.layers import get_channel_layer
 from django.utils import timezone
 
-from ai_profiles.models import BotProfile
-from chat_module.models import ChatHistory
 from dialog_engine.engine import DialogEngine
-from user_profiles.models import UserProfile, User
-
+import logging
+logger = logging.getLogger("my_logger")
 channel_layer = get_channel_layer()
 
 
 def get_response(channel_name, user, user_profile, bot, chat_history_obj):
-    response = DialogEngine(user_profile, chat_history_obj)
-    response = response.run()
+    engine = DialogEngine(user_profile, chat_history_obj)
+    response = engine.run()
 
     timestamp = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
     packet = {
@@ -25,11 +23,14 @@ def get_response(channel_name, user, user_profile, bot, chat_history_obj):
         "message": response,
         "timestamp": timestamp,
     }
+    logger.info(f"Packet from bot: {packet}")
+
     async_to_sync(channel_layer.send)(
         channel_name,
         packet,
     )
 
+    logger.info("Now appending bot message to chat history")
     chat_history_obj.history.append(
         {
             "who": packet["who"],

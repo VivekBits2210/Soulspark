@@ -1,11 +1,9 @@
-from ai_profiles.models import BotProfile
 from django.db import models
-from user_profiles.models import User
 
 
 class GPTUsageRecord(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    bot = models.ForeignKey(BotProfile, on_delete=models.CASCADE)
+    email = models.CharField(max_length=200, default="email@email.com")
+    bot_name = models.CharField(max_length=50, default="default_bot_name")
     indicator_tokens = models.IntegerField(default=0)
     story_tokens = models.IntegerField(default=0)
     summarizer_tokens = models.IntegerField(default=0)
@@ -14,8 +12,8 @@ class GPTUsageRecord(models.Model):
     chat_history_length = models.IntegerField(default=0)
 
     REQUIRED_FIELDS = [
-        "user",
-        "bot",
+        "email",
+        "bot_name",
         "indicator_tokens",
         "story_tokens",
         "indicator_vector",
@@ -25,7 +23,7 @@ class GPTUsageRecord(models.Model):
 
     def __str__(self):
         return (
-            f"GPTUsageRecord({self.user.email}, {self.bot.name}, indicator_tokens={self.indicator_tokens}, "
+            f"GPTUsageRecord({self.email}, {self.bot_name}, indicator_tokens={self.indicator_tokens}, "
             f"story_tokens={self.story_tokens}, summarizer_tokens={self.summarizer_tokens}, "
             f"indicator_vector={self.indicator_vector}, indicator_version={self.indicator_version}, "
             f"chat_history_length={self.chat_history_length})"
