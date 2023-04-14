@@ -56,14 +56,6 @@ def fetch_profile(request):
 
     # If the 'bot_profile_id' parameter is provided, filter by bot_profile_id
     if bot_profile_id:
-        try:
-            bot_profile_id = int(bot_profile_id)
-        except ValueError:
-            return JsonResponse(
-                {"error": f"Bot ID {bot_profile_id} is not an integer."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         query_set = BotProfile.objects.filter(bot_profile_id=bot_profile_id)
         if not query_set.exists():
             return JsonResponse(
